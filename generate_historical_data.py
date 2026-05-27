@@ -13,9 +13,14 @@ from the Medici Bank's operations during 1390-1440, including:
 import csv
 import json
 import random
+from pathlib import Path
 from datetime import date, timedelta
 from decimal import Decimal
 from typing import List, Dict, Tuple
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
 # Historical context and transaction types
 class HistoricalPeriod:
@@ -527,18 +532,20 @@ def main():
     # Generate 20,000 transactions
     num_transactions = 20000
     transactions = generator.generate_transactions(num_transactions)
+
+    DATA_DIR.mkdir(exist_ok=True)
     
     # Print summary
     print_summary(transactions)
     
     # Save to files
-    save_to_csv(transactions, "medici_transactions.csv")
-    save_to_json(transactions, "medici_transactions.json")
+    save_to_csv(transactions, DATA_DIR / "medici_transactions.csv")
+    save_to_json(transactions, DATA_DIR / "medici_transactions.json")
     
     print("\nData generation complete!")
     print("\nGenerated files:")
-    print("  - medici_transactions.csv")
-    print("  - medici_transactions.json")
+    print("  - data/medici_transactions.csv")
+    print("  - data/medici_transactions.json")
 
 
 if __name__ == "__main__":

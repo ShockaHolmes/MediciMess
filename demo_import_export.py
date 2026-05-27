@@ -9,11 +9,15 @@ This demonstrates:
 """
 
 import sys
+from pathlib import Path
 from decimal import Decimal
 from datetime import date
 
-# Import the banking system
-exec(open('medici-banking.py').read())
+from medici_banking import AccountType, Ledger, TransactionEntry
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
 
 def demo_export():
@@ -56,12 +60,15 @@ def demo_export():
     
     # Export to CSV
     print("\n" + "-"*70)
-    csv_count = ledger.export_transactions_to_csv("exported_transactions.csv")
-    print(f"✓ Exported {csv_count} transactions to 'exported_transactions.csv'")
+    DATA_DIR.mkdir(exist_ok=True)
+    csv_file = DATA_DIR / "exported_transactions.csv"
+    json_file = DATA_DIR / "exported_transactions.json"
+    csv_count = ledger.export_transactions_to_csv(csv_file)
+    print(f"✓ Exported {csv_count} transactions to 'data/exported_transactions.csv'")
     
     # Export to JSON
-    json_count = ledger.export_transactions_to_json("exported_transactions.json")
-    print(f"✓ Exported {json_count} transactions to 'exported_transactions.json'")
+    json_count = ledger.export_transactions_to_json(json_file)
+    print(f"✓ Exported {json_count} transactions to 'data/exported_transactions.json'")
     
     return ledger
 
@@ -76,8 +83,9 @@ def demo_import_csv():
     ledger = Ledger("CSV Import Demo Bank")
     
     # Import from CSV
-    print("\nImporting transactions from 'exported_transactions.csv'...")
-    count = ledger.import_transactions_from_csv("exported_transactions.csv", verbose=False)
+    csv_file = DATA_DIR / "exported_transactions.csv"
+    print("\nImporting transactions from 'data/exported_transactions.csv'...")
+    count = ledger.import_transactions_from_csv(csv_file, verbose=False)
     print(f"✓ Imported {count} transactions from CSV")
     
     # Verify the books are balanced
@@ -99,8 +107,9 @@ def demo_import_json():
     ledger = Ledger("JSON Import Demo Bank")
     
     # Import from JSON
-    print("\nImporting transactions from 'exported_transactions.json'...")
-    count = ledger.import_transactions_from_json("exported_transactions.json", verbose=False)
+    json_file = DATA_DIR / "exported_transactions.json"
+    print("\nImporting transactions from 'data/exported_transactions.json'...")
+    count = ledger.import_transactions_from_json(json_file, verbose=False)
     print(f"✓ Imported {count} transactions from JSON")
     
     # Verify the books are balanced
@@ -123,8 +132,9 @@ def demo_historical_data():
     
     # Check if the historical data file exists
     import os
-    if not os.path.exists("medici_transactions.csv"):
-        print("\n❌ Historical data file 'medici_transactions.csv' not found.")
+    historical_file = DATA_DIR / "medici_transactions.csv"
+    if not os.path.exists(historical_file):
+        print("\n❌ Historical data file 'data/medici_transactions.csv' not found.")
         print("   Run 'python3 generate_historical_data.py' to generate it first.")
         return None
     
@@ -132,7 +142,7 @@ def demo_historical_data():
     print("(This may take a few seconds...)")
     
     # Import the historical data
-    count = ledger.import_transactions_from_csv("medici_transactions.csv", verbose=False)
+    count = ledger.import_transactions_from_csv(historical_file, verbose=False)
     print(f"\n✓ Successfully imported {count} transactions!")
     
     # Show some statistics

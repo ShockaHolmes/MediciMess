@@ -10,6 +10,11 @@ import json
 from decimal import Decimal
 from datetime import datetime
 from collections import defaultdict
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
 
 def validate_csv_structure(filename: str) -> bool:
@@ -245,18 +250,21 @@ def main():
     print("\n" + "="*60)
     print("MEDICI BANK TRANSACTION DATA VALIDATION")
     print("="*60)
+
+    csv_file = DATA_DIR / 'medici_transactions.csv'
+    json_file = DATA_DIR / 'medici_transactions.json'
     
     # Validate CSV
-    csv_valid = validate_csv_structure('medici_transactions.csv')
+    csv_valid = validate_csv_structure(csv_file)
     
     # Validate JSON
-    json_valid = validate_json_structure('medici_transactions.json')
+    json_valid = validate_json_structure(json_file)
     
     # Analyze distribution
-    analyze_transaction_distribution('medici_transactions.csv')
+    analyze_transaction_distribution(csv_file)
     
     # Check historical events
-    check_historical_events('medici_transactions.csv')
+    check_historical_events(csv_file)
     
     # Final summary
     print(f"\n{'='*60}")
