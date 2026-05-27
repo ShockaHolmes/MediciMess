@@ -145,6 +145,14 @@ You can also run the packaged module directly from the project root:
 python3 -m medici_banking
 ```
 
+## 1397 Medici Bank Simulation
+
+Running the main program shows a full 1397 transaction simulation with accounting explanations.
+
+- Includes Giovanni de' Medici's initial investment as the opening transaction.
+- Explains real concepts for each step (equity funding, loan issuance, repayment with interest, asset purchases, and expense recognition).
+- Verifies that all sample transactions are balanced.
+
 ## Code Structure
 
 ### Core Classes

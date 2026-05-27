@@ -622,8 +622,11 @@ def main():
     expenses = medici_ledger.create_account("Expenses", AccountType.EXPENSE)
     wages = medici_ledger.create_account("Wages", AccountType.EXPENSE)
     
-    # Starting our banking operations with initial capital
-    print("=== STARTING THE MEDICI BANK ===")
+    # Running a full year simulation with concept-driven narration.
+    print("=== 1397 MEDICI BANK SIMULATION ===")
+    print("This walkthrough shows how every event records equal debits and credits.\n")
+
+    print("[Concept] Owner investment increases assets and owner equity.")
     medici_ledger.record_transaction(
         date(1397, 1, 1),
         "Initial investment from Giovanni de' Medici",
@@ -631,7 +634,7 @@ def main():
         TransactionEntry.credit(capital, Decimal("10000.00"))
     )
     
-    # Recording a loan to a wool merchant
+    print("\n[Concept] Issuing a loan swaps one asset (cash) for another (receivable).")
     medici_ledger.record_transaction(
         date(1397, 2, 15),
         "Loan to Wool Merchant",
@@ -639,7 +642,7 @@ def main():
         TransactionEntry.credit(cash, Decimal("2000.00"))
     )
     
-    # Receiving partial payment with interest
+    print("\n[Concept] Repayments reduce receivables; interest increases revenue.")
     medici_ledger.record_transaction(
         date(1397, 8, 10),
         "Partial loan repayment from Wool Merchant with interest",
@@ -648,7 +651,7 @@ def main():
         TransactionEntry.credit(interest_income, Decimal("200.00"))
     )
     
-    # Purchasing land for a new banking house
+    print("\n[Concept] Buying long-term assets moves value from cash into land.")
     medici_ledger.record_transaction(
         date(1397, 9, 5),
         "Purchase of land for new Medici banking house",
@@ -656,13 +659,19 @@ def main():
         TransactionEntry.credit(cash, Decimal("3000.00"))
     )
     
-    # Paying wages to bank employees
+    print("\n[Concept] Paying wages records an expense and reduces cash.")
     medici_ledger.record_transaction(
         date(1397, 12, 1),
         "Quarterly wages for bank employees",
         TransactionEntry.debit(wages, Decimal("800.00")),
         TransactionEntry.credit(cash, Decimal("800.00"))
     )
+
+    all_balanced = all(transaction.is_balanced() for transaction in medici_ledger.transactions)
+    if all_balanced:
+        print("\nAll sample transactions are balanced. ✓")
+    else:
+        print("\nWARNING: At least one sample transaction is unbalanced. ✗")
     
     # Print the trial balance to verify our accounting is balanced
     print("\n=== MEDICI BANK TRIAL BALANCE (Year 1397) ===")
