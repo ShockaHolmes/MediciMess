@@ -63,6 +63,64 @@ cd MediciMess
 python3 medici-banking.py
 ```
 
+## Setup and Run
+
+### One-time setup (recommended)
+
+```bash
+# from the project root
+python3 -m venv .venv
+source .venv/bin/activate
+python3 -m pip install --upgrade pip
+```
+
+This project uses only the Python standard library, so no additional package installs are required.
+
+### Run the main demo
+
+```bash
+python3 medici-banking.py
+```
+
+Alternative module entrypoint:
+
+```bash
+python3 -m medici_banking
+```
+
+### Generate and validate historical data
+
+```bash
+python3 generate_historical_data.py
+python3 generate_additional_data.py
+python3 validate_transactions.py
+```
+
+### Run import/export walkthrough
+
+```bash
+python3 demo_import_export.py
+```
+
+### Optional: Use Makefile shortcuts
+
+```bash
+make help
+make setup
+make run
+make generate-data
+make validate
+make import-export
+```
+
+## Project Structure
+
+- `src/` contains the reusable accounting package.
+- `data/` stores generated CSV and JSON files.
+- `medici-banking.py` remains the main entrypoint for the Medici demo.
+- `medici_banking.py` provides a compatibility import path for scripts.
+- `docs/`, `reports/`, and `tests/` are reserved for documentation, outputs, and tests.
+
 ## Usage
 
 The main script demonstrates a series of banking transactions from the year 1397:
@@ -80,6 +138,12 @@ When you run the script, you'll see:
 - A Trial Balance verifying the books are balanced
 - A Balance Sheet showing the financial position
 - An Income Statement showing profitability
+
+You can also run the packaged module directly from the project root:
+
+```bash
+python3 -m medici_banking
+```
 
 ## Code Structure
 
@@ -142,6 +206,13 @@ python3 generate_additional_data.py
 # Validate the generated data
 python3 validate_transactions.py
 ```
+
+Generated files are written to `data/`:
+
+- `data/medici_transactions.csv`
+- `data/medici_transactions.json`
+- `data/exported_transactions.csv`
+- `data/exported_transactions.json`
 
 For detailed information about the transaction data, see [TRANSACTION_DATA.md](TRANSACTION_DATA.md).
 
@@ -283,7 +354,7 @@ This is a **specification document only**.
 
 ### Forensic Data Analysis — Hidden Embezzlement Scenario
 
-The `medici_transactions.csv` dataset contains a hidden embezzlement trail embedded within the Florence branch operating expenses (1420–1424). The scheme involves approximately 100,000 florins channelled through a fictitious supplier over five years.
+The `data/medici_transactions.csv` dataset contains a hidden embezzlement trail embedded within the Florence branch operating expenses (1420–1424). The scheme involves approximately 100,000 florins channelled through a fictitious supplier over five years.
 
 Students are expected to:
 

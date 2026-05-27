@@ -209,3 +209,5 @@ __marimo__/
 # Demo exported files (temporary)
 exported_transactions.csv
 exported_transactions.json
+data/exported_transactions.csv
+data/exported_transactions.json

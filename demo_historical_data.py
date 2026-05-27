@@ -6,9 +6,14 @@ and provides summary statistics and insights.
 """
 
 import csv
+from pathlib import Path
 from decimal import Decimal
 from datetime import datetime
 from collections import defaultdict, Counter
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
 
 def analyze_transactions(filename, max_display=20):
@@ -157,21 +162,22 @@ def main():
     print("transactions from the Medici Bank operations (1390-1440).\n")
     
     try:
+        csv_file = DATA_DIR / 'medici_transactions.csv'
         # Analyze the data
-        stats = analyze_transactions('medici_transactions.csv', max_display=20)
+        stats = analyze_transactions(csv_file, max_display=20)
         
         # Print analysis
         print_analysis(stats)
         
         # Find significant events
-        find_significant_events('medici_transactions.csv')
+        find_significant_events(csv_file)
         
         print("\n" + "="*70)
         print("ANALYSIS COMPLETE")
         print("="*70)
         print("\nFor more details, see:")
-        print("  - medici_transactions.csv (full dataset)")
-        print("  - medici_transactions.json (JSON format)")
+        print("  - data/medici_transactions.csv (full dataset)")
+        print("  - data/medici_transactions.json (JSON format)")
         print("  - TRANSACTION_DATA.md (documentation)")
         print("  - validate_transactions.py (data validation)")
         print("="*70)
@@ -179,7 +185,7 @@ def main():
         return 0
         
     except FileNotFoundError:
-        print("\n❌ Error: medici_transactions.csv not found.")
+        print("\n❌ Error: data/medici_transactions.csv not found.")
         print("Please run generate_historical_data.py first.")
         return 1
     except Exception as e:
