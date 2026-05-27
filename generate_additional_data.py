@@ -17,9 +17,14 @@ Output:
 import csv
 import json
 import random
+from pathlib import Path
 from datetime import date, timedelta
 from decimal import Decimal
 from typing import List, Dict
+
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -496,8 +501,10 @@ def main():
     print("Medici Bank — Additional Data Generator")
     print("=" * 60)
 
+    DATA_DIR.mkdir(exist_ok=True)
+
     # 1. Load existing 20,000 transactions
-    existing = load_existing_csv("medici_transactions.csv")
+    existing = load_existing_csv(DATA_DIR / "medici_transactions.csv")
 
     # 2. Generate 60,000 more legitimate transactions
     print("\nGenerating 60,000 additional legitimate transactions …")
@@ -521,12 +528,12 @@ def main():
 
     # 6. Save
     print("\nSaving updated files …")
-    save_to_csv(combined, "medici_transactions.csv")
-    save_to_json(combined, "medici_transactions.json")
+    save_to_csv(combined, DATA_DIR / "medici_transactions.csv")
+    save_to_json(combined, DATA_DIR / "medici_transactions.json")
 
     print("\nDone. Updated files:")
-    print("  medici_transactions.csv")
-    print("  medici_transactions.json")
+    print("  data/medici_transactions.csv")
+    print("  data/medici_transactions.json")
 
 
 if __name__ == "__main__":
