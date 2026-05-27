@@ -40,22 +40,22 @@ def demo_export():
     ledger.record_transaction(
         date(2024, 1, 1),
         "Initial capital investment",
-        TransactionEntry(cash, Decimal("10000.00")),
-        TransactionEntry(capital, Decimal("10000.00"))
+        TransactionEntry.debit(cash, Decimal("10000.00")),
+        TransactionEntry.credit(capital, Decimal("10000.00"))
     )
     
     ledger.record_transaction(
         date(2024, 1, 15),
         "Service revenue received",
-        TransactionEntry(cash, Decimal("1500.00")),
-        TransactionEntry(revenue, Decimal("1500.00"))
+        TransactionEntry.debit(cash, Decimal("1500.00")),
+        TransactionEntry.credit(revenue, Decimal("1500.00"))
     )
     
     ledger.record_transaction(
         date(2024, 1, 30),
         "Operating expenses paid",
-        TransactionEntry(expenses, Decimal("500.00")),
-        TransactionEntry(cash, Decimal("-500.00"))
+        TransactionEntry.debit(expenses, Decimal("500.00")),
+        TransactionEntry.credit(cash, Decimal("500.00"))
     )
     
     # Export to CSV
