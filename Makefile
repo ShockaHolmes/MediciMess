@@ -1,10 +1,11 @@
-.PHONY: help setup run run-module test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export clean-data
+.PHONY: help setup run run-module start test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export clean-data
 
 help:
 	@echo "Available targets:"
 	@echo "  make setup        - Create venv and upgrade pip"
 	@echo "  make run          - Run main Medici banking demo"
 	@echo "  make run-module   - Run module entrypoint"
+	@echo "  make start        - Start API server + UI server together"
 	@echo "  make test         - Run test suite using .venv"
 	@echo "  make generate-data- Generate historical datasets in data/"
 	@echo "  make transform-data- Build cleaned analytics-ready transaction dataset"
@@ -27,6 +28,9 @@ run:
 
 run-module:
 	python3 -m medici_banking
+
+start:
+	./start.sh
 
 test:
 	@test -x .venv/bin/python || (echo "Virtual environment missing. Run 'make setup' first." && exit 1)
