@@ -30,8 +30,8 @@ property acquisition, and operating expenses.
 
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import date, datetime
-from enum import Enum, auto
-from typing import List, Tuple, Dict, Optional
+from enum import Enum
+from typing import Any, List, Tuple, Dict, Optional
 from dataclasses import dataclass, field
 import csv
 import json
@@ -166,25 +166,15 @@ _DESCRIPTIONS: Dict[AccountType, str] = {
     ),
 }
 
-
-class AccountType(Enum):
-    """The different types of accounts in double-entry accounting"""
-    ASSET = auto()      # Resources owned by the business
-    LIABILITY = auto()  # Debts owed by the business
-    EQUITY = auto()     # Owner's interest in the business
-    REVENUE = auto()    # Income earned by the business
-    EXPENSE = auto()    # Costs incurred by the business
-
-
 class Account:
     """Represents a financial account in the double-entry system"""
     
     def __init__(self, name: str, account_type: AccountType):
-        self.name = name
-        self.type = account_type
+        self._name = name
+        self._type = account_type
         self._balance = Decimal('0')
-    
-     @property
+
+    @property
     def name(self) -> str:          
         return self._name
 
@@ -238,7 +228,7 @@ class TransactionEntry:
     """Represents one debit or credit line in a transaction"""
     account: Account
     amount: Decimal
-    is_debit: bool
+    is_debit: Optional[bool] = None
 
     @classmethod
     def debit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
@@ -254,7 +244,20 @@ class TransactionEntry:
         # Ensure amount is a Decimal
         self.amount = Decimal(str(self.amount))
 
-        if self.amount <= 0:
+        if self.amount == 0:
+            raise ValueError("Transaction entry amount must not be zero")
+
+        # Backward compatibility: if side is omitted, infer it from account type
+        # and amount sign. Positive means normal balance direction, negative means
+        # the opposite direction.
+        if self.is_debit is None:
+            normal_is_debit = self.account.type in (AccountType.ASSET, AccountType.EXPENSE)
+            if self.amount > 0:
+                self.is_debit = normal_is_debit
+            else:
+                self.is_debit = not normal_is_debit
+            self.amount = abs(self.amount)
+        elif self.amount < 0:
             raise ValueError("Transaction entry amount must be greater than zero")
 
     def __str__(self) -> str:
@@ -358,42 +361,84 @@ class Ledger:
         # Print only if not in silent mode
         if not self._silent_mode:
             print(transaction)
-    
-    def print_trial_balance(self) -> None:
-        """Prints a trial balance to verify that debits = credits across all accounts"""
-        total_debits = Decimal('0')
-        total_credits = Decimal('0')
-        
-        print(f"{'Account':<30} {'Debit (Florins)':<15} {'Credit (Florins)':<15}")
-        print("-" * 60)
-        
+
+    def get_trial_balance_report(self) -> Dict[str, Any]:
+        """Build a structured trial balance report for UI/API consumers."""
+        cent = Decimal("0.01")
+        total_debits = Decimal("0")
+        total_credits = Decimal("0")
+        rows = []
+
         for account in self.accounts:
             balance = account.balance
-            
-            # For the trial balance, we show positive balances in their normal position
+            debit_balance = Decimal("0")
+            credit_balance = Decimal("0")
+
             if account.type in (AccountType.ASSET, AccountType.EXPENSE):
-                if balance > 0:
-                    print(f"{account.name:<30} {balance.quantize(Decimal('0.01')):<15} {'':15}")
-                    total_debits += balance
-                elif balance < 0:
-                    print(f"{account.name:<30} {'':15} {abs(balance).quantize(Decimal('0.01')):<15}")
-                    total_credits += abs(balance)
+                if balance >= 0:
+                    debit_balance = balance
+                else:
+                    credit_balance = abs(balance)
             else:
-                if balance > 0:
-                    print(f"{account.name:<30} {'':15} {balance.quantize(Decimal('0.01')):<15}")
-                    total_credits += balance
-                elif balance < 0:
-                    print(f"{account.name:<30} {abs(balance).quantize(Decimal('0.01')):<15} {'':15}")
-                    total_debits += abs(balance)
-        
-        print("-" * 60)
-        print(f"{'TOTAL':<30} {total_debits.quantize(Decimal('0.01')):<15} "
-              f"{total_credits.quantize(Decimal('0.01')):<15}")
-        
-        if total_debits == total_credits:
-            print("\nThe books are balanced! ✓")
-        else:
-            print("\nWARNING: The books are NOT balanced! ✗")
+                if balance >= 0:
+                    credit_balance = balance
+                else:
+                    debit_balance = abs(balance)
+
+            total_debits += debit_balance
+            total_credits += credit_balance
+
+            rows.append(
+                {
+                    "account_name": account.name,
+                    "account_type": account.type.value,
+                    "debit_balance": debit_balance.quantize(cent),
+                    "credit_balance": credit_balance.quantize(cent),
+                }
+            )
+
+        total_debits = total_debits.quantize(cent)
+        total_credits = total_credits.quantize(cent)
+
+        return {
+            "rows": rows,
+            "total_debits": total_debits,
+            "total_credits": total_credits,
+            "is_balanced": total_debits == total_credits,
+        }
+    
+    def print_trial_balance(self) -> None:
+        """Print a trial balance report for all accounts in the ledger."""
+        report = self.get_trial_balance_report()
+        rows = report["rows"]
+        total_debits = report["total_debits"]
+        total_credits = report["total_credits"]
+        is_balanced = report["is_balanced"]
+
+        def _format_amount(value: Decimal) -> str:
+            if value == 0:
+                return ""
+            return f"{value:,.2f}"
+
+        print(f"{'Account':<30} {'Type':<12} {'Debit (Florins)':>18} {'Credit (Florins)':>18}")
+        print("-" * 82)
+
+        for row in rows:
+            print(
+                f"{row['account_name']:<30} "
+                f"{str(row['account_type']).upper():<12} "
+                f"{_format_amount(row['debit_balance']):>18} "
+                f"{_format_amount(row['credit_balance']):>18}"
+            )
+
+        print("-" * 82)
+        print(
+            f"{'TOTAL':<42} "
+            f"{total_debits:>18,.2f} "
+            f"{total_credits:>18,.2f}"
+        )
+
+        print(f"\nLedger balanced: {'YES' if is_balanced else 'NO'}")
     
     def print_balance_sheet(self) -> None:
         """Prints a balance sheet (Assets = Liabilities + Equity)"""
