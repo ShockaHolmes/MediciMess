@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medici Transaction Ledger View</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+    :root {
+      --paper: #f4efe2;
+      --ink: #2b241c;
+      --accent: #8b1a1a;
+      --accent-2: #b8860b;
+      --surface: #fffaf0;
+      --surface-2: #f7f0e1;
+      --ok: #2f7d32;
+      --muted: #7b6d5a;
+      --line: #d8c8aa;
+      --shadow: rgba(43, 36, 28, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Source Sans 3', serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 20%, rgba(184, 134, 11, 0.2) 0, transparent 36%),
+        radial-gradient(circle at 85% 8%, rgba(139, 26, 26, 0.16) 0, transparent 32%),
+        linear-gradient(160deg, #efe5d0 0%, #f9f2e5 42%, #f2e9d5 100%);
+      min-height: 100vh;
+      padding: 28px;
+      animation: fade-in 0.65s ease;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 36px var(--shadow);
+    }
+
+    .hero {
+      padding: 24px 28px;
+      background: linear-gradient(120deg, #fff5dd 0%, #f6e4be 50%, #f1d599 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .title {
+      margin: 0;
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--line);
+      align-items: end;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 0.86rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+      border: 1px solid #c9b899;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #fffcf6;
+      color: var(--ink);
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid rgba(184, 134, 11, 0.35);
+      border-color: var(--accent-2);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      background: linear-gradient(120deg, var(--accent) 0%, #7a1515 100%);
+      color: #fff8e6;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(122, 21, 21, 0.28);
+    }
+
+    button.secondary {
+      background: linear-gradient(120deg, #6f5d45 0%, #5f4f3a 100%);
+    }
+
+    .status-bar {
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fff9eb;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      max-height: 70vh;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #f6ecd5;
+      z-index: 1;
+      border-bottom: 2px solid #cbb488;
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #5f4f3a;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 11px 12px;
+      border-bottom: 1px solid #eadbc0;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(2n) {
+      background: #fff7e7;
+    }
+
+    tbody tr {
+      transition: background-color 120ms ease;
+    }
+
+    tbody tr:hover {
+      background: #fceecf;
+    }
+
+    .amount {
+      font-weight: 700;
+      color: var(--ok);
+      white-space: nowrap;
+    }
+
+    .desc {
+      max-width: 360px;
+    }
+
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      border-top: 1px solid var(--line);
+      background: #fff9ec;
+    }
+
+    .pager-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .hint {
+      font-size: 0.9rem;
+      color: #745f43;
+      margin: 10px 20px 18px;
+    }
+
+    .error {
+      color: #8b1a1a;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1080px) {
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .actions {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 12px;
+      }
+
+      .hero {
+        padding: 18px;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <h1 class="title">Medici Transaction Ledger</h1>
+      <p class="subtitle">Searchable and filterable ledger view for historical double-entry transactions</p>
+    </section>
+
+    <section class="controls">
+      <div class="field">
+        <label for="searchInput">Search Description / Account</label>
+        <input id="searchInput" type="text" placeholder="Try: interest, loans receivable, wool..." />
+      </div>
+
+      <div class="field">
+        <label for="branchFilter">Branch</label>
+        <select id="branchFilter">
+          <option value="">All branches</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="dateStart">Date From</label>
+        <input id="dateStart" type="date" />
+      </div>
+
+      <div class="field">
+        <label for="dateEnd">Date To</label>
+        <input id="dateEnd" type="date" />
+      </div>
+
+      <div class="actions">
+        <button id="applyBtn" type="button">Apply Filters</button>
+        <button id="clearBtn" class="secondary" type="button">Clear</button>
+      </div>
+    </section>
+
+    <section class="status-bar">
+      <div id="statusText">Loading dataset...</div>
+      <div>
+        <label for="fileInput">Load CSV file:</label>
+        <input id="fileInput" type="file" accept=".csv" />
+      </div>
+    </section>
+
+    <section class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Branch</th>
+            <th>Debit Account</th>
+            <th>Credit Account</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="ledgerBody"></tbody>
+      </table>
+    </section>
+
+    <section class="pager">
+      <div id="pageMeta">Page 1 of 1</div>
+      <div class="pager-controls">
+        <button id="prevBtn" class="secondary" type="button">Previous</button>
+        <button id="nextBtn" class="secondary" type="button">Next</button>
+      </div>
+    </section>
+
+    <p class="hint" id="hintText">
+      If the page is opened directly as a local file and automatic loading fails, use the "Load CSV file" input and select data/medici_transactions.csv.
+    </p>
+  </main>
+
+  <script>
+    const PAGE_SIZE = 100;
+    const ledgerBody = document.getElementById('ledgerBody');
+    const statusText = document.getElementById('statusText');
+    const pageMeta = document.getElementById('pageMeta');
+    const branchFilter = document.getElementById('branchFilter');
+
+    const searchInput = document.getElementById('searchInput');
+    const dateStart = document.getElementById('dateStart');
+    const dateEnd = document.getElementById('dateEnd');
+    const applyBtn = document.getElementById('applyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const fileInput = document.getElementById('fileInput');
+
+    let allRows = [];
+    let filteredRows = [];
+    let page = 1;
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i += 1) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            cell += '"';
+            i += 1;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          row.push(cell);
+          cell = '';
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (char === '\r' && next === '\n') {
+            i += 1;
+          }
+          row.push(cell);
+          if (row.length > 1 || row[0] !== '') {
+            rows.push(row);
+          }
+          row = [];
+          cell = '';
+        } else {
+          cell += char;
+        }
+      }
+
+      if (cell.length || row.length) {
+        row.push(cell);
+        rows.push(row);
+      }
+
+      if (!rows.length) {
+        return [];
+      }
+
+      const headers = rows[0];
+      return rows.slice(1).map((cols) => {
+        const item = {};
+        headers.forEach((h, idx) => {
+          item[h] = (cols[idx] || '').trim();
+        });
+        return item;
+      });
+    }
+
+    function formatAmount(row) {
+      const raw = Number(row.debit_amount || 0);
+      if (!Number.isFinite(raw)) {
+        return row.debit_amount || '';
+      }
+      return raw.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function toDateValue(value) {
+      if (!value) {
+        return null;
+      }
+      const parsed = new Date(value + 'T00:00:00');
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      const branch = branchFilter.value;
+      const fromDate = toDateValue(dateStart.value);
+      const toDate = toDateValue(dateEnd.value);
+
+      filteredRows = allRows.filter((row) => {
+        const description = (row.description || '').toLowerCase();
+        const debit = (row.debit_account || '').toLowerCase();
+        const credit = (row.credit_account || '').toLowerCase();
+        const account2 = (row.credit_account_2 || '').toLowerCase();
+        const matchesSearch = !q || description.includes(q) || debit.includes(q) || credit.includes(q) || account2.includes(q);
+
+        const matchesBranch = !branch || row.branch === branch;
+
+        const txDate = toDateValue(row.date);
+        const matchesFrom = !fromDate || (txDate && txDate >= fromDate);
+        const matchesTo = !toDate || (txDate && txDate <= toDate);
+
+        return matchesSearch && matchesBranch && matchesFrom && matchesTo;
+      });
+
+      page = 1;
+      renderTable();
+    }
+
+    function renderTable() {
+      const total = filteredRows.length;
+      const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      if (page > pages) {
+        page = pages;
+      }
+
+      const start = (page - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const rows = filteredRows.slice(start, end);
+
+      ledgerBody.innerHTML = rows.map((row) => `
+        <tr>
+          <td>${row.id || ''}</td>
+          <td>${row.date || ''}</td>
+          <td class="desc">${row.description || ''}</td>
+          <td>${row.branch || ''}</td>
+          <td>${row.debit_account || ''}</td>
+          <td>${row.credit_account || ''}</td>
+          <td class="amount">${formatAmount(row)}</td>
+        </tr>
+      `).join('');
+
+      if (!rows.length) {
+        ledgerBody.innerHTML = '<tr><td colspan="7">No transactions match current filters.</td></tr>';
+      }
+
+      pageMeta.textContent = `Page ${page} of ${pages}`;
+      statusText.textContent = `Showing ${rows.length.toLocaleString()} of ${total.toLocaleString()} filtered records (total loaded: ${allRows.length.toLocaleString()})`;
+      prevBtn.disabled = page <= 1;
+      nextBtn.disabled = page >= pages;
+    }
+
+    function populateBranchFilter() {
+      const branches = Array.from(new Set(allRows.map((row) => row.branch).filter(Boolean))).sort();
+      branchFilter.innerHTML = '<option value="">All branches</option>' + branches
+        .map((branch) => `<option value="${branch}">${branch}</option>`)
+        .join('');
+    }
+
+    function initializeRows(rows) {
+      allRows = rows
+        .filter((row) => row.id && row.date)
+        .sort((a, b) => {
+          if (a.date !== b.date) {
+            return a.date.localeCompare(b.date);
+          }
+          return Number(a.id || 0) - Number(b.id || 0);
+        });
+
+      populateBranchFilter();
+      filteredRows = allRows.slice();
+      page = 1;
+      renderTable();
+    }
+
+    async function tryLoadDefaultCsv() {
+      const candidates = [
+        'data/medici_transactions.csv',
+        './data/medici_transactions.csv',
+        '../data/medici_transactions.csv',
+      ];
+
+      for (const path of candidates) {
+        try {
+          const response = await fetch(path);
+          if (!response.ok) {
+            continue;
+          }
+          const text = await response.text();
+          const rows = parseCsv(text);
+          if (rows.length > 0) {
+            initializeRows(rows);
+            statusText.textContent = `Loaded ${rows.length.toLocaleString()} rows from ${path}`;
+            return;
+          }
+        } catch (error) {
+          // Continue trying candidates.
+        }
+      }
+
+      statusText.innerHTML = '<span class="error">Could not auto-load data/medici_transactions.csv. Use the file picker to load a CSV file.</span>';
+    }
+
+    applyBtn.addEventListener('click', applyFilters);
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      branchFilter.value = '';
+      dateStart.value = '';
+      dateEnd.value = '';
+      filteredRows = allRows.slice();
+      page = 1;
+      renderTable();
+    });
+
+    searchInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        applyFilters();
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      page = Math.max(1, page - 1);
+      renderTable();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      page += 1;
+      renderTable();
+    });
+
+    fileInput.addEventListener('change', async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) {
+        return;
+      }
+      const text = await file.text();
+      const rows = parseCsv(text);
+      initializeRows(rows);
+      statusText.textContent = `Loaded ${rows.length.toLocaleString()} rows from ${file.name}`;
+    });
+
+    tryLoadDefaultCsv();
+  </script>
+</body>
+</html>
