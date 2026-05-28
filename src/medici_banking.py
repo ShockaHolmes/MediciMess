@@ -37,6 +37,136 @@ import csv
 import json
 
 
+class NormalBalance(str, Enum):
+    """The side of a journal entry that increases an account's balance."""
+ 
+    DEBIT = "debit"
+    CREDIT = "credit"
+ 
+ 
+class AccountType(str, Enum):
+    """
+    The five account types recognized in double-entry bookkeeping.
+ 
+    Inherits from `str` so values serialize cleanly to JSON, slot into Pydantic
+    models, and persist as VARCHAR with no custom converters.
+ 
+    Behavior summary (issue #16):
+        ASSET     -> normal balance DEBIT  (debits increase, credits decrease)
+        LIABILITY -> normal balance CREDIT (credits increase, debits decrease)
+        EQUITY    -> normal balance CREDIT (credits increase, debits decrease)
+        REVENUE   -> normal balance CREDIT (credits increase, debits decrease)
+        EXPENSE   -> normal balance DEBIT  (debits increase, credits decrease)
+    """
+ 
+    ASSET = "asset"          # Resources owned by the business that have economic value (e.g. cash, receivables, inventory, land)
+    LIABILITY = "liability"  # Debts owed by the business (e.g. payables, loans, customer deposits)
+    EQUITY = "equity"        # Owner's interest in the business after liabilities (e.g. capital contributions, retained earnings)
+    REVENUE = "revenue"      # Income earned from primary business activities (e.g. interest income, service fees)
+    EXPENSE = "expense"      # Costs incurred to generate revenue (e.g. wages, rent, supplies)
+ 
+    @property
+    def normal_balance(self) -> NormalBalance:
+        """The side that increases this account's balance."""
+        return _NORMAL_BALANCES[self]
+ 
+    @property
+    def increases_on(self) -> NormalBalance:
+        """Alias for `normal_balance`. The side that increases this account."""
+        return self.normal_balance
+ 
+    @property
+    def decreases_on(self) -> NormalBalance:
+        """The side that decreases this account's balance."""
+        return (
+            NormalBalance.CREDIT
+            if self.normal_balance is NormalBalance.DEBIT
+            else NormalBalance.DEBIT
+        )
+ 
+    @property
+    def description(self) -> str:
+        """Human-readable description of the account category."""
+        return _DESCRIPTIONS[self]
+ 
+    @classmethod
+    def parse(cls, value) -> "AccountType":
+        """
+        Coerce a string (or AccountType) into an AccountType.
+ 
+        Accepts either the value form ("asset") or the member-name form
+        ("ASSET"), case-insensitively, with surrounding whitespace tolerated.
+        This keeps backward-compat with JSON exports that used `.name`.
+ 
+        Raises:
+            ValueError: if `value` does not match a supported account type.
+        """
+        if isinstance(value, cls):
+            return value
+        if not isinstance(value, str):
+            raise ValueError(
+                f"Account type must be a string, got {type(value).__name__}"
+            )
+        cleaned = value.strip()
+        # Try the lowercase value form first ("asset")
+        try:
+            return cls(cleaned.lower())
+        except ValueError:
+            pass
+        # Fall back to uppercase name form ("ASSET") for older JSON files
+        try:
+            return cls[cleaned.upper()]
+        except KeyError:
+            pass
+        supported = ", ".join(t.value for t in cls)
+        raise ValueError(
+            f"Unsupported account type: {value!r}. "
+            f"Must be one of: {supported}."
+        )
+ 
+ 
+# Behavior tables  ------------------------------------------------
+ 
+_NORMAL_BALANCES: Dict[AccountType, NormalBalance] = {
+    AccountType.ASSET:     NormalBalance.DEBIT,
+    AccountType.LIABILITY: NormalBalance.CREDIT,
+    AccountType.EQUITY:    NormalBalance.CREDIT,
+    AccountType.REVENUE:   NormalBalance.CREDIT,
+    AccountType.EXPENSE:   NormalBalance.DEBIT,
+}
+ 
+ 
+_DESCRIPTIONS: Dict[AccountType, str] = {
+    AccountType.ASSET: (
+        "Resources owned by the business that have economic value "
+        "(e.g. cash, receivables, inventory, land). "
+        "Increased by debits, decreased by credits."
+    ),
+    AccountType.LIABILITY: (
+        "Obligations the business owes to others "
+        "(e.g. payables, loans, customer deposits). "
+        "Increased by credits, decreased by debits."
+    ),
+    AccountType.EQUITY: (
+        "The owners' residual interest in the business after liabilities "
+        "(e.g. capital contributions, retained earnings). "
+        "Increased by credits, decreased by debits."
+    ),
+    AccountType.REVENUE: (
+        "Income earned from primary business activities "
+        "(e.g. interest income, service fees). "
+        "Increased by credits, decreased by debits. "
+        "Closes into equity at period end."
+    ),
+    AccountType.EXPENSE: (
+        "Costs incurred to generate revenue "
+        "(e.g. wages, rent, supplies). "
+        "Increased by debits, decreased by credits. "
+        "Closes into equity at period end."
+    ),
+}
+
+
 class AccountType(Enum):
     """The different types of accounts in double-entry accounting"""
     ASSET = auto()      # Resources owned by the business
@@ -54,6 +184,19 @@ class Account:
         self.type = account_type
         self._balance = Decimal('0')
     
+     @property
+    def name(self) -> str:          
+        return self._name
+
+    @property
+    def type(self) -> AccountType:  
+        return self._type
+
+    @property
+    def formatted_balance(self) -> str:  
+        # Storage keeps full precision; only the display is quantized.
+        return f"{self._balance:,.2f} florins"
+
     @property
     def balance(self) -> Decimal:
         """Get the current balance of the account"""
