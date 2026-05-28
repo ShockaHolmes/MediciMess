@@ -166,13 +166,6 @@ _DESCRIPTIONS: Dict[AccountType, str] = {
         "Closes into equity at period end."
     ),
 }
-<<<<<<< HEAD
- 
- 
-=======
-
-
->>>>>>> b39dd7d (updated dev to fixt test and problems.)
 class Account:
     """Represents a financial account in the double-entry system"""
  
@@ -180,15 +173,9 @@ class Account:
         self._name = name
         self._type = account_type
         self._balance = Decimal('0')
-<<<<<<< HEAD
- 
-    @property
-    def name(self) -> str:
-=======
 
     @property
-    def name(self) -> str:          
->>>>>>> b39dd7d (updated dev to fixt test and problems.)
+    def name(self) -> str:
         return self._name
  
     @property
@@ -242,11 +229,7 @@ class TransactionEntry:
     account: Account
     amount: Decimal
     is_debit: Optional[bool] = None
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> b39dd7d (updated dev to fixt test and problems.)
     @classmethod
     def debit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
         """Create a debit transaction entry."""
@@ -260,11 +243,10 @@ class TransactionEntry:
     def __post_init__(self):
         # Normalize and support legacy 2-arg constructor usage by inferring side.
         self.amount = Decimal(str(self.amount))
-<<<<<<< HEAD
- 
+
         if self.amount == 0:
             raise ValueError("Transaction entry amount must not be zero")
- 
+
         # Backward compatibility: if side is omitted, infer it from account type
         # and amount sign. Positive means normal balance direction, negative means
         # the opposite direction.
@@ -276,14 +258,6 @@ class TransactionEntry:
                 self.is_debit = not normal_is_debit
             self.amount = abs(self.amount)
         elif self.amount < 0:
-=======
-
-        if self.is_debit is None:
-            base_is_debit = self.account.type in (AccountType.ASSET, AccountType.EXPENSE)
-            self.is_debit = base_is_debit if self.amount >= 0 else (not base_is_debit)
-            self.amount = abs(self.amount)
-        elif self.amount <= 0:
->>>>>>> b39dd7d (updated dev to fixt test and problems.)
             raise ValueError("Transaction entry amount must be greater than zero")
  
     def __str__(self) -> str:
@@ -371,12 +345,21 @@ class DuplicateTransactionError(ValueError):
     """Raised when a transaction ID is reused, empty, or otherwise invalid."""
  
  
+class AccountRegistry(dict[str, Account]):
+    """Mapping keyed by account name; iteration yields Account objects."""
+
+    def __iter__(self):
+        # Backward compatibility for callers that iterate ledger.accounts
+        # and expect Account objects instead of account-name strings.
+        return iter(self.values())
+
+
 class Ledger:
     """The main ledger that keeps track of all accounts and transactions"""
  
     def __init__(self, name: str):
         self.name = name
-        self.accounts: Dict[str, Account] = {}        # issue #44 (keyed by name)
+        self.accounts: AccountRegistry = AccountRegistry()  # issue #44 (keyed by name)
         self.transactions: List[Transaction] = []     # issue #47
         self._used_ids: set[str] = set()              # issue #49
         self._next_seq = 1
@@ -614,7 +597,7 @@ class Ledger:
         total_revenue = Decimal("0")
         total_expenses = Decimal("0")
 
-        for account in self.accounts:
+        for account in self.accounts.values():
             if account.type == AccountType.REVENUE:
                 amount = account.balance.quantize(cent)
                 revenue_accounts.append(
