@@ -7,6 +7,7 @@ from the Medici Bank's operations during 1390-1440, including:
 - Florentine-Milanese Wars
 - Council of Constance
 - Wars in Lombardy
+- Political events around Florentine governance
 - Regular banking operations across branches
 """
 
@@ -348,6 +349,76 @@ class TransactionGenerator:
         })
         
         return transactions
+
+    def generate_political_event(self, transaction_date: date) -> Dict:
+        """Generate non-war political event transactions in Italian city-states."""
+        branch = random.choice(["Florence", "Rome", "Venice", "Milan"])
+
+        event_templates: List[Tuple[str, str, str, int, int]] = [
+            (
+                "Signoria Election Patronage",
+                "Political patronage disbursement tied to Signoria election cycle",
+                "Political Influence Expense",
+                300,
+                5000,
+            ),
+            (
+                "Guild Coalition Funding",
+                "Funding to stabilize guild coalition before council deliberations",
+                "Political Influence Expense",
+                200,
+                4000,
+            ),
+            (
+                "Cosimo Exile Logistics",
+                "Funds advanced for Cosimo de' Medici exile logistics and correspondence",
+                "Political Receivable",
+                1000,
+                12000,
+            ),
+            (
+                "Cosimo Restoration Settlement",
+                "Settlement flows tied to Medici restoration in Florence",
+                "Political Receivable",
+                1500,
+                15000,
+            ),
+            (
+                "Diplomatic Tribute",
+                "Diplomatic payment supporting inter-city political alignment",
+                "Political Influence Expense",
+                500,
+                7000,
+            ),
+        ]
+
+        event_name, description, debit_account, min_amt, max_amt = random.choice(event_templates)
+        amount = self.random_amount(min_amt, max_amt)
+
+        # Receivable-style entries represent advances expected to be recovered;
+        # influence expense entries represent direct political spending.
+        counterparty = random.choice([
+            "Florentine Signoria",
+            "City Magistrates",
+            "Guild Councillors",
+            "Diplomatic Envoys",
+            "Medici Political Network",
+        ])
+
+        return {
+            "id": self.transaction_id,
+            "date": transaction_date.isoformat(),
+            "branch": branch,
+            "type": "political_event",
+            "event_name": event_name,
+            "counterparty": counterparty,
+            "description": description,
+            "debit_account": debit_account,
+            "debit_amount": float(amount),
+            "credit_account": "Cash",
+            "credit_amount": float(amount),
+            "currency": "florin",
+        }
     
     def generate_transactions(self, num_transactions: int = 20000) -> List[Dict]:
         """Generate the full set of historical transactions"""
@@ -371,8 +442,27 @@ class TransactionGenerator:
             "bills_of_exchange": 0.10,   # 10% - International banking
             "alum_trade": 0.08,          # 8% - Papal monopoly trade
             "war_financing": 0.05,       # 5% - Wars (high amounts)
-            "operating_expense": 0.17    # 17% - Daily operations
+            "operating_expense": 0.12,   # 12% - Daily operations
+            "political_event": 0.05      # 5% - Non-war political events
         }
+
+        # Guarantee at least one transaction for each required category.
+        guaranteed_transactions: List[Dict] = [
+            self.generate_papal_deposit(date(1391, 2, 14)),
+            self.generate_loan_repayment(date(1392, 5, 2)),
+            self.generate_deposit_withdrawal(date(1393, 7, 19)),
+            self.generate_bills_of_exchange(date(1394, 9, 11)),
+            self.generate_alum_trade(date(1395, 3, 8)),
+            self.generate_war_financing(date(1398, 6, 21), "milan"),
+            self.generate_operating_expense(date(1399, 1, 30)),
+            self.generate_political_event(date(1400, 4, 16)),
+        ]
+
+        # Loan issuance returns a one-element list.
+        guaranteed_transactions.extend(self.generate_loan_issuance(date(1390, 10, 3)))
+        for guaranteed in guaranteed_transactions:
+            transactions.append(guaranteed)
+            self.transaction_id += 1
         
         # Generate remaining transactions
         while len(transactions) < num_transactions:
@@ -429,6 +519,8 @@ class TransactionGenerator:
                     trans = self.generate_war_financing(trans_date, war_type)
                 elif trans_type == "operating_expense":
                     trans = self.generate_operating_expense(trans_date)
+                elif trans_type == "political_event":
+                    trans = self.generate_political_event(trans_date)
                 else:
                     continue
                 

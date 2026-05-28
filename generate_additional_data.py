@@ -1,127 +1,218 @@
 """
-Additional Transaction Generator for Medici Bank Dataset
+Medici Bank Additional Dataset Generator (Phase 2)
 
-This script:
-1. Appends 60,000 more historically-themed transactions to the existing dataset.
-2. Injects a hidden embezzlement trail (~100,000 florins over 1420-1425) using the
-   ghost-vendor technique, designed to look plausible in isolation but detectable
-   through simple forensic analysis.
+Expands the historical transaction dataset to more than 80,000 records while
+preserving the 1390-1440 coverage window.
+
+This script adds:
+- More branch activity
+- Recurring operating expenses
+- Trade-related transactions
+- Loan and repayment transactions
+- Vendor payments
 
 Usage:
-    python3 generate_additional_data.py
-
-Output:
-    Updates medici_transactions.csv and medici_transactions.json in place.
+    /Users/shocka/MediciMess/.venv/bin/python generate_additional_data.py
 """
+
+from __future__ import annotations
 
 import csv
 import json
 import random
-from pathlib import Path
+from collections import Counter
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import List, Dict
+from pathlib import Path
+from typing import Any
 
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 
+BASE_CSV = DATA_DIR / "medici_transactions.csv"
+BASE_JSON = DATA_DIR / "medici_transactions.json"
+EXPANDED_CSV = DATA_DIR / "medici_transactions_expanded.csv"
+EXPANDED_JSON = DATA_DIR / "medici_transactions_expanded.json"
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Re-use the same generator infrastructure as generate_historical_data.py
-# ──────────────────────────────────────────────────────────────────────────────
-
-class HistoricalPeriod:
-    WESTERN_SCHISM = {"start": date(1390, 1, 1), "end": date(1417, 12, 31)}
-    PAPAL_BANKING_BOOM = {"start": date(1410, 1, 1), "end": date(1430, 12, 31)}
-    FIRST_MILANESE_WAR = {"start": date(1390, 1, 1), "end": date(1402, 9, 3)}
-    COUNCIL_CONSTANCE = {"start": date(1414, 11, 16), "end": date(1418, 4, 22)}
-    SECOND_MILANESE_WAR = {"start": date(1422, 1, 1), "end": date(1426, 12, 31)}
-    LOMBARDY_WARS = {"start": date(1423, 1, 1), "end": date(1440, 12, 31)}
+START_DATE = date(1390, 1, 1)
+END_DATE = date(1440, 12, 31)
+TARGET_TOTAL = 85000
 
 
-class TransactionGenerator:
-    """Generates historically-themed banking transactions (same logic as generate_historical_data.py)."""
+class AdditionalTransactionGenerator:
+    """Generate additional transactions to expand the historical dataset."""
 
-    def __init__(self, seed=99):
+    def __init__(self, seed: int = 31415):
         random.seed(seed)
-        self.transaction_id = 1
-        self.branches = ["Florence", "Rome", "Venice", "Milan", "Geneva", "Bruges", "London", "Avignon"]
+        self.branches = [
+            "Florence",
+            "Rome",
+            "Venice",
+            "Milan",
+            "Geneva",
+            "Bruges",
+            "London",
+            "Avignon",
+            "Naples",
+            "Pisa",
+        ]
         self.merchants = [
-            "Wool Merchant", "Silk Trader", "Spice Merchant", "Cloth Merchant",
-            "Wine Trader", "Gold Merchant", "Jewel Trader", "Grain Merchant",
-            "Armor Smith", "Textile Merchant", "Banking House", "Trading Company"
+            "Wool Guild Syndicate",
+            "Silk Consortium",
+            "Levant Spice Traders",
+            "Flemish Cloth House",
+            "Venetian Grain Brokers",
+            "Lombard Metals Exchange",
+            "Tuscan Wine Carriers",
+            "Mediterranean Shipping Company",
+        ]
+        self.vendors = [
+            "Santa Maria Scribes",
+            "Florentine Paperworks",
+            "Guildhall Security Company",
+            "San Lorenzo Couriers",
+            "Arno Lamp Oil Merchants",
+            "Mercato Maintenance Works",
+            "Ponte Vecchio Rent Office",
+            "Signoria Utilities Office",
         ]
         self.nobles = [
-            "Duke of Milan", "Doge of Venice", "King of Naples", "Cardinal",
-            "Archbishop", "Count of Urbino", "Marquis", "Baron", "Lord"
+            "Duke of Milan",
+            "Doge of Venice",
+            "Republic of Florence",
+            "Kingdom of Naples",
+            "Count of Urbino",
+            "Marquis of Mantua",
         ]
-        self.papal_entities = [
-            "Papal Curia", "Vatican Treasury", "Cardinal's Office", "Papal Court",
-            "Holy See", "Apostolic Chamber", "Sacred College"
+        self.trade_goods = [
+            "wool",
+            "silk",
+            "spices",
+            "alum",
+            "grain",
+            "wine",
+            "dyestuffs",
+            "metals",
         ]
 
-    def random_date(self, start: date, end: date) -> date:
+    @staticmethod
+    def random_date(start: date, end: date) -> date:
         delta = end - start
         return start + timedelta(days=random.randint(0, delta.days))
 
-    def random_amount(self, min_amount: int, max_amount: int) -> Decimal:
+    @staticmethod
+    def random_amount(min_amount: int, max_amount: int) -> Decimal:
         base = random.uniform(min_amount, max_amount)
-        factor = random.choice([1, 1, 1, 2, 5, 10, 20, 50])
+        factor = random.choice([1, 1, 1, 2, 5, 10])
         return Decimal(str(base * factor)).quantize(Decimal("0.01"))
 
-    def generate_papal_deposit(self, transaction_date: date) -> Dict:
-        entity = random.choice(self.papal_entities)
-        amount = self.random_amount(500, 50000)
+    def generate_branch_activity(self, transaction_id: int) -> dict[str, Any]:
+        src = random.choice(self.branches)
+        dst = random.choice([b for b in self.branches if b != src])
+        amount = self.random_amount(200, 18000)
+        fee = (amount * Decimal("0.015")).quantize(Decimal("0.01"))
+        tx_date = self.random_date(START_DATE, END_DATE)
         return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": "Rome",
-            "type": "deposit",
-            "counterparty": entity,
-            "description": f"Deposit from {entity} to Rome branch",
-            "debit_account": "Cash",
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
+            "branch": src,
+            "branch_to": dst,
+            "type": "branch_activity",
+            "counterparty": f"Inter-branch transfer to {dst}",
+            "description": f"Branch settlement transfer from {src} to {dst}",
+            "debit_account": f"Due from {dst}",
             "debit_amount": float(amount),
-            "credit_account": "Deposits Payable",
-            "credit_amount": float(amount),
+            "credit_account": "Cash",
+            "credit_amount": float((amount - fee).quantize(Decimal("0.01"))),
+            "credit_account_2": "Exchange Fee Revenue",
+            "credit_amount_2": float(fee),
             "currency": "florin",
         }
 
-    def generate_loan_issuance(self, transaction_date: date) -> List[Dict]:
+    def generate_recurring_operating_expense(self, transaction_id: int) -> dict[str, Any]:
         branch = random.choice(self.branches)
-        is_noble = random.random() > 0.7
-        counterparty = random.choice(self.nobles if is_noble else self.merchants)
-        amount = self.random_amount(1000, 100000) if is_noble else self.random_amount(100, 10000)
-        self.transaction_id += 1
-        return [{
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
+        expense = random.choice([
+            ("Wages", "monthly"),
+            ("Rent", "monthly"),
+            ("Supplies", "monthly"),
+            ("Security", "monthly"),
+            ("Courier Services", "weekly"),
+            ("Maintenance", "quarterly"),
+        ])
+        amount = self.random_amount(50, 2400)
+        tx_date = self.random_date(START_DATE, END_DATE)
+        vendor = random.choice(self.vendors)
+        return {
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
+            "branch": branch,
+            "type": "recurring_operating_expense",
+            "counterparty": vendor,
+            "description": f"{expense[0]} expense for {branch} branch ({expense[1]} cycle)",
+            "debit_account": expense[0],
+            "debit_amount": float(amount),
+            "credit_account": "Cash",
+            "credit_amount": float(amount),
+            "recurrence": expense[1],
+            "currency": "florin",
+        }
+
+    def generate_trade_transaction(self, transaction_id: int) -> dict[str, Any]:
+        branch = random.choice(self.branches)
+        good = random.choice(self.trade_goods)
+        merchant = random.choice(self.merchants)
+        amount = self.random_amount(150, 22000)
+        tx_date = self.random_date(START_DATE, END_DATE)
+        return {
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
+            "branch": branch,
+            "type": "trade_transaction",
+            "counterparty": merchant,
+            "description": f"Trade finance settlement for {good} cargo",
+            "debit_account": "Cash",
+            "debit_amount": float(amount),
+            "credit_account": "Trading Revenue",
+            "credit_amount": float(amount),
+            "trade_good": good,
+            "currency": "florin",
+        }
+
+    def generate_loan_issuance(self, transaction_id: int) -> dict[str, Any]:
+        branch = random.choice(self.branches)
+        borrower = random.choice(self.merchants + self.nobles)
+        amount = self.random_amount(300, 120000)
+        tx_date = self.random_date(START_DATE, END_DATE)
+        return {
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
             "branch": branch,
             "type": "loan_issuance",
-            "counterparty": counterparty,
-            "description": f"Loan issued to {counterparty} from {branch} branch",
+            "counterparty": borrower,
+            "description": f"Commercial loan issued to {borrower}",
             "debit_account": "Loans Receivable",
             "debit_amount": float(amount),
             "credit_account": "Cash",
             "credit_amount": float(amount),
             "currency": "florin",
-        }]
+        }
 
-    def generate_loan_repayment(self, transaction_date: date) -> Dict:
+    def generate_loan_repayment(self, transaction_id: int) -> dict[str, Any]:
         branch = random.choice(self.branches)
-        is_noble = random.random() > 0.7
-        counterparty = random.choice(self.nobles if is_noble else self.merchants)
-        principal = self.random_amount(100, 10000)
-        interest_rate = Decimal(random.randint(8, 25)) / Decimal("100")
-        interest = (principal * interest_rate).quantize(Decimal("0.01"))
+        borrower = random.choice(self.merchants + self.nobles)
+        principal = self.random_amount(150, 45000)
+        rate = Decimal(random.choice(["0.08", "0.10", "0.12", "0.15", "0.18", "0.22"]))
+        interest = (principal * rate).quantize(Decimal("0.01"))
         total = principal + interest
+        tx_date = self.random_date(START_DATE, END_DATE)
         return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
             "branch": branch,
             "type": "loan_repayment",
-            "counterparty": counterparty,
-            "description": f"Loan repayment from {counterparty} with interest",
+            "counterparty": borrower,
+            "description": f"Loan repayment from {borrower} including interest",
             "debit_account": "Cash",
             "debit_amount": float(total),
             "credit_account": "Loans Receivable",
@@ -131,409 +222,190 @@ class TransactionGenerator:
             "currency": "florin",
         }
 
-    def generate_war_financing(self, transaction_date: date, war_type: str) -> Dict:
-        amount = self.random_amount(5000, 200000)
-        descriptions = {
-            "milan": "War financing for Florentine operations against Milan",
-            "venice": "Loan to Venice for Lombardy Wars operations",
-            "defensive": "Emergency war financing for Florence defense",
-        }
-        return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": "Florence",
-            "type": "war_financing",
-            "counterparty": "Republic of Florence",
-            "description": descriptions.get(war_type, "War financing"),
-            "debit_account": "Loans Receivable - Government",
-            "debit_amount": float(amount),
-            "credit_account": "Cash",
-            "credit_amount": float(amount),
-            "currency": "florin",
-        }
-
-    def generate_alum_trade(self, transaction_date: date) -> Dict:
-        branch = random.choice(["Rome", "Florence", "Venice"])
-        amount = self.random_amount(200, 5000)
-        return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": branch,
-            "type": "alum_trade",
-            "counterparty": random.choice(self.merchants),
-            "description": "Alum sale from papal mines",
-            "debit_account": "Cash",
-            "debit_amount": float(amount),
-            "credit_account": "Trading Revenue",
-            "credit_amount": float(amount),
-            "currency": "florin",
-        }
-
-    def generate_bills_of_exchange(self, transaction_date: date) -> Dict:
-        from_branch = random.choice(self.branches)
-        to_branch = random.choice([b for b in self.branches if b != from_branch])
-        amount = self.random_amount(500, 20000)
-        fee_rate = Decimal(random.randint(100, 300)) / Decimal("10000")
-        fee = (amount * fee_rate).quantize(Decimal("0.01"))
-        return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": from_branch,
-            "type": "bill_of_exchange",
-            "counterparty": f"Transfer to {to_branch}",
-            "description": f"Bill of exchange from {from_branch} to {to_branch}",
-            "debit_account": f"Due from {to_branch}",
-            "debit_amount": float(amount),
-            "credit_account": "Cash",
-            "credit_amount": float(amount - fee),
-            "credit_account_2": "Exchange Fee Revenue",
-            "credit_amount_2": float(fee),
-            "currency": "florin",
-        }
-
-    def generate_operating_expense(self, transaction_date: date) -> Dict:
+    def generate_vendor_payment(self, transaction_id: int) -> dict[str, Any]:
         branch = random.choice(self.branches)
-        expense_types = [
-            ("Wages", 100, 2000),
-            ("Rent", 50, 500),
-            ("Supplies", 20, 300),
-            ("Courier Services", 10, 100),
-            ("Security", 50, 500),
-            ("Maintenance", 30, 400),
+        vendor = random.choice(self.vendors)
+        amount = self.random_amount(80, 9000)
+        tx_date = self.random_date(START_DATE, END_DATE)
+        return {
+            "id": transaction_id,
+            "date": tx_date.isoformat(),
+            "branch": branch,
+            "type": "vendor_payment",
+            "counterparty": vendor,
+            "description": f"Vendor payment to {vendor} for branch services",
+            "debit_account": "Accounts Payable",
+            "debit_amount": float(amount),
+            "credit_account": "Cash",
+            "credit_amount": float(amount),
+            "currency": "florin",
+        }
+
+    def generate_transactions(self, start_id: int, count: int) -> list[dict[str, Any]]:
+        generated: list[dict[str, Any]] = []
+        next_id = start_id
+
+        weighted_types = [
+            ("branch_activity", 0.22),
+            ("recurring_operating_expense", 0.20),
+            ("trade_transaction", 0.18),
+            ("loan_issuance", 0.15),
+            ("loan_repayment", 0.15),
+            ("vendor_payment", 0.10),
         ]
-        expense_type, min_amt, max_amt = random.choice(expense_types)
-        amount = self.random_amount(min_amt, max_amt)
-        return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": branch,
-            "type": "operating_expense",
-            "counterparty": f"{branch} Operations",
-            "description": f"{expense_type} expense for {branch} branch",
-            "debit_account": expense_type,
-            "debit_amount": float(amount),
-            "credit_account": "Cash",
-            "credit_amount": float(amount),
-            "currency": "florin",
-        }
 
-    def generate_deposit_withdrawal(self, transaction_date: date) -> Dict:
-        branch = random.choice(self.branches)
-        is_withdrawal = random.random() > 0.5
-        counterparty = random.choice(self.merchants + self.nobles)
-        amount = self.random_amount(100, 15000)
-        if is_withdrawal:
-            return {
-                "id": self.transaction_id,
-                "date": transaction_date.isoformat(),
-                "branch": branch,
-                "type": "withdrawal",
-                "counterparty": counterparty,
-                "description": f"Withdrawal by {counterparty}",
-                "debit_account": "Deposits Payable",
-                "debit_amount": float(amount),
-                "credit_account": "Cash",
-                "credit_amount": float(amount),
-                "currency": "florin",
-            }
-        return {
-            "id": self.transaction_id,
-            "date": transaction_date.isoformat(),
-            "branch": branch,
-            "type": "deposit",
-            "counterparty": counterparty,
-            "description": f"Deposit by {counterparty}",
-            "debit_account": "Cash",
-            "debit_amount": float(amount),
-            "credit_account": "Deposits Payable",
-            "credit_amount": float(amount),
-            "currency": "florin",
-        }
+        # Guarantee at least one of each required category.
+        required = [
+            self.generate_branch_activity,
+            self.generate_recurring_operating_expense,
+            self.generate_trade_transaction,
+            self.generate_loan_issuance,
+            self.generate_loan_repayment,
+            self.generate_vendor_payment,
+        ]
+        for factory in required:
+            generated.append(factory(next_id))
+            next_id += 1
 
-    def generate_transactions(self, num_transactions: int = 60000) -> List[Dict]:
-        transactions = []
-        start_date = date(1390, 1, 1)
-        end_date = date(1440, 12, 31)
-
-        transaction_weights = {
-            "papal_deposit": 0.15,
-            "loan_issuance": 0.12,
-            "loan_repayment": 0.13,
-            "deposit_withdrawal": 0.20,
-            "bills_of_exchange": 0.10,
-            "alum_trade": 0.08,
-            "war_financing": 0.05,
-            "operating_expense": 0.17,
-        }
-
-        while len(transactions) < num_transactions:
-            trans_date = self.random_date(start_date, end_date)
-
-            rand = random.random()
+        while len(generated) < count:
+            draw = random.random()
             cumulative = 0.0
-            trans_type = None
-            for t_type, weight in transaction_weights.items():
+            tx_type = "branch_activity"
+            for name, weight in weighted_types:
                 cumulative += weight
-                if rand <= cumulative:
-                    trans_type = t_type
+                if draw <= cumulative:
+                    tx_type = name
                     break
 
-            # Boost papal during boom
-            if (HistoricalPeriod.PAPAL_BANKING_BOOM["start"] <= trans_date
-                    <= HistoricalPeriod.PAPAL_BANKING_BOOM["end"]):
-                if random.random() < 0.3:
-                    trans_type = "papal_deposit"
+            if tx_type == "branch_activity":
+                tx = self.generate_branch_activity(next_id)
+            elif tx_type == "recurring_operating_expense":
+                tx = self.generate_recurring_operating_expense(next_id)
+            elif tx_type == "trade_transaction":
+                tx = self.generate_trade_transaction(next_id)
+            elif tx_type == "loan_issuance":
+                tx = self.generate_loan_issuance(next_id)
+            elif tx_type == "loan_repayment":
+                tx = self.generate_loan_repayment(next_id)
+            else:
+                tx = self.generate_vendor_payment(next_id)
 
-            # Boost war financing during wars
-            war_periods = [
-                HistoricalPeriod.FIRST_MILANESE_WAR,
-                HistoricalPeriod.SECOND_MILANESE_WAR,
-                HistoricalPeriod.LOMBARDY_WARS,
-            ]
-            in_war = any(p["start"] <= trans_date <= p["end"] for p in war_periods)
-            if in_war and random.random() < 0.15:
-                trans_type = "war_financing"
+            generated.append(tx)
+            next_id += 1
 
-            try:
-                if trans_type == "papal_deposit":
-                    trans = self.generate_papal_deposit(trans_date)
-                elif trans_type == "loan_issuance":
-                    trans_list = self.generate_loan_issuance(trans_date)
-                    transactions.extend(trans_list)
-                    continue
-                elif trans_type == "loan_repayment":
-                    trans = self.generate_loan_repayment(trans_date)
-                elif trans_type == "deposit_withdrawal":
-                    trans = self.generate_deposit_withdrawal(trans_date)
-                elif trans_type == "bills_of_exchange":
-                    trans = self.generate_bills_of_exchange(trans_date)
-                elif trans_type == "alum_trade":
-                    trans = self.generate_alum_trade(trans_date)
-                elif trans_type == "war_financing":
-                    war_type = random.choice(["milan", "venice", "defensive"])
-                    trans = self.generate_war_financing(trans_date, war_type)
-                elif trans_type == "operating_expense":
-                    trans = self.generate_operating_expense(trans_date)
-                else:
-                    continue
-
-                self.transaction_id += 1
-                transactions.append(trans)
-            except (ValueError, KeyError) as e:
-                print(f"Error generating {trans_type}: {e}")
-                continue
-
-        return transactions[:num_transactions]
+        generated.sort(key=lambda r: (r["date"], int(r["id"])))
+        return generated[:count]
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Embezzlement Transaction Generator
-#
-# The scheme: Ser Benedetto di Agnolo, senior clerk at the Florence branch,
-# creates a fictitious supplier called "Ser Benedetto Forniture" (Benedetto's
-# Supplies) and authorises payments for "parchment, ink and scribal materials"
-# — legitimate-sounding expenses for a busy banking branch.
-#
-# Over five years (1420-01-01 to 1424-12-31), 247 transactions drain
-# approximately 100,000 florins from the Florence branch Cash account into
-# a personal holding managed through a correspondent in Genoa.
-#
-# Forensic detection hints (detailed in INSTRUCTOR_EMBEZZLEMENT_GUIDE.md):
-#   1. Benford's Law: amounts cluster heavily on digits 3, 4, 5 (fail chi-sq)
-#   2. Vendor concentration: "Ser Benedetto Forniture" alone > 30% of Florence
-#      Supplies expenses in every year of the scheme
-#   3. Round-number clustering: ~45% of amounts are exact multiples of 50
-#   4. Regularity: payments arrive every 7-8 days (too regular for a real supplier)
-#   5. No other branch: this vendor appears ONLY in Florence records
-# ──────────────────────────────────────────────────────────────────────────────
-
-EMBEZZLEMENT_COUNTERPARTY = "Ser Benedetto Forniture"
-EMBEZZLEMENT_BRANCH = "Florence"
-EMBEZZLEMENT_START = date(1420, 1, 3)
-EMBEZZLEMENT_END = date(1424, 12, 28)
-# Total target: ~100,000 florins across ~247 payments ≈ 405 florins average
-
-# Fixed payment amounts (deliberately round-number heavy — a forensic red flag)
-_PAYMENT_POOL = [
-    250.00, 300.00, 350.00, 400.00, 450.00, 500.00,
-    275.00, 325.00, 375.00, 425.00, 475.00,
-    310.00, 340.00, 390.00, 410.00, 460.00,
-    380.00, 420.00, 440.00, 360.00, 480.00,
-    550.00, 600.00, 520.00, 580.00,
-]
+def load_csv(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        raise FileNotFoundError(f"Missing required file: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
 
-def generate_embezzlement_transactions() -> List[Dict]:
-    """
-    Generate the embezzlement transaction trail.
-    Returns a list of dicts in the same schema as normal transactions.
-    """
-    random.seed(7)  # deterministic for reproducibility
-    transactions = []
-    current_date = EMBEZZLEMENT_START
-    interval_days = 8  # payments every ~8 days — suspiciously regular
-
-    descriptions = [
-        "Parchment and scribal supplies from Ser Benedetto Forniture",
-        "Ink and writing materials — Florence scriptorium",
-        "Scribal materials and ledger parchment, Florence branch",
-        "Wax, parchment and binding thread for Florence records",
-        "Quills, ink and parchment — quarterly supply, Florence",
-        "Writing materials and archival supplies, Florence",
-        "Scribal sundries for Florence correspondence office",
-    ]
-
-    while current_date <= EMBEZZLEMENT_END:
-        amount_float = random.choice(_PAYMENT_POOL)
-        # Occasionally add a small random variation to look less mechanical,
-        # but still bias heavily toward round numbers
-        if random.random() < 0.25:
-            # A plausible "odd" amount — still within the round-number pool
-            amount_float += random.choice([12.50, 17.50, 22.50, 7.50, 15.00])
-
-        amount = Decimal(str(amount_float)).quantize(Decimal("0.01"))
-        desc = random.choice(descriptions)
-
-        transactions.append({
-            # id assigned during final renumbering
-            "date": current_date.isoformat(),
-            "branch": EMBEZZLEMENT_BRANCH,
-            "type": "operating_expense",
-            "counterparty": EMBEZZLEMENT_COUNTERPARTY,
-            "description": desc,
-            "debit_account": "Supplies",
-            "debit_amount": float(amount),
-            "credit_account": "Cash",
-            "credit_amount": float(amount),
-            "currency": "florin",
-        })
-
-        # Advance by 7 or 8 days — just enough variation to not look mechanical
-        current_date += timedelta(days=interval_days + random.randint(-1, 1))
-
-    print(f"Generated {len(transactions)} embezzlement transactions")
-    total = sum(t["debit_amount"] for t in transactions)
-    print(f"Total embezzled: {total:,.2f} florins")
-    return transactions
+def load_json(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        raise FileNotFoundError(f"Missing required file: {path}")
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data, list):
+        raise ValueError(f"Expected JSON array in {path}")
+    return data
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# I/O helpers
-# ──────────────────────────────────────────────────────────────────────────────
-
-def load_existing_csv(filename: str | Path) -> List[Dict]:
-    print(f"Loading existing transactions from {filename} …")
-    transactions = []
-    with open(filename, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            # Convert numeric fields
-            for field in ("debit_amount", "credit_amount", "credit_amount_2"):
-                if row.get(field):
-                    try:
-                        row[field] = float(row[field])
-                    except ValueError:
-                        row[field] = None
-            transactions.append(row)
-    print(f"Loaded {len(transactions)} existing transactions.")
-    return transactions
+def normalize_ids(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows_sorted = sorted(rows, key=lambda r: (r.get("date", ""), int(r.get("id", 0))))
+    for idx, row in enumerate(rows_sorted, start=1):
+        row["id"] = idx
+    return rows_sorted
 
 
-def save_to_csv(transactions: List[Dict], filename: str | Path):
-    if not transactions:
-        print("No transactions to save.")
-        return
-    fieldnames = set()
-    for t in transactions:
-        fieldnames.update(t.keys())
-    fieldnames = sorted(fieldnames)
-    with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+def save_csv(rows: list[dict[str, Any]], path: Path) -> None:
+    fieldnames: set[str] = set()
+    for row in rows:
+        fieldnames.update(row.keys())
+    ordered = sorted(fieldnames)
+
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=ordered)
         writer.writeheader()
-        writer.writerows(transactions)
-    print(f"Saved {len(transactions)} transactions to {filename}")
+        writer.writerows(rows)
 
 
-def save_to_json(transactions: List[Dict], filename: str | Path):
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(transactions, f, indent=2)
-    print(f"Saved {len(transactions)} transactions to {filename}")
+def save_json(rows: list[dict[str, Any]], path: Path) -> None:
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(rows, f, indent=2)
 
 
-def print_summary(transactions: List[Dict]):
-    print("\n" + "=" * 60)
-    print("MEDICI BANK — EXPANDED TRANSACTION SUMMARY")
-    print("=" * 60)
-    print(f"\nTotal Transactions: {len(transactions)}")
+def summarize(rows: list[dict[str, Any]]) -> None:
+    dates = [r.get("date", "") for r in rows if r.get("date")]
+    type_counts = Counter(r.get("type", "unknown") for r in rows)
+    branch_counts = Counter(r.get("branch", "unknown") for r in rows)
 
-    type_counts: Dict[str, int] = {}
-    for t in transactions:
-        tt = str(t.get("type", "unknown"))
-        type_counts[tt] = type_counts.get(tt, 0) + 1
-    print("\nTransactions by Type:")
-    for tt, cnt in sorted(type_counts.items(), key=lambda x: x[1], reverse=True):
-        pct = cnt / len(transactions) * 100
-        print(f"  {tt:25s}: {cnt:6d} ({pct:5.2f}%)")
+    print("\n" + "=" * 64)
+    print("EXPANDED DATASET SUMMARY")
+    print("=" * 64)
+    print(f"Total transactions: {len(rows):,}")
+    if dates:
+        print(f"Date range: {min(dates)} to {max(dates)}")
+    print("\nTop transaction types:")
+    for tx_type, count in type_counts.most_common(10):
+        print(f"  {tx_type:30s} {count:7d}")
 
-    branch_counts: Dict[str, int] = {}
-    for t in transactions:
-        b = str(t.get("branch", "unknown"))
-        branch_counts[b] = branch_counts.get(b, 0) + 1
-    print("\nTransactions by Branch:")
-    for b, cnt in sorted(branch_counts.items(), key=lambda x: x[1], reverse=True):
-        pct = cnt / len(transactions) * 100
-        print(f"  {b:15s}: {cnt:6d} ({pct:5.2f}%)")
-
-    dates = [t["date"] for t in transactions]
-    print(f"\nDate Range: {min(dates)} to {max(dates)}")
-
-    total_vol = sum(float(t.get("debit_amount") or 0) for t in transactions)
-    print(f"Total Transaction Volume: {total_vol:,.2f} florins")
-    print("=" * 60)
+    print("\nTop branches:")
+    for branch, count in branch_counts.most_common(10):
+        print(f"  {branch:30s} {count:7d}")
+    print("=" * 64)
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# Main
-# ──────────────────────────────────────────────────────────────────────────────
+def main() -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-def main():
-    print("=" * 60)
-    print("Medici Bank — Additional Data Generator")
-    print("=" * 60)
+    base_csv_rows = load_csv(BASE_CSV)
+    base_json_rows = load_json(BASE_JSON)
 
-    DATA_DIR.mkdir(exist_ok=True)
+    # Prefer JSON base for richer typed values, but keep parity check with CSV count.
+    base_rows: list[dict[str, Any]] = [dict(r) for r in base_json_rows]
+    if len(base_csv_rows) != len(base_rows):
+        print(
+            "Warning: CSV/JSON base counts differ "
+            f"({len(base_csv_rows)} vs {len(base_rows)}). Continuing with JSON base."
+        )
 
-    # 1. Load existing 20,000 transactions
-    existing = load_existing_csv(DATA_DIR / "medici_transactions.csv")
+    current_total = len(base_rows)
+    add_count = max(0, TARGET_TOTAL - current_total)
 
-    # 2. Generate 60,000 more legitimate transactions
-    print("\nGenerating 60,000 additional legitimate transactions …")
-    gen = TransactionGenerator(seed=99)
-    additional = gen.generate_transactions(60000)
-    print(f"Generated {len(additional)} additional transactions.")
+    print("Expanding Medici historical dataset...")
+    print(f"Current transaction count: {current_total:,}")
+    print(f"Target transaction count:  {TARGET_TOTAL:,}")
+    print(f"Additional to generate:    {add_count:,}")
 
-    # 3. Generate embezzlement transactions
-    print("\nGenerating embezzlement transaction trail …")
-    embezzlement = generate_embezzlement_transactions()
+    if add_count == 0:
+        expanded_rows = normalize_ids(base_rows)
+    else:
+        max_id = max(int(r.get("id", 0)) for r in base_rows) if base_rows else 0
+        generator = AdditionalTransactionGenerator(seed=2718)
+        new_rows = generator.generate_transactions(start_id=max_id + 1, count=add_count)
+        expanded_rows = normalize_ids(base_rows + new_rows)
 
-    # 4. Combine, sort, renumber
-    print("\nCombining and sorting all transactions …")
-    combined = existing + additional + embezzlement
-    combined.sort(key=lambda x: (str(x.get("date", "")), int(x.get("id", 0)) if x.get("id") else 0))
-    for idx, t in enumerate(combined, 1):
-        t["id"] = idx
+    # Guarantee the expected date-window coverage in final output.
+    dates = [r.get("date", "") for r in expanded_rows if r.get("date")]
+    if not dates or min(dates) > START_DATE.isoformat() or max(dates) < END_DATE.isoformat():
+        print("Warning: dataset date range does not fully cover 1390-1440.")
 
-    # 5. Print summary
-    print_summary(combined)
+    # Save canonical updated files plus explicit expanded snapshots.
+    save_csv(expanded_rows, BASE_CSV)
+    save_json(expanded_rows, BASE_JSON)
+    save_csv(expanded_rows, EXPANDED_CSV)
+    save_json(expanded_rows, EXPANDED_JSON)
 
-    # 6. Save
-    print("\nSaving updated files …")
-    save_to_csv(combined, DATA_DIR / "medici_transactions.csv")
-    save_to_json(combined, DATA_DIR / "medici_transactions.json")
-
-    print("\nDone. Updated files:")
-    print("  data/medici_transactions.csv")
-    print("  data/medici_transactions.json")
+    summarize(expanded_rows)
+    print("\nSaved files:")
+    print(f"  - {BASE_CSV}")
+    print(f"  - {BASE_JSON}")
+    print(f"  - {EXPANDED_CSV}")
+    print(f"  - {EXPANDED_JSON}")
 
 
 if __name__ == "__main__":
