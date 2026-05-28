@@ -1,10 +1,11 @@
-.PHONY: help setup run run-module generate-data validate import-export clean-data
+.PHONY: help setup run run-module test generate-data validate import-export clean-data
 
 help:
 	@echo "Available targets:"
 	@echo "  make setup        - Create venv and upgrade pip"
 	@echo "  make run          - Run main Medici banking demo"
 	@echo "  make run-module   - Run module entrypoint"
+	@echo "  make test         - Run test suite using .venv"
 	@echo "  make generate-data- Generate historical datasets in data/"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
@@ -19,6 +20,10 @@ run:
 
 run-module:
 	python3 -m medici_banking
+
+test:
+	@test -x .venv/bin/python || (echo "Virtual environment missing. Run 'make setup' first." && exit 1)
+	. .venv/bin/activate && python -m pytest -q
 
 generate-data:
 	python3 generate_historical_data.py
