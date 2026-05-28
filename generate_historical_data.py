@@ -450,7 +450,7 @@ class TransactionGenerator:
         return transactions[:num_transactions]
 
 
-def save_to_csv(transactions: List[Dict], filename: str):
+def save_to_csv(transactions: List[Dict], filename: str | Path):
     """Save transactions to CSV file"""
     if not transactions:
         print("No transactions to save")
@@ -471,7 +471,7 @@ def save_to_csv(transactions: List[Dict], filename: str):
     print(f"Saved {len(transactions)} transactions to {filename}")
 
 
-def save_to_json(transactions: List[Dict], filename: str):
+def save_to_json(transactions: List[Dict], filename: str | Path):
     """Save transactions to JSON file"""
     with open(filename, 'w', encoding='utf-8') as jsonfile:
         json.dump(transactions, jsonfile, indent=2)

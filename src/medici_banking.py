@@ -166,8 +166,13 @@ _DESCRIPTIONS: Dict[AccountType, str] = {
         "Closes into equity at period end."
     ),
 }
+<<<<<<< HEAD
  
  
+=======
+
+
+>>>>>>> b39dd7d (updated dev to fixt test and problems.)
 class Account:
     """Represents a financial account in the double-entry system"""
  
@@ -175,9 +180,15 @@ class Account:
         self._name = name
         self._type = account_type
         self._balance = Decimal('0')
+<<<<<<< HEAD
  
     @property
     def name(self) -> str:
+=======
+
+    @property
+    def name(self) -> str:          
+>>>>>>> b39dd7d (updated dev to fixt test and problems.)
         return self._name
  
     @property
@@ -231,7 +242,11 @@ class TransactionEntry:
     account: Account
     amount: Decimal
     is_debit: Optional[bool] = None
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> b39dd7d (updated dev to fixt test and problems.)
     @classmethod
     def debit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
         """Create a debit transaction entry."""
@@ -243,8 +258,9 @@ class TransactionEntry:
         return cls(account=account, amount=amount, is_debit=False)
  
     def __post_init__(self):
-        # Ensure amount is a Decimal
+        # Normalize and support legacy 2-arg constructor usage by inferring side.
         self.amount = Decimal(str(self.amount))
+<<<<<<< HEAD
  
         if self.amount == 0:
             raise ValueError("Transaction entry amount must not be zero")
@@ -260,6 +276,14 @@ class TransactionEntry:
                 self.is_debit = not normal_is_debit
             self.amount = abs(self.amount)
         elif self.amount < 0:
+=======
+
+        if self.is_debit is None:
+            base_is_debit = self.account.type in (AccountType.ASSET, AccountType.EXPENSE)
+            self.is_debit = base_is_debit if self.amount >= 0 else (not base_is_debit)
+            self.amount = abs(self.amount)
+        elif self.amount <= 0:
+>>>>>>> b39dd7d (updated dev to fixt test and problems.)
             raise ValueError("Transaction entry amount must be greater than zero")
  
     def __str__(self) -> str:

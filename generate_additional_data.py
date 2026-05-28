@@ -421,7 +421,7 @@ def generate_embezzlement_transactions() -> List[Dict]:
 # I/O helpers
 # ──────────────────────────────────────────────────────────────────────────────
 
-def load_existing_csv(filename: str) -> List[Dict]:
+def load_existing_csv(filename: str | Path) -> List[Dict]:
     print(f"Loading existing transactions from {filename} …")
     transactions = []
     with open(filename, newline="", encoding="utf-8") as f:
@@ -439,7 +439,7 @@ def load_existing_csv(filename: str) -> List[Dict]:
     return transactions
 
 
-def save_to_csv(transactions: List[Dict], filename: str):
+def save_to_csv(transactions: List[Dict], filename: str | Path):
     if not transactions:
         print("No transactions to save.")
         return
@@ -454,7 +454,7 @@ def save_to_csv(transactions: List[Dict], filename: str):
     print(f"Saved {len(transactions)} transactions to {filename}")
 
 
-def save_to_json(transactions: List[Dict], filename: str):
+def save_to_json(transactions: List[Dict], filename: str | Path):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(transactions, f, indent=2)
     print(f"Saved {len(transactions)} transactions to {filename}")
