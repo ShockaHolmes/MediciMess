@@ -235,13 +235,31 @@ class Account:
 
 @dataclass
 class TransactionEntry:
-    """Represents a single entry in a transaction"""
+    """Represents one debit or credit line in a transaction"""
     account: Account
     amount: Decimal
+    is_debit: bool
+
+    @classmethod
+    def debit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
+        """Create a debit transaction entry."""
+        return cls(account=account, amount=amount, is_debit=True)
+
+    @classmethod
+    def credit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
+        """Create a credit transaction entry."""
+        return cls(account=account, amount=amount, is_debit=False)
     
     def __post_init__(self):
         # Ensure amount is a Decimal
         self.amount = Decimal(str(self.amount))
+
+        if self.amount <= 0:
+            raise ValueError("Transaction entry amount must be greater than zero")
+
+    def __str__(self) -> str:
+        side = "DEBIT" if self.is_debit else "CREDIT"
+        return f"{side} | {self.account.name}: {self.amount} florins"
 
 
 @dataclass
@@ -320,24 +338,12 @@ class Ledger:
         """
         transaction = Transaction(date, description)
         
-        # Separate entries into debits and credits based on account type
+        # Separate entries into debits and credits based on explicit entry direction.
         for entry in entries:
-            account = entry.account
-            
-            # For asset and expense accounts, positive amounts are debits
-            # For liability, equity, and revenue accounts, positive amounts are credits
-            if account.type in (AccountType.ASSET, AccountType.EXPENSE):
-                if entry.amount >= 0:
-                    transaction.add_debit(entry)
-                else:
-                    # Negative amount means we're crediting the account
-                    transaction.add_credit(TransactionEntry(account, abs(entry.amount)))
+            if entry.is_debit:
+                transaction.add_debit(entry)
             else:
-                if entry.amount >= 0:
-                    transaction.add_credit(entry)
-                else:
-                    # Negative amount means we're debiting the account
-                    transaction.add_debit(TransactionEntry(account, abs(entry.amount)))
+                transaction.add_credit(entry)
         
         # Verify that the transaction is balanced
         if not transaction.is_balanced():
@@ -600,18 +606,18 @@ class Ledger:
                     for debit_acc_name in debit_accounts:
                         account_type = self._infer_account_type(debit_acc_name)
                         debit_account = self.get_or_create_account(debit_acc_name, account_type)
-                        transaction.add_debit(TransactionEntry(debit_account, debit_amount / len(debit_accounts)))
+                        transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount / len(debit_accounts)))
                     
                     # Add credit entries
                     if credit_account:
                         account_type = self._infer_account_type(credit_account)
                         credit_acc = self.get_or_create_account(credit_account, account_type)
-                        transaction.add_credit(TransactionEntry(credit_acc, credit_amount))
+                        transaction.add_credit(TransactionEntry.credit(credit_acc, credit_amount))
                     
                     if credit_account_2 and credit_amount_2 > 0:
                         account_type = self._infer_account_type(credit_account_2)
                         credit_acc_2 = self.get_or_create_account(credit_account_2, account_type)
-                        transaction.add_credit(TransactionEntry(credit_acc_2, credit_amount_2))
+                        transaction.add_credit(TransactionEntry.credit(credit_acc_2, credit_amount_2))
                     
                     # Verify that the transaction is balanced
                     if not transaction.is_balanced():
@@ -666,14 +672,14 @@ class Ledger:
                     account_type = AccountType[debit_entry['account_type']]
                     debit_account = self.get_or_create_account(debit_entry['account'], account_type)
                     amount = Decimal(debit_entry['amount'])
-                    transaction.add_debit(TransactionEntry(debit_account, amount))
+                    transaction.add_debit(TransactionEntry.debit(debit_account, amount))
                 
                 # Add credit entries
                 for credit_entry in trans_dict.get('credits', []):
                     account_type = AccountType[credit_entry['account_type']]
                     credit_account = self.get_or_create_account(credit_entry['account'], account_type)
                     amount = Decimal(credit_entry['amount'])
-                    transaction.add_credit(TransactionEntry(credit_account, amount))
+                    transaction.add_credit(TransactionEntry.credit(credit_account, amount))
                 
                 # Verify that the transaction is balanced
                 if not transaction.is_balanced():
@@ -759,47 +765,56 @@ def main():
     expenses = medici_ledger.create_account("Expenses", AccountType.EXPENSE)
     wages = medici_ledger.create_account("Wages", AccountType.EXPENSE)
     
-    # Starting our banking operations with initial capital
-    print("=== STARTING THE MEDICI BANK ===")
+    # Running a full year simulation with concept-driven narration.
+    print("=== 1397 MEDICI BANK SIMULATION ===")
+    print("This walkthrough shows how every event records equal debits and credits.\n")
+
+    print("[Concept] Owner investment increases assets and owner equity.")
     medici_ledger.record_transaction(
         date(1397, 1, 1),
         "Initial investment from Giovanni de' Medici",
-        TransactionEntry(cash, Decimal("10000.00")),
-        TransactionEntry(capital, Decimal("10000.00"))
+        TransactionEntry.debit(cash, Decimal("10000.00")),
+        TransactionEntry.credit(capital, Decimal("10000.00"))
     )
     
-    # Recording a loan to a wool merchant
+    print("\n[Concept] Issuing a loan swaps one asset (cash) for another (receivable).")
     medici_ledger.record_transaction(
         date(1397, 2, 15),
         "Loan to Wool Merchant",
-        TransactionEntry(accounts_receivable, Decimal("2000.00")),
-        TransactionEntry(cash, Decimal("-2000.00"))
+        TransactionEntry.debit(accounts_receivable, Decimal("2000.00")),
+        TransactionEntry.credit(cash, Decimal("2000.00"))
     )
     
-    # Receiving partial payment with interest
+    print("\n[Concept] Repayments reduce receivables; interest increases revenue.")
     medici_ledger.record_transaction(
         date(1397, 8, 10),
         "Partial loan repayment from Wool Merchant with interest",
-        TransactionEntry(cash, Decimal("1200.00")),
-        TransactionEntry(accounts_receivable, Decimal("-1000.00")),
-        TransactionEntry(interest_income, Decimal("200.00"))
+        TransactionEntry.debit(cash, Decimal("1200.00")),
+        TransactionEntry.credit(accounts_receivable, Decimal("1000.00")),
+        TransactionEntry.credit(interest_income, Decimal("200.00"))
     )
     
-    # Purchasing land for a new banking house
+    print("\n[Concept] Buying long-term assets moves value from cash into land.")
     medici_ledger.record_transaction(
         date(1397, 9, 5),
         "Purchase of land for new Medici banking house",
-        TransactionEntry(land, Decimal("3000.00")),
-        TransactionEntry(cash, Decimal("-3000.00"))
+        TransactionEntry.debit(land, Decimal("3000.00")),
+        TransactionEntry.credit(cash, Decimal("3000.00"))
     )
     
-    # Paying wages to bank employees
+    print("\n[Concept] Paying wages records an expense and reduces cash.")
     medici_ledger.record_transaction(
         date(1397, 12, 1),
         "Quarterly wages for bank employees",
-        TransactionEntry(wages, Decimal("800.00")),
-        TransactionEntry(cash, Decimal("-800.00"))
+        TransactionEntry.debit(wages, Decimal("800.00")),
+        TransactionEntry.credit(cash, Decimal("800.00"))
     )
+
+    all_balanced = all(transaction.is_balanced() for transaction in medici_ledger.transactions)
+    if all_balanced:
+        print("\nAll sample transactions are balanced. ✓")
+    else:
+        print("\nWARNING: At least one sample transaction is unbalanced. ✗")
     
     # Print the trial balance to verify our accounting is balanced
     print("\n=== MEDICI BANK TRIAL BALANCE (Year 1397) ===")

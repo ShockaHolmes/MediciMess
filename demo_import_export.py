@@ -31,31 +31,58 @@ def demo_export():
     
     # Create accounts
     cash = ledger.create_account("Cash", AccountType.ASSET)
-    revenue = ledger.create_account("Service Revenue", AccountType.REVENUE)
-    expenses = ledger.create_account("Operating Expenses", AccountType.EXPENSE)
+    accounts_receivable = ledger.create_account("Accounts Receivable", AccountType.ASSET)
+    interest_income = ledger.create_account("Interest Income", AccountType.REVENUE)
+    land = ledger.create_account("Land", AccountType.ASSET)
+    wages = ledger.create_account("Wages", AccountType.EXPENSE)
     capital = ledger.create_account("Owner's Capital", AccountType.EQUITY)
     
     # Add some transactions
     print("\nRecording sample transactions...")
+    # Initial capitalization: owner investment increases cash and equity.
+    print("\n[1397] Posting: Initial investment from Giovanni de' Medici")
     ledger.record_transaction(
         date(2024, 1, 1),
         "Initial capital investment",
-        TransactionEntry(cash, Decimal("10000.00")),
-        TransactionEntry(capital, Decimal("10000.00"))
+        TransactionEntry.debit(cash, Decimal("10000.00")),
+        TransactionEntry.credit(capital, Decimal("10000.00"))
     )
     
+    # Loan issuance: converting cash into an accounts receivable asset.
+    print("\n[1397] Posting: Loan to wool merchant")
     ledger.record_transaction(
-        date(2024, 1, 15),
-        "Service revenue received",
-        TransactionEntry(cash, Decimal("1500.00")),
-        TransactionEntry(revenue, Decimal("1500.00"))
+        date(2024, 2, 15),
+        "Loan to Wool Merchant",
+        TransactionEntry.debit(accounts_receivable, Decimal("2000.00")),
+        TransactionEntry.credit(cash, Decimal("2000.00"))
     )
     
+    # Repayment with interest: cash increases, receivable is reduced, and interest is revenue.
+    print("\n[1397] Posting: Partial loan repayment with interest")
     ledger.record_transaction(
-        date(2024, 1, 30),
-        "Operating expenses paid",
-        TransactionEntry(expenses, Decimal("500.00")),
-        TransactionEntry(cash, Decimal("-500.00"))
+        date(2024, 8, 10),
+        "Partial loan repayment from Wool Merchant with interest",
+        TransactionEntry.debit(cash, Decimal("1200.00")),
+        TransactionEntry.credit(accounts_receivable, Decimal("1000.00")),
+        TransactionEntry.credit(interest_income, Decimal("200.00"))
+    )
+
+    # Land purchase: shifts funds from cash into a long-term asset.
+    print("\n[1397] Posting: Purchase of land for new banking house")
+    ledger.record_transaction(
+        date(2024, 9, 5),
+        "Purchase of land for new Medici banking house",
+        TransactionEntry.debit(land, Decimal("3000.00")),
+        TransactionEntry.credit(cash, Decimal("3000.00"))
+    )
+
+    # Quarterly wage expense: records operating expense and decreases cash.
+    print("\n[1397] Posting: Quarterly wages")
+    ledger.record_transaction(
+        date(2024, 12, 1),
+        "Quarterly wages for bank employees",
+        TransactionEntry.debit(wages, Decimal("800.00")),
+        TransactionEntry.credit(cash, Decimal("800.00"))
     )
     
     # Export to CSV
@@ -63,11 +90,11 @@ def demo_export():
     DATA_DIR.mkdir(exist_ok=True)
     csv_file = DATA_DIR / "exported_transactions.csv"
     json_file = DATA_DIR / "exported_transactions.json"
-    csv_count = ledger.export_transactions_to_csv(csv_file)
+    csv_count = ledger.export_transactions_to_csv(str(csv_file))
     print(f"✓ Exported {csv_count} transactions to 'data/exported_transactions.csv'")
     
     # Export to JSON
-    json_count = ledger.export_transactions_to_json(json_file)
+    json_count = ledger.export_transactions_to_json(str(json_file))
     print(f"✓ Exported {json_count} transactions to 'data/exported_transactions.json'")
     
     return ledger
@@ -85,7 +112,7 @@ def demo_import_csv():
     # Import from CSV
     csv_file = DATA_DIR / "exported_transactions.csv"
     print("\nImporting transactions from 'data/exported_transactions.csv'...")
-    count = ledger.import_transactions_from_csv(csv_file, verbose=False)
+    count = ledger.import_transactions_from_csv(str(csv_file), verbose=False)
     print(f"✓ Imported {count} transactions from CSV")
     
     # Verify the books are balanced
@@ -109,7 +136,7 @@ def demo_import_json():
     # Import from JSON
     json_file = DATA_DIR / "exported_transactions.json"
     print("\nImporting transactions from 'data/exported_transactions.json'...")
-    count = ledger.import_transactions_from_json(json_file, verbose=False)
+    count = ledger.import_transactions_from_json(str(json_file), verbose=False)
     print(f"✓ Imported {count} transactions from JSON")
     
     # Verify the books are balanced
@@ -142,7 +169,7 @@ def demo_historical_data():
     print("(This may take a few seconds...)")
     
     # Import the historical data
-    count = ledger.import_transactions_from_csv(historical_file, verbose=False)
+    count = ledger.import_transactions_from_csv(str(historical_file), verbose=False)
     print(f"\n✓ Successfully imported {count} transactions!")
     
     # Show some statistics
