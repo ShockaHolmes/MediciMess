@@ -1,4 +1,4 @@
-.PHONY: help setup run run-module test generate-data transform-data serve-data run-api benford-analysis validate import-export clean-data
+.PHONY: help setup run run-module test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export clean-data
 
 help:
 	@echo "Available targets:"
@@ -11,6 +11,9 @@ help:
 	@echo "  make serve-data   - Build serving-layer analytics and API payloads"
 	@echo "  make run-api      - Start the serving-layer HTTP API"
 	@echo "  make benford-analysis - Run Benford's Law anomaly detection"
+	@echo "  make vendor-concentration - Run vendor concentration anomaly detection"
+	@echo "  make duplicate-detection - Run duplicate transaction anomaly detection"
+	@echo "  make round-clustering - Run round-number clustering anomaly detection"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
 	@echo "  make clean-data   - Remove demo export files from data/"
@@ -45,6 +48,15 @@ run-api:
 
 benford-analysis:
 	python3 benford_analysis.py
+
+vendor-concentration:
+	python3 vendor_concentration_analysis.py
+
+duplicate-detection:
+	python3 duplicate_transaction_analysis.py
+
+round-clustering:
+	python3 round_number_clustering_analysis.py
 
 validate:
 	python3 validate_transactions.py

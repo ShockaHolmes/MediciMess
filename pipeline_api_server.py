@@ -11,6 +11,10 @@ Endpoints:
 - GET /api/accounts?account_type=&name=
 - GET /api/cashflow?branch=&start=&end=&granularity=
 - GET /api/alerts?branch=&start=&end=&severity=
+- GET /api/duplicates?branch=&start=&end=&severity=&duplicate_type=&page=&per_page=
+- GET /api/vendor-concentration?branch=&start=&end=&severity=&counterparty=&debit_account=&page=&per_page=
+- GET /api/benford?severity=&dimension=&group_key=&flagged_only=&page=&per_page=
+- GET /api/round-clustering?branch=&severity=&counterparty=&debit_account=&flagged_only=&page=&per_page=
 - POST /api/alerts/{id}/acknowledge
 - GET /api/loans?branch=&status=
 - GET /api/expenses?branch=&start=&end=
@@ -44,6 +48,10 @@ class ServingStore:
         self.expenses = self._load_json(serving_dir / "expense_breakdown.json")
         self.loans = self._load_json(serving_dir / "loan_portfolio.json")
         self.alerts = self._load_json(api_dir / "api_alerts.json").get("data", [])
+        self.duplicate_alerts = self._load_json(serving_dir / "duplicate_transaction_analysis.json").get("alerts", [])
+        self.vendor_concentration = self._load_json(serving_dir / "vendor_concentration_analysis.json")
+        self.benford_analysis = self._load_json(serving_dir / "benford_analysis.json")
+        self.round_clustering = self._load_json(serving_dir / "round_number_clustering_analysis.json")
         self.alert_status_overrides: dict[int, dict[str, Any]] = {}
 
     @staticmethod
@@ -68,6 +76,21 @@ class ServingStore:
             return int(value)
         except ValueError:
             return default
+
+    @staticmethod
+    def _parse_bool(value: str | None, default: bool) -> bool:
+        if value is None or value == "":
+            return default
+        return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+    @staticmethod
+    def _parse_period(value: str | None) -> datetime | None:
+        if not value:
+            return None
+        try:
+            return datetime.strptime(value + "-01", "%Y-%m-%d")
+        except ValueError:
+            return None
 
     @staticmethod
     def _money_sum(rows: list[dict[str, Any]], field: str) -> Decimal:
@@ -279,6 +302,191 @@ class ServingStore:
             "data": rows,
         }
 
+    def get_duplicates(self, params: dict[str, list[str]]) -> dict[str, Any]:
+        branch = (params.get("branch") or [""])[0] or None
+        start = (params.get("start") or [""])[0] or None
+        end = (params.get("end") or [""])[0] or None
+        severity = ((params.get("severity") or [""])[0] or "").upper() or None
+        duplicate_type = ((params.get("duplicate_type") or [""])[0] or "").upper() or None
+        page = self._parse_int((params.get("page") or [None])[0], 1)
+        per_page = self._parse_int((params.get("per_page") or [None])[0], 100)
+        per_page = max(1, min(per_page, 1000))
+        page = max(1, page)
+
+        rows = list(self.duplicate_alerts)
+        if branch:
+            rows = [row for row in rows if row.get("branch") == branch]
+        if severity:
+            rows = [row for row in rows if row.get("severity") == severity]
+        if duplicate_type:
+            rows = [row for row in rows if row.get("duplicate_type") == duplicate_type]
+
+        start_dt = self._parse_date(start)
+        end_dt = self._parse_date(end)
+        if start_dt or end_dt:
+            filtered: list[dict[str, Any]] = []
+            for row in rows:
+                row_dt = self._parse_date(row.get("date_left") or row.get("date") or "")
+                if row_dt is None:
+                    continue
+                if start_dt and row_dt < start_dt:
+                    continue
+                if end_dt and row_dt > end_dt:
+                    continue
+                filtered.append(row)
+            rows = filtered
+
+        total = len(rows)
+        total_pages = max(1, (total + per_page - 1) // per_page)
+        page = min(page, total_pages)
+        start_index = (page - 1) * per_page
+        page_rows = rows[start_index : start_index + per_page]
+        return {
+            "branch": branch,
+            "start": start,
+            "end": end,
+            "severity": severity,
+            "duplicate_type": duplicate_type,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": total_pages,
+            "data": page_rows,
+        }
+
+    def get_vendor_concentration(self, params: dict[str, list[str]]) -> dict[str, Any]:
+        branch = (params.get("branch") or [""])[0] or None
+        start = (params.get("start") or [""])[0] or None
+        end = (params.get("end") or [""])[0] or None
+        severity = ((params.get("severity") or [""])[0] or "").upper() or None
+        counterparty = ((params.get("counterparty") or [""])[0] or "").casefold()
+        debit_account = ((params.get("debit_account") or [""])[0] or "").casefold()
+        page = self._parse_int((params.get("page") or [None])[0], 1)
+        per_page = self._parse_int((params.get("per_page") or [None])[0], 100)
+        per_page = max(1, min(per_page, 1000))
+        page = max(1, page)
+
+        rows = list(self.vendor_concentration.get("anomalies", []))
+        if branch:
+            rows = [row for row in rows if row.get("branch") == branch]
+        if severity:
+            rows = [row for row in rows if row.get("severity") == severity]
+        if counterparty:
+            rows = [row for row in rows if counterparty in str(row.get("counterparty", "")).casefold()]
+        if debit_account:
+            rows = [row for row in rows if debit_account in str(row.get("debit_account", "")).casefold()]
+
+        start_dt = self._parse_date(start)
+        end_dt = self._parse_date(end)
+        if start_dt or end_dt:
+            filtered: list[dict[str, Any]] = []
+            for row in rows:
+                period_dt = self._parse_period(row.get("period"))
+                if period_dt is None:
+                    continue
+                if start_dt and period_dt < start_dt:
+                    continue
+                if end_dt and period_dt > end_dt:
+                    continue
+                filtered.append(row)
+            rows = filtered
+
+        total = len(rows)
+        total_pages = max(1, (total + per_page - 1) // per_page)
+        page = min(page, total_pages)
+        start_index = (page - 1) * per_page
+        page_rows = rows[start_index : start_index + per_page]
+        return {
+            "branch": branch,
+            "start": start,
+            "end": end,
+            "severity": severity,
+            "counterparty": counterparty or None,
+            "debit_account": debit_account or None,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": total_pages,
+            "meta": self.vendor_concentration.get("meta", {}),
+            "data": page_rows,
+        }
+
+    def get_benford(self, params: dict[str, list[str]]) -> dict[str, Any]:
+        severity = ((params.get("severity") or [""])[0] or "").upper() or None
+        dimension = (params.get("dimension") or [""])[0] or None
+        group_key = ((params.get("group_key") or [""])[0] or "").casefold()
+        flagged_only = self._parse_bool((params.get("flagged_only") or ["true"])[0], True)
+        page = self._parse_int((params.get("page") or [None])[0], 1)
+        per_page = self._parse_int((params.get("per_page") or [None])[0], 100)
+        per_page = max(1, min(per_page, 1000))
+        page = max(1, page)
+
+        rows = list(self.benford_analysis.get("flagged_groups" if flagged_only else "all_groups", []))
+        if severity:
+            rows = [row for row in rows if row.get("severity") == severity]
+        if dimension:
+            rows = [row for row in rows if row.get("dimension") == dimension]
+        if group_key:
+            rows = [row for row in rows if group_key in str(row.get("group_key", "")).casefold()]
+
+        total = len(rows)
+        total_pages = max(1, (total + per_page - 1) // per_page)
+        page = min(page, total_pages)
+        start_index = (page - 1) * per_page
+        page_rows = rows[start_index : start_index + per_page]
+        return {
+            "severity": severity,
+            "dimension": dimension,
+            "group_key": group_key or None,
+            "flagged_only": flagged_only,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": total_pages,
+            "meta": self.benford_analysis.get("meta", {}),
+            "data": page_rows,
+        }
+
+    def get_round_clustering(self, params: dict[str, list[str]]) -> dict[str, Any]:
+        branch = (params.get("branch") or [""])[0] or None
+        severity = ((params.get("severity") or [""])[0] or "").upper() or None
+        counterparty = ((params.get("counterparty") or [""])[0] or "").casefold()
+        debit_account = ((params.get("debit_account") or [""])[0] or "").casefold()
+        flagged_only = self._parse_bool((params.get("flagged_only") or ["true"])[0], True)
+        page = self._parse_int((params.get("page") or [None])[0], 1)
+        per_page = self._parse_int((params.get("per_page") or [None])[0], 100)
+        per_page = max(1, min(per_page, 1000))
+        page = max(1, page)
+
+        rows = list(self.round_clustering.get("alerts" if flagged_only else "groups", []))
+        if branch:
+            rows = [row for row in rows if row.get("branch") == branch]
+        if severity:
+            rows = [row for row in rows if row.get("severity") == severity]
+        if counterparty:
+            rows = [row for row in rows if counterparty in str(row.get("counterparty", "")).casefold()]
+        if debit_account:
+            rows = [row for row in rows if debit_account in str(row.get("debit_account", "")).casefold()]
+
+        total = len(rows)
+        total_pages = max(1, (total + per_page - 1) // per_page)
+        page = min(page, total_pages)
+        start_index = (page - 1) * per_page
+        page_rows = rows[start_index : start_index + per_page]
+        return {
+            "branch": branch,
+            "severity": severity,
+            "counterparty": counterparty or None,
+            "debit_account": debit_account or None,
+            "flagged_only": flagged_only,
+            "page": page,
+            "per_page": per_page,
+            "total": total,
+            "total_pages": total_pages,
+            "meta": self.round_clustering.get("meta", {}),
+            "data": page_rows,
+        }
+
     def acknowledge_alert(self, alert_id: int, payload: dict[str, Any]) -> dict[str, Any]:
         note = str(payload.get("note", "")).strip()
         user_id = str(payload.get("user_id", "")).strip()
@@ -330,6 +538,10 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
         {"method": "GET",  "path": "/api/accounts",                  "description": "Account balances",              "params": "account_type, name"},
         {"method": "GET",  "path": "/api/cashflow",                  "description": "Cash flow time series",          "params": "branch, start, end, granularity"},
         {"method": "GET",  "path": "/api/alerts",                    "description": "Anomaly and fraud alerts",       "params": "branch, start, end, severity"},
+        {"method": "GET",  "path": "/api/duplicates",                "description": "Duplicate transaction alerts",   "params": "branch, start, end, severity, duplicate_type, page, per_page"},
+        {"method": "GET",  "path": "/api/vendor-concentration",       "description": "Vendor concentration anomalies", "params": "branch, start, end, severity, counterparty, debit_account, page, per_page"},
+        {"method": "GET",  "path": "/api/benford",                   "description": "Benford anomaly groups",         "params": "severity, dimension, group_key, flagged_only, page, per_page"},
+        {"method": "GET",  "path": "/api/round-clustering",          "description": "Round-number clustering",        "params": "branch, severity, counterparty, debit_account, flagged_only, page, per_page"},
         {"method": "POST", "path": "/api/alerts/{id}/acknowledge",   "description": "Acknowledge an alert",          "body": "user_id, note"},
         {"method": "GET",  "path": "/api/loans",                     "description": "Open loan portfolio",           "params": "branch, status"},
         {"method": "GET",  "path": "/api/expenses",                  "description": "Expense breakdown",             "params": "branch, start, end"},
@@ -363,6 +575,18 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
             return
         if parsed.path == "/api/alerts":
             self._send_json(200, store.get_alerts(params))
+            return
+        if parsed.path == "/api/duplicates":
+            self._send_json(200, store.get_duplicates(params))
+            return
+        if parsed.path == "/api/vendor-concentration":
+            self._send_json(200, store.get_vendor_concentration(params))
+            return
+        if parsed.path == "/api/benford":
+            self._send_json(200, store.get_benford(params))
+            return
+        if parsed.path == "/api/round-clustering":
+            self._send_json(200, store.get_round_clustering(params))
             return
         if parsed.path == "/api/loans":
             self._send_json(200, store.get_loans(params))
