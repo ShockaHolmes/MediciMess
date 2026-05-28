@@ -33,6 +33,7 @@ from datetime import date, datetime
 from enum import Enum
 from typing import Any, List, Tuple, Dict, Optional
 from dataclasses import dataclass, field
+from pathlib import Path
 import csv
 import json
 
@@ -490,46 +491,98 @@ class Ledger:
             print("\nThe accounting equation is balanced! ✓")
         else:
             print("\nWARNING: The accounting equation is NOT balanced! ✗")
+
+    def get_income_statement_report(self) -> Dict[str, Any]:
+        """Build a structured income statement report for UI/API consumers."""
+        cent = Decimal("0.01")
+        revenue_accounts = []
+        expense_accounts = []
+        total_revenue = Decimal("0")
+        total_expenses = Decimal("0")
+
+        for account in self.accounts:
+            if account.type == AccountType.REVENUE:
+                amount = account.balance.quantize(cent)
+                revenue_accounts.append(
+                    {
+                        "account_name": account.name,
+                        "amount": amount,
+                    }
+                )
+                total_revenue += amount
+            elif account.type == AccountType.EXPENSE:
+                amount = account.balance.quantize(cent)
+                expense_accounts.append(
+                    {
+                        "account_name": account.name,
+                        "amount": amount,
+                    }
+                )
+                total_expenses += amount
+
+        total_revenue = total_revenue.quantize(cent)
+        total_expenses = total_expenses.quantize(cent)
+        net_income = (total_revenue - total_expenses).quantize(cent)
+
+        return {
+            "revenue_accounts": revenue_accounts,
+            "expense_accounts": expense_accounts,
+            "total_revenue": total_revenue,
+            "total_expenses": total_expenses,
+            "net_income": net_income,
+        }
     
     def print_income_statement(self) -> None:
-        """Prints an income statement (Revenue - Expenses = Net Income)"""
-        total_revenue = Decimal('0')
-        total_expenses = Decimal('0')
-        
-        # Print Revenue
+        """Print an income statement grouped by revenue and expense accounts."""
+        report = self.get_income_statement_report()
+        revenue_accounts = report["revenue_accounts"]
+        expense_accounts = report["expense_accounts"]
+        total_revenue = report["total_revenue"]
+        total_expenses = report["total_expenses"]
+        net_income = report["net_income"]
+
+        print("INCOME STATEMENT")
+        print("=" * 60)
+        print(f"{'Account':<42} {'Amount (Florins)':>18}")
+        print("-" * 60)
+
         print("REVENUE")
-        print("-" * 40)
-        for account in self.accounts:
-            if account.type == AccountType.REVENUE and account.balance != 0:
-                print(f"{account.name:<30} {account.balance.quantize(Decimal('0.01')):>10}")
-                total_revenue += account.balance
-        print("-" * 40)
-        print(f"{'TOTAL REVENUE':<30} {total_revenue.quantize(Decimal('0.01')):>10}")
+        for row in revenue_accounts:
+            print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
+        print("-" * 60)
+        print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
         print()
-        
-        # Print Expenses
+
         print("EXPENSES")
-        print("-" * 40)
-        for account in self.accounts:
-            if account.type == AccountType.EXPENSE and account.balance != 0:
-                print(f"{account.name:<30} {account.balance.quantize(Decimal('0.01')):>10}")
-                total_expenses += account.balance
-        print("-" * 40)
-        print(f"{'TOTAL EXPENSES':<30} {total_expenses.quantize(Decimal('0.01')):>10}")
+        for row in expense_accounts:
+            print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
+        print("-" * 60)
+        print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
         print()
-        
-        # Calculate Net Income
-        net_income = total_revenue - total_expenses
+
+        net_label = "NET INCOME"
+        if net_income < 0:
+            net_label = "NET LOSS"
+        elif net_income == 0:
+            net_label = "BREAK-EVEN"
+
         print("SUMMARY")
-        print("-" * 40)
-        print(f"{'Total Revenue':<30} {total_revenue.quantize(Decimal('0.01')):>10}")
-        print(f"{'Total Expenses':<30} {total_expenses.quantize(Decimal('0.01')):>10}")
-        print("-" * 40)
-        print(f"{'NET INCOME':<30} {net_income.quantize(Decimal('0.01')):>10}")
+        print("-" * 60)
+        print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
+        print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
+        print("=" * 60)
+        print(f"{net_label:<42} {net_income:>18,.2f}")
     
     def export_transactions_to_csv(self, filename: str) -> int:
         """
-        Export all transactions to a CSV file
+        Export all transactions to a CSV file.
+
+        CSV column format:
+            transaction_id,date,description,line_number,
+            debit_account,debit_amount,credit_account,credit_amount
+
+        Each transaction may produce multiple CSV rows to preserve split
+        debits/credits. This supports transactions with multiple credit lines.
         
         Args:
             filename: Path to the CSV file to create
@@ -537,32 +590,51 @@ class Ledger:
         Returns:
             Number of transactions exported
         """
-        with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+        output_path = Path(filename)
+        if output_path.parent == Path("."):
+            output_path = Path("data") / output_path
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with output_path.open('w', newline='', encoding='utf-8') as csvfile:
             fieldnames = [
-                'id', 'date', 'description', 'debit_account', 'debit_amount',
-                'credit_account', 'credit_amount', 'credit_account_2', 'credit_amount_2'
+                'transaction_id',
+                'date',
+                'description',
+                'line_number',
+                'debit_account',
+                'debit_amount',
+                'credit_account',
+                'credit_amount',
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             
-            for idx, transaction in enumerate(self.transactions, 1):
-                # Get the total debits and credits
-                total_debits = sum(entry.amount for entry in transaction.debits)
-                total_credits = sum(entry.amount for entry in transaction.credits)
-                
-                # Format the transaction for CSV
-                row = {
-                    'id': idx,
-                    'date': transaction.date.isoformat(),
-                    'description': transaction.description,
-                    'debit_account': ', '.join([entry.account.name for entry in transaction.debits]),
-                    'debit_amount': str(total_debits),
-                    'credit_account': transaction.credits[0].account.name if transaction.credits else '',
-                    'credit_amount': str(transaction.credits[0].amount) if transaction.credits else '0',
-                    'credit_account_2': transaction.credits[1].account.name if len(transaction.credits) > 1 else '',
-                    'credit_amount_2': str(transaction.credits[1].amount) if len(transaction.credits) > 1 else ''
-                }
-                writer.writerow(row)
+            for transaction_id, transaction in enumerate(self.transactions, 1):
+                row_count = max(len(transaction.debits), len(transaction.credits), 1)
+                for line_number in range(1, row_count + 1):
+                    debit_entry = (
+                        transaction.debits[line_number - 1]
+                        if line_number <= len(transaction.debits)
+                        else None
+                    )
+                    credit_entry = (
+                        transaction.credits[line_number - 1]
+                        if line_number <= len(transaction.credits)
+                        else None
+                    )
+
+                    writer.writerow(
+                        {
+                            'transaction_id': transaction_id,
+                            'date': transaction.date.isoformat(),
+                            'description': transaction.description,
+                            'line_number': line_number,
+                            'debit_account': debit_entry.account.name if debit_entry else '',
+                            'debit_amount': str(debit_entry.amount) if debit_entry else '',
+                            'credit_account': credit_entry.account.name if credit_entry else '',
+                            'credit_amount': str(credit_entry.amount) if credit_entry else '',
+                        }
+                    )
         
         return len(self.transactions)
     
@@ -608,83 +680,167 @@ class Ledger:
         return len(self.transactions)
     
     def import_transactions_from_csv(self, filename: str, verbose: bool = False) -> int:
-        """
-        Import transactions from a CSV file
-        
+        """Import transactions from a CSV file into this ledger.
+
+        Path resolution:
+            If ``filename`` contains no directory component, the file is
+            resolved relative to the ``data/`` directory of the current
+            working directory (mirrors the behaviour of
+            :meth:`export_transactions_to_csv`).
+
+        Parsing:
+            Supports the current line-based format produced by
+            ``export_transactions_to_csv`` (keyed by ``transaction_id``)
+            and the older legacy two-credit-column format.
+
+        Account creation:
+            Missing accounts are created automatically using
+            :meth:`get_or_create_account`.  Account types are inferred from
+            account names via :meth:`_infer_account_type`.
+
+        Validation:
+            Every reconstructed transaction must balance (total debits ==
+            total credits).  Rows that fail validation are skipped; a
+            warning is printed when ``verbose=True``.
+
         Args:
-            filename: Path to the CSV file to import
-            verbose: If True, print each transaction as it's imported
-            
+            filename: Path to the CSV file, or a bare filename to be
+                resolved inside ``data/``.
+            verbose: When ``True``, print each imported transaction and a
+                final summary.  When ``False`` (default), produce no
+                output.
+
         Returns:
-            Number of transactions imported
+            Number of transactions successfully imported.
         """
+        input_path = Path(filename)
+        if input_path.parent == Path("."):
+            input_path = Path("data") / input_path
+
         count = 0
-        row_num = 1  # Track row number (1 = header)
-        
-        with open(filename, 'r', encoding='utf-8') as csvfile:
+        skipped = 0
+
+        with open(input_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
-            
+            fieldnames = set(reader.fieldnames or [])
+
+            # New CSV format: line-based rows keyed by transaction_id.
+            if "transaction_id" in fieldnames:
+                grouped: Dict[str, Dict[str, Any]] = {}
+                order: List[str] = []
+
+                for row in reader:
+                    tx_id = str(row.get("transaction_id", "")).strip()
+                    if not tx_id:
+                        continue
+
+                    if tx_id not in grouped:
+                        grouped[tx_id] = {
+                            "date": row.get("date", "").strip(),
+                            "description": row.get("description", ""),
+                            "debits": [],
+                            "credits": [],
+                        }
+                        order.append(tx_id)
+
+                    debit_account = row.get("debit_account", "").strip()
+                    debit_amount_text = row.get("debit_amount", "").strip()
+                    if debit_account and debit_amount_text:
+                        grouped[tx_id]["debits"].append((debit_account, Decimal(debit_amount_text)))
+
+                    credit_account = row.get("credit_account", "").strip()
+                    credit_amount_text = row.get("credit_amount", "").strip()
+                    if credit_account and credit_amount_text:
+                        grouped[tx_id]["credits"].append((credit_account, Decimal(credit_amount_text)))
+
+                for tx_id in order:
+                    tx_data = grouped[tx_id]
+                    try:
+                        trans_date = datetime.fromisoformat(tx_data["date"]).date()
+                        description = tx_data["description"]
+
+                        transaction = Transaction(trans_date, description)
+
+                        for debit_acc_name, debit_amount in tx_data["debits"]:
+                            account_type = self._infer_account_type(debit_acc_name)
+                            debit_account = self.get_or_create_account(debit_acc_name, account_type)
+                            transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount))
+
+                        for credit_acc_name, credit_amount in tx_data["credits"]:
+                            account_type = self._infer_account_type(credit_acc_name)
+                            credit_account = self.get_or_create_account(credit_acc_name, account_type)
+                            transaction.add_credit(TransactionEntry.credit(credit_account, credit_amount))
+
+                        if not transaction.is_balanced():
+                            raise ValueError("Transaction is not balanced: debits must equal credits")
+
+                        transaction.post()
+                        self.transactions.append(transaction)
+                        if verbose:
+                            print(transaction)
+                        count += 1
+                    except (ValueError, KeyError) as e:
+                        skipped += 1
+                        if verbose:
+                            print(f"Warning: Skipping invalid transaction id {tx_id}: {e}")
+                        continue
+
+                if verbose:
+                    print(f"\nImported {count} transaction(s) from '{input_path}'."
+                          + (f"  {skipped} skipped." if skipped else ""))
+                return count
+
+            # Backward-compatible legacy CSV import.
+            row_num = 1
             for row in reader:
                 row_num += 1
                 try:
-                    # Parse the transaction date
                     trans_date = datetime.fromisoformat(row['date']).date()
                     description = row['description']
-                    
-                    # Parse debit entries
+
                     debit_accounts = [acc.strip() for acc in row.get('debit_account', '').split(',') if acc.strip()]
                     debit_amount = Decimal(row.get('debit_amount', '0'))
-                    
-                    # Parse credit entries
+
                     credit_account = row.get('credit_account', '').strip()
                     credit_amount = Decimal(row.get('credit_amount', '0'))
                     credit_account_2 = row.get('credit_account_2', '').strip()
                     credit_amount_2 = Decimal(row.get('credit_amount_2', '0')) if row.get('credit_amount_2') else Decimal('0')
-                    
-                    # Create the transaction directly
+
                     transaction = Transaction(trans_date, description)
-                    
-                    # Add debit entries
-                    # Note: CSV format doesn't track individual debit amounts, so we
-                    # distribute the total equally. For precise multi-debit transactions,
-                    # use JSON format which preserves individual amounts.
+
                     for debit_acc_name in debit_accounts:
                         account_type = self._infer_account_type(debit_acc_name)
                         debit_account = self.get_or_create_account(debit_acc_name, account_type)
                         transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount / len(debit_accounts)))
-                    
-                    # Add credit entries
+
                     if credit_account:
                         account_type = self._infer_account_type(credit_account)
                         credit_acc = self.get_or_create_account(credit_account, account_type)
                         transaction.add_credit(TransactionEntry.credit(credit_acc, credit_amount))
-                    
+
                     if credit_account_2 and credit_amount_2 > 0:
                         account_type = self._infer_account_type(credit_account_2)
                         credit_acc_2 = self.get_or_create_account(credit_account_2, account_type)
                         transaction.add_credit(TransactionEntry.credit(credit_acc_2, credit_amount_2))
-                    
-                    # Verify that the transaction is balanced
+
                     if not transaction.is_balanced():
                         raise ValueError("Transaction is not balanced: debits must equal credits")
-                    
-                    # Post the transaction to update account balances
+
                     transaction.post()
-                    
-                    # Record the transaction in the ledger
                     self.transactions.append(transaction)
-                    
-                    # Print if verbose
                     if verbose:
                         print(transaction)
-                    
                     count += 1
-                    
+
                 except (ValueError, KeyError) as e:
+                    skipped += 1
                     if verbose:
                         print(f"Warning: Skipping invalid transaction at row {row_num}: {e}")
                     continue
-        
+
+        if verbose:
+            print(f"\nImported {count} transaction(s) from '{input_path}'."
+                  + (f"  {skipped} skipped." if skipped else ""))
         return count
     
     def import_transactions_from_json(self, filename: str, verbose: bool = False) -> int:
