@@ -1,4 +1,4 @@
-.PHONY: help setup run run-module test generate-data transform-data validate import-export clean-data
+.PHONY: help setup run run-module test generate-data transform-data serve-data run-api validate import-export clean-data
 
 help:
 	@echo "Available targets:"
@@ -8,6 +8,8 @@ help:
 	@echo "  make test         - Run test suite using .venv"
 	@echo "  make generate-data- Generate historical datasets in data/"
 	@echo "  make transform-data- Build cleaned analytics-ready transaction dataset"
+	@echo "  make serve-data   - Build serving-layer analytics and API payloads"
+	@echo "  make run-api      - Start the serving-layer HTTP API"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
 	@echo "  make clean-data   - Remove demo export files from data/"
@@ -32,6 +34,13 @@ generate-data:
 
 transform-data:
 	python3 transform_transactions.py
+
+serve-data:
+	python3 transform_transactions.py
+	python3 build_serving_layer.py
+
+run-api:
+	python3 pipeline_api_server.py
 
 validate:
 	python3 validate_transactions.py
