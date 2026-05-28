@@ -5,20 +5,22 @@ REST endpoints for the dashboard and reports.
 
 Endpoints:
 - GET /health
-- GET /api/kpis?branch=&start=&end=
+- GET /api
 - GET /api/transactions?branch=&start=&end=&type=&page=&per_page=
+- GET /api/kpis?branch=&start=&end=
+- GET /api/accounts?account_type=&name=
 - GET /api/cashflow?branch=&start=&end=&granularity=
-- GET /api/loans?branch=&status=
-- GET /api/expenses?branch=&start=&end=
 - GET /api/alerts?branch=&start=&end=&severity=
 - POST /api/alerts/{id}/acknowledge
+- GET /api/loans?branch=&status=
+- GET /api/expenses?branch=&start=&end=
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -260,6 +262,23 @@ class ServingStore:
             "data": rows,
         }
 
+    def get_accounts(self, params: dict[str, list[str]]) -> dict[str, Any]:
+        account_type = ((params.get("account_type") or [""])[0] or "").upper() or None
+        name_query = ((params.get("name") or [""])[0] or "").casefold()
+
+        rows = list(self.account_summary)
+        if account_type:
+            rows = [row for row in rows if row.get("account_type") == account_type]
+        if name_query:
+            rows = [row for row in rows if name_query in row.get("account_name", "").casefold()]
+
+        return {
+            "account_type": account_type,
+            "name": name_query or None,
+            "total": len(rows),
+            "data": rows,
+        }
+
     def acknowledge_alert(self, alert_id: int, payload: dict[str, Any]) -> dict[str, Any]:
         note = str(payload.get("note", "")).strip()
         user_id = str(payload.get("user_id", "")).strip()
@@ -303,6 +322,19 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
 
+    _ENDPOINTS = [
+        {"method": "GET",  "path": "/health",                        "description": "Health check"},
+        {"method": "GET",  "path": "/api",                           "description": "API endpoint index"},
+        {"method": "GET",  "path": "/api/transactions",              "description": "Paginated transaction ledger",   "params": "branch, start, end, type, page, per_page"},
+        {"method": "GET",  "path": "/api/kpis",                      "description": "Branch KPI summary",             "params": "branch, start, end"},
+        {"method": "GET",  "path": "/api/accounts",                  "description": "Account balances",              "params": "account_type, name"},
+        {"method": "GET",  "path": "/api/cashflow",                  "description": "Cash flow time series",          "params": "branch, start, end, granularity"},
+        {"method": "GET",  "path": "/api/alerts",                    "description": "Anomaly and fraud alerts",       "params": "branch, start, end, severity"},
+        {"method": "POST", "path": "/api/alerts/{id}/acknowledge",   "description": "Acknowledge an alert",          "body": "user_id, note"},
+        {"method": "GET",  "path": "/api/loans",                     "description": "Open loan portfolio",           "params": "branch, status"},
+        {"method": "GET",  "path": "/api/expenses",                  "description": "Expense breakdown",             "params": "branch, start, end"},
+    ]
+
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
         params = parse_qs(parsed.query)
@@ -314,23 +346,29 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
         if parsed.path == "/health":
             self._send_json(200, {"status": "ok", "service": "medici-api"})
             return
-        if parsed.path == "/api/kpis":
-            self._send_json(200, store.get_kpis(params))
+        if parsed.path in {"/api", "/api/"}:
+            self._send_json(200, {"service": "medici-api", "endpoints": self._ENDPOINTS})
             return
         if parsed.path == "/api/transactions":
             self._send_json(200, store.get_transactions(params))
             return
+        if parsed.path == "/api/kpis":
+            self._send_json(200, store.get_kpis(params))
+            return
+        if parsed.path == "/api/accounts":
+            self._send_json(200, store.get_accounts(params))
+            return
         if parsed.path == "/api/cashflow":
             self._send_json(200, store.get_cashflow(params))
+            return
+        if parsed.path == "/api/alerts":
+            self._send_json(200, store.get_alerts(params))
             return
         if parsed.path == "/api/loans":
             self._send_json(200, store.get_loans(params))
             return
         if parsed.path == "/api/expenses":
             self._send_json(200, store.get_expenses(params))
-            return
-        if parsed.path == "/api/alerts":
-            self._send_json(200, store.get_alerts(params))
             return
 
         self._send_json(404, {"error": f"unknown endpoint: {parsed.path}"})
@@ -355,9 +393,9 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
 
         self._send_json(404, {"error": f"unknown endpoint: {parsed.path}"})
 
-    def log_message(self, format: str, *args: Any) -> None:
-        # Keep terminal output concise during dashboard/API development.
-        return
+    def log_message(self, fmt: str, *args: Any) -> None:
+        method = self.command if hasattr(self, "command") else "-"
+        print(f"{self.address_string()} {method} {self.path} {args[1] if len(args) > 1 else ''}")
 
 
 def build_parser() -> argparse.ArgumentParser:
