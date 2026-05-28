@@ -211,3 +211,7 @@ exported_transactions.csv
 exported_transactions.json
 data/exported_transactions.csv
 data/exported_transactions.json
+
+# Generated datasets and exports
+*.csv
+*.json
