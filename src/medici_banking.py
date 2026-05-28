@@ -1,33 +1,33 @@
 """
 Medici Banking System - Double-Entry Accounting in Python
-
+ 
 This implementation showcases the core principles of double-entry accounting, using florins as
  the currency in honor of the Medici banking dynasty. Here's what the code demonstrates:
-
+ 
 1. **The Fundamental Principle**: Every transaction affects at least two accounts
    (the double-entry principle), and the sum of debits must always equal the sum of credits.
-
+ 
 2. **Five Main Account Types**:
    - Assets: Resources owned by the business
    - Liabilities: Debts owed by the business
    - Equity: Owner's interest in the business
    - Revenue: Income earned by the business
    - Expenses: Costs incurred by the business
-
+ 
 3. **Account Balance Rules**:
    - Assets and Expenses: Increased by debits, decreased by credits
    - Liabilities, Equity, and Revenue: Increased by credits, decreased by debits
-
+ 
 4. **Key Financial Reports**:
    - Trial Balance: Verifies that total debits equal total credits
    - Balance Sheet: Shows Assets = Liabilities + Equity
    - Income Statement: Shows Revenue - Expenses = Net Income
-
+ 
 The example simulates transactions for the Medici Bank in the year 1397,
 including initial capitalization, loans with interest (a key banking activity),
 property acquisition, and operating expenses.
 """
-
+ 
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import date, datetime
 from enum import Enum
@@ -36,8 +36,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import csv
 import json
-
-
+ 
+ 
 class NormalBalance(str, Enum):
     """The side of a journal entry that increases an account's balance."""
  
@@ -166,37 +166,38 @@ _DESCRIPTIONS: Dict[AccountType, str] = {
         "Closes into equity at period end."
     ),
 }
-
+ 
+ 
 class Account:
     """Represents a financial account in the double-entry system"""
-    
+ 
     def __init__(self, name: str, account_type: AccountType):
         self._name = name
         self._type = account_type
         self._balance = Decimal('0')
-
+ 
     @property
-    def name(self) -> str:          
+    def name(self) -> str:
         return self._name
-
+ 
     @property
-    def type(self) -> AccountType:  
+    def type(self) -> AccountType:
         return self._type
-
+ 
     @property
-    def formatted_balance(self) -> str:  
+    def formatted_balance(self) -> str:
         # Storage keeps full precision; only the display is quantized.
         return f"{self._balance:,.2f} florins"
-
+ 
     @property
     def balance(self) -> Decimal:
         """Get the current balance of the account"""
         return self._balance
-    
+ 
     def debit(self, amount: Decimal) -> None:
         """
         Apply a debit to the account
-        
+ 
         Debits increase ASSET and EXPENSE accounts
         Debits decrease LIABILITY, EQUITY, and REVENUE accounts
         """
@@ -204,11 +205,11 @@ class Account:
             self._balance += amount
         else:
             self._balance -= amount
-    
+ 
     def credit(self, amount: Decimal) -> None:
         """
         Apply a credit to the account
-        
+ 
         Credits decrease ASSET and EXPENSE accounts
         Credits increase LIABILITY, EQUITY, and REVENUE accounts
         """
@@ -216,38 +217,38 @@ class Account:
             self._balance -= amount
         else:
             self._balance += amount
-    
+ 
     def __str__(self) -> str:
         return f"{self.name} ({self.type.name}): {self._balance} florins"
-    
+ 
     def __repr__(self) -> str:
         return f"Account('{self.name}', {self.type})"
-
-
+ 
+ 
 @dataclass
 class TransactionEntry:
     """Represents one debit or credit line in a transaction"""
     account: Account
     amount: Decimal
     is_debit: Optional[bool] = None
-
+ 
     @classmethod
     def debit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
         """Create a debit transaction entry."""
         return cls(account=account, amount=amount, is_debit=True)
-
+ 
     @classmethod
     def credit(cls, account: Account, amount: Decimal) -> "TransactionEntry":
         """Create a credit transaction entry."""
         return cls(account=account, amount=amount, is_debit=False)
-    
+ 
     def __post_init__(self):
         # Ensure amount is a Decimal
         self.amount = Decimal(str(self.amount))
-
+ 
         if self.amount == 0:
             raise ValueError("Transaction entry amount must not be zero")
-
+ 
         # Backward compatibility: if side is omitted, infer it from account type
         # and amount sign. Positive means normal balance direction, negative means
         # the opposite direction.
@@ -260,121 +261,210 @@ class TransactionEntry:
             self.amount = abs(self.amount)
         elif self.amount < 0:
             raise ValueError("Transaction entry amount must be greater than zero")
-
+ 
     def __str__(self) -> str:
         side = "DEBIT" if self.is_debit else "CREDIT"
         return f"{side} | {self.account.name}: {self.amount} florins"
-
-
+ 
+ 
+class UnbalancedTransactionError(ValueError):
+    """Raised when a transaction's debits and credits do not match."""
+ 
+ 
 @dataclass
 class Transaction:
     """Represents a complete financial transaction in the double-entry system"""
     date: date
     description: str
-    debits: List[TransactionEntry] = field(default_factory=list)
-    credits: List[TransactionEntry] = field(default_factory=list)
-    
+    id: Optional[str] = None                                       # issue #49
+    debits: List[TransactionEntry] = field(default_factory=list)   # issue #37
+    credits: List[TransactionEntry] = field(default_factory=list)  # issue #38
+ 
     def add_debit(self, entry: TransactionEntry) -> None:
         """Add a debit entry to the transaction"""
         self.debits.append(entry)
-    
+ 
     def add_credit(self, entry: TransactionEntry) -> None:
         """Add a credit entry to the transaction"""
         self.credits.append(entry)
-    
-    def is_balanced(self) -> bool:
+ 
+    def total_debits(self) -> Decimal:
+        return sum((e.amount for e in self.debits), Decimal("0"))
+ 
+    def total_credits(self) -> Decimal:
+        return sum((e.amount for e in self.credits), Decimal("0"))
+ 
+    def is_balanced(self) -> bool:                       # issue #39
         """Check if the transaction is balanced (debits = credits)"""
-        total_debits = sum(entry.amount for entry in self.debits)
-        total_credits = sum(entry.amount for entry in self.credits)
-        return total_debits == total_credits
-    
+        return self.total_debits() == self.total_credits()
+ 
+    def validate(self) -> None:                          # issues #40, #41
+        if not self.debits or not self.credits:
+            raise UnbalancedTransactionError(
+                f"Transaction '{self.description}' on {self.date} needs at "
+                f"least one debit and one credit entry."
+            )
+        td, tc = self.total_debits(), self.total_credits()
+        if td != tc:
+            raise UnbalancedTransactionError(
+                f"Transaction '{self.description}' on {self.date} is not "
+                f"balanced: debits total {td}, credits total {tc} "
+                f"(off by {abs(td - tc)})."
+            )
+ 
     def post(self) -> None:
         """Post the transaction to update account balances"""
+        self.validate()  # Ensure the transaction is valid before posting
         # Apply all debits
         for entry in self.debits:
             entry.account.debit(entry.amount)
-        
         # Apply all credits
         for entry in self.credits:
             entry.account.credit(entry.amount)
-    
+ 
     def __str__(self) -> str:
-        lines = [f"Transaction: {self.date} - {self.description}"]
-        
+        header = f"Transaction: {self.date} - {self.description}"
+        if self.id:
+            header = f"Transaction {self.id}: {self.date} - {self.description}"
+        lines = [header]
+ 
         lines.append("  Debits:")
         for entry in self.debits:
             lines.append(f"    {entry.account.name}: {entry.amount} florins")
-        
+ 
         lines.append("  Credits:")
         for entry in self.credits:
             lines.append(f"    {entry.account.name}: {entry.amount} florins")
-        
+ 
         return '\n'.join(lines)
-
-
+ 
+ 
+class DuplicateAccountError(ValueError):
+    """Raised when creating an account name that already exists."""
+ 
+ 
+class DuplicateTransactionError(ValueError):
+    """Raised when a transaction ID is reused, empty, or otherwise invalid."""
+ 
+ 
 class Ledger:
     """The main ledger that keeps track of all accounts and transactions"""
-    
+ 
     def __init__(self, name: str):
         self.name = name
-        self.accounts: List[Account] = []
-        self.transactions: List[Transaction] = []
-        self._silent_mode = False  # Flag for suppressing transaction output
-    
-    def create_account(self, name: str, account_type: AccountType) -> Account:
-        """Create a new account and add it to the ledger"""
+        self.accounts: Dict[str, Account] = {}        # issue #44 (keyed by name)
+        self.transactions: List[Transaction] = []     # issue #47
+        self._used_ids: set[str] = set()              # issue #49
+        self._next_seq = 1
+        self._silent_mode = False
+ 
+    # --- Account management (#44, #45) ------------------------------------
+ 
+    def create_account(self, name: str, account_type: AccountType) -> Account:  # #44
+        if name in self.accounts:
+            raise DuplicateAccountError(f"Account '{name}' already exists.")
         account = Account(name, account_type)
-        self.accounts.append(account)
+        self.accounts[name] = account
         return account
-    
+ 
+    def get_account(self, name: str) -> Optional[Account]:                      # #45
+        """Find an existing account by name. Returns None if not found."""
+        return self.accounts.get(name)
+ 
+    def require_account(self, name: str) -> Account:                            # #45 (strict)
+        account = self.accounts.get(name)
+        if account is None:
+            raise KeyError(f"No account named '{name}' in the ledger.")
+        return account
+ 
     def get_or_create_account(self, name: str, account_type: AccountType) -> Account:
-        """Get an existing account by name or create a new one if it doesn't exist"""
-        for account in self.accounts:
-            if account.name == name:
-                return account
+        """Get an existing account by name, or create a new one if absent."""
+        existing = self.accounts.get(name)
+        if existing is not None:
+            return existing
         return self.create_account(name, account_type)
-    
-    def record_transaction(self, date: date, description: str, 
-                          *entries: TransactionEntry) -> None:
+ 
+    # --- Transaction ID handling (#49) ------------------------------------
+ 
+    def _resolve_id(self, transaction_id: Optional[str]) -> str:
         """
-        Records a transaction with any number of debits and credits,
-        ensuring that debits = credits (the fundamental principle of double-entry)
+        Return a unique, valid transaction ID, or raise if invalid/duplicate.
+ 
+        - None  -> auto-generate the next free "TXN-NNNN" id.
+        - given -> trimmed; rejected if empty or already used.
+        """
+        if transaction_id is None:
+            seq = self._next_seq
+            tid = f"TXN-{seq:04d}"
+            while tid in self._used_ids:        # skip ids already reserved (e.g. imported)
+                seq += 1
+                tid = f"TXN-{seq:04d}"
+            self._next_seq = seq + 1
+            return tid
+        tid = str(transaction_id).strip()
+        if not tid:
+            raise DuplicateTransactionError("Transaction ID cannot be empty or whitespace.")
+        if tid in self._used_ids:
+            raise DuplicateTransactionError(f"Transaction ID '{tid}' already exists in the ledger.")
+        return tid
+ 
+    def record_transaction(self, date: date, description: str,
+                           *entries: TransactionEntry,
+                           transaction_id: Optional[str] = None) -> Transaction:  # #46
+        """
+        Records a transaction with any number of debits and credits, ensuring
+        debits = credits (the fundamental principle of double-entry).
+ 
+        A transaction is only stored if it has a unique, non-empty ID and it
+        balances. A rejected transaction reserves no ID and changes no account.
         """
         transaction = Transaction(date, description)
-        
-        # Separate entries into debits and credits based on explicit entry direction.
+ 
+        # Separate entries into debits and credits based on explicit direction.
         for entry in entries:
             if entry.is_debit:
                 transaction.add_debit(entry)
             else:
                 transaction.add_credit(entry)
-        
-        # Verify that the transaction is balanced
+ 
+        # Resolve + validate the ID before anything irreversible happens (#49).
+        transaction.id = self._resolve_id(transaction_id)
+ 
+        # Verify the transaction is balanced (#40 / Double-Entry Policy).
         if not transaction.is_balanced():
-            raise ValueError("Transaction is not balanced: debits must equal credits")
-        
-        # Post the transaction to update account balances
+            raise ValueError(
+                "Transaction is not balanced: debits must equal credits "
+                f"(debits total {transaction.total_debits()}, "
+                f"credits total {transaction.total_credits()})"
+            )
+ 
+        # Post to update account balances (#48).
         transaction.post()
-        
-        # Record the transaction in the ledger
+ 
+        # Record the transaction and reserve its ID only after success (#47).
         self.transactions.append(transaction)
-        
+        self._used_ids.add(transaction.id)
+ 
         # Print only if not in silent mode
         if not self._silent_mode:
             print(transaction)
-
+ 
+        return transaction
+ 
+    # --- Reports ----------------------------------------------------------
+ 
     def get_trial_balance_report(self) -> Dict[str, Any]:
         """Build a structured trial balance report for UI/API consumers."""
         cent = Decimal("0.01")
         total_debits = Decimal("0")
         total_credits = Decimal("0")
         rows = []
-
-        for account in self.accounts:
+ 
+        for account in self.accounts.values():
             balance = account.balance
             debit_balance = Decimal("0")
             credit_balance = Decimal("0")
-
+ 
             if account.type in (AccountType.ASSET, AccountType.EXPENSE):
                 if balance >= 0:
                     debit_balance = balance
@@ -385,10 +475,10 @@ class Ledger:
                     credit_balance = balance
                 else:
                     debit_balance = abs(balance)
-
+ 
             total_debits += debit_balance
             total_credits += credit_balance
-
+ 
             rows.append(
                 {
                     "account_name": account.name,
@@ -397,17 +487,17 @@ class Ledger:
                     "credit_balance": credit_balance.quantize(cent),
                 }
             )
-
+ 
         total_debits = total_debits.quantize(cent)
         total_credits = total_credits.quantize(cent)
-
+ 
         return {
             "rows": rows,
             "total_debits": total_debits,
             "total_credits": total_credits,
             "is_balanced": total_debits == total_credits,
         }
-    
+ 
     def print_trial_balance(self) -> None:
         """Print a trial balance report for all accounts in the ledger."""
         report = self.get_trial_balance_report()
@@ -415,15 +505,15 @@ class Ledger:
         total_debits = report["total_debits"]
         total_credits = report["total_credits"]
         is_balanced = report["is_balanced"]
-
+ 
         def _format_amount(value: Decimal) -> str:
             if value == 0:
                 return ""
             return f"{value:,.2f}"
-
+ 
         print(f"{'Account':<30} {'Type':<12} {'Debit (Florins)':>18} {'Credit (Florins)':>18}")
         print("-" * 82)
-
+ 
         for row in rows:
             print(
                 f"{row['account_name']:<30} "
@@ -431,62 +521,62 @@ class Ledger:
                 f"{_format_amount(row['debit_balance']):>18} "
                 f"{_format_amount(row['credit_balance']):>18}"
             )
-
+ 
         print("-" * 82)
         print(
             f"{'TOTAL':<42} "
             f"{total_debits:>18,.2f} "
             f"{total_credits:>18,.2f}"
         )
-
+ 
         print(f"\nLedger balanced: {'YES' if is_balanced else 'NO'}")
-    
+ 
     def print_balance_sheet(self) -> None:
         """Prints a balance sheet (Assets = Liabilities + Equity)"""
         total_assets = Decimal('0')
         total_liabilities = Decimal('0')
         total_equity = Decimal('0')
-        
+ 
         # Print Assets
         print("ASSETS")
         print("-" * 40)
-        for account in self.accounts:
+        for account in self.accounts.values():
             if account.type == AccountType.ASSET and account.balance != 0:
                 print(f"{account.name:<30} {account.balance.quantize(Decimal('0.01')):>10}")
                 total_assets += account.balance
         print("-" * 40)
         print(f"{'TOTAL ASSETS':<30} {total_assets.quantize(Decimal('0.01')):>10}")
         print()
-        
+ 
         # Print Liabilities
         print("LIABILITIES")
         print("-" * 40)
-        for account in self.accounts:
+        for account in self.accounts.values():
             if account.type == AccountType.LIABILITY and account.balance != 0:
                 print(f"{account.name:<30} {account.balance.quantize(Decimal('0.01')):>10}")
                 total_liabilities += account.balance
         print("-" * 40)
         print(f"{'TOTAL LIABILITIES':<30} {total_liabilities.quantize(Decimal('0.01')):>10}")
         print()
-        
+ 
         # Print Equity
         print("EQUITY")
         print("-" * 40)
-        for account in self.accounts:
+        for account in self.accounts.values():
             if account.type == AccountType.EQUITY and account.balance != 0:
                 print(f"{account.name:<30} {account.balance.quantize(Decimal('0.01')):>10}")
                 total_equity += account.balance
         print("-" * 40)
         print(f"{'TOTAL EQUITY':<30} {total_equity.quantize(Decimal('0.01')):>10}")
         print()
-        
+ 
         # Verify the accounting equation: Assets = Liabilities + Equity
         print("ACCOUNTING EQUATION")
         print("-" * 40)
         print(f"{'Total Assets':<30} {total_assets.quantize(Decimal('0.01')):>10}")
         print(f"{'Total Liabilities + Equity':<30} "
               f"{(total_liabilities + total_equity).quantize(Decimal('0.01')):>10}")
-        
+ 
         if total_assets == total_liabilities + total_equity:
             print("\nThe accounting equation is balanced! ✓")
         else:
@@ -637,22 +727,18 @@ class Ledger:
                     )
         
         return len(self.transactions)
-    
+ 
     def export_transactions_to_json(self, filename: str) -> int:
         """
-        Export all transactions to a JSON file
-        
-        Args:
-            filename: Path to the JSON file to create
-            
-        Returns:
-            Number of transactions exported
+        Export all transactions to a JSON file.
+ 
+        Returns the number of transactions exported.
         """
         transactions_data = []
-        
+ 
         for idx, transaction in enumerate(self.transactions, 1):
             trans_dict = {
-                'id': idx,
+                'id': transaction.id or f"TXN-{idx:04d}",
                 'date': transaction.date.isoformat(),
                 'description': transaction.description,
                 'debits': [
@@ -673,12 +759,12 @@ class Ledger:
                 ]
             }
             transactions_data.append(trans_dict)
-        
+ 
         with open(filename, 'w', encoding='utf-8') as jsonfile:
             json.dump(transactions_data, jsonfile, indent=2)
-        
+ 
         return len(self.transactions)
-    
+ 
     def import_transactions_from_csv(self, filename: str, verbose: bool = False) -> int:
         """Import transactions from a CSV file into this ledger.
 
@@ -805,19 +891,22 @@ class Ledger:
                     credit_amount = Decimal(row.get('credit_amount', '0'))
                     credit_account_2 = row.get('credit_account_2', '').strip()
                     credit_amount_2 = Decimal(row.get('credit_amount_2', '0')) if row.get('credit_amount_2') else Decimal('0')
-
+ 
                     transaction = Transaction(trans_date, description)
-
+ 
+                    # CSV format doesn't track individual debit amounts, so we
+                    # distribute the total equally. For precise multi-debit
+                    # transactions, use JSON which preserves individual amounts.
                     for debit_acc_name in debit_accounts:
                         account_type = self._infer_account_type(debit_acc_name)
                         debit_account = self.get_or_create_account(debit_acc_name, account_type)
                         transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount / len(debit_accounts)))
-
+ 
                     if credit_account:
                         account_type = self._infer_account_type(credit_account)
                         credit_acc = self.get_or_create_account(credit_account, account_type)
                         transaction.add_credit(TransactionEntry.credit(credit_acc, credit_amount))
-
+ 
                     if credit_account_2 and credit_amount_2 > 0:
                         account_type = self._infer_account_type(credit_account_2)
                         credit_acc_2 = self.get_or_create_account(credit_account_2, account_type)
@@ -842,134 +931,109 @@ class Ledger:
             print(f"\nImported {count} transaction(s) from '{input_path}'."
                   + (f"  {skipped} skipped." if skipped else ""))
         return count
-    
+ 
     def import_transactions_from_json(self, filename: str, verbose: bool = False) -> int:
         """
-        Import transactions from a JSON file
-        
-        Args:
-            filename: Path to the JSON file to import
-            verbose: If True, print each transaction as it's imported
-            
-        Returns:
-            Number of transactions imported
+        Import transactions from a JSON file.
+ 
+        Returns the number of transactions imported. Invalid or unbalanced
+        records are skipped (and reported when verbose), never silently posted.
         """
         count = 0
-        
+ 
         with open(filename, 'r', encoding='utf-8') as jsonfile:
             transactions_data = json.load(jsonfile)
-        
+ 
         for trans_dict in transactions_data:
             try:
-                # Parse the transaction
                 trans_date = datetime.fromisoformat(trans_dict['date']).date()
                 description = trans_dict['description']
-                
-                # Create the transaction directly
+ 
                 transaction = Transaction(trans_date, description)
-                
-                # Add debit entries
+ 
                 for debit_entry in trans_dict.get('debits', []):
-                    account_type = AccountType[debit_entry['account_type']]
+                    account_type = AccountType.parse(debit_entry['account_type'])
                     debit_account = self.get_or_create_account(debit_entry['account'], account_type)
                     amount = Decimal(debit_entry['amount'])
                     transaction.add_debit(TransactionEntry.debit(debit_account, amount))
-                
-                # Add credit entries
+ 
                 for credit_entry in trans_dict.get('credits', []):
-                    account_type = AccountType[credit_entry['account_type']]
+                    account_type = AccountType.parse(credit_entry['account_type'])
                     credit_account = self.get_or_create_account(credit_entry['account'], account_type)
                     amount = Decimal(credit_entry['amount'])
                     transaction.add_credit(TransactionEntry.credit(credit_account, amount))
-                
-                # Verify that the transaction is balanced
+ 
+                # Assign/validate ID (#49) before posting.
+                transaction.id = self._resolve_id(trans_dict.get('id') or None)
+ 
                 if not transaction.is_balanced():
                     raise ValueError("Transaction is not balanced: debits must equal credits")
-                
-                # Post the transaction to update account balances
+ 
                 transaction.post()
-                
-                # Record the transaction in the ledger
                 self.transactions.append(transaction)
-                
-                # Print if verbose
+                self._used_ids.add(transaction.id)
+ 
                 if verbose:
                     print(transaction)
-                
+ 
                 count += 1
-                
+ 
             except (ValueError, KeyError) as e:
                 if verbose:
                     print(f"Warning: Skipping invalid transaction: {e}")
                 continue
-        
+ 
         return count
-    
+ 
     def _infer_account_type(self, account_name: str) -> AccountType:
         """
-        Infer the account type from the account name
-        This is a heuristic-based approach for CSV imports where type isn't explicit.
-        
-        Note: Defaults to ASSET if account type cannot be determined. This is a safe
-        default for unknown accounts as most banking transactions involve asset accounts.
+        Infer the account type from the account name (heuristic for CSV imports
+        where the type isn't explicit). Defaults to ASSET when undetermined.
         For precise type control, use JSON import which preserves account types.
         """
         name_lower = account_name.lower()
-        
-        # Asset accounts
+ 
         if any(keyword in name_lower for keyword in ['cash', 'receivable', 'inventory', 'land', 'building', 'equipment', 'asset']):
             return AccountType.ASSET
-        
-        # Liability accounts
         if any(keyword in name_lower for keyword in ['payable', 'loan', 'debt', 'liability', 'deposits payable']):
             return AccountType.LIABILITY
-        
-        # Equity accounts
         if any(keyword in name_lower for keyword in ['capital', 'equity', 'retained earnings', 'owner']):
             return AccountType.EQUITY
-        
-        # Revenue accounts
         if any(keyword in name_lower for keyword in ['revenue', 'income', 'sales', 'interest income', 'fee']):
             return AccountType.REVENUE
-        
-        # Expense accounts
         if any(keyword in name_lower for keyword in ['expense', 'wages', 'rent', 'supplies', 'maintenance', 'courier', 'cost']):
             return AccountType.EXPENSE
-        
-        # Default to ASSET if we can't determine
         return AccountType.ASSET
-
-
+ 
+ 
 def main():
     """
     A double-entry accounting system implementation inspired by the
     Florentine banking practices of the Medici family.
     """
-    # Create a new ledger for our banking operations
     medici_ledger = Ledger("Medici Family Bank")
-    
+ 
     # Define our chart of accounts
     cash = medici_ledger.create_account("Cash", AccountType.ASSET)
     accounts_receivable = medici_ledger.create_account("Accounts Receivable", AccountType.ASSET)
     inventory = medici_ledger.create_account("Inventory", AccountType.ASSET)
     land = medici_ledger.create_account("Land", AccountType.ASSET)
-    
+ 
     accounts_payable = medici_ledger.create_account("Accounts Payable", AccountType.LIABILITY)
     loans = medici_ledger.create_account("Loans", AccountType.LIABILITY)
-    
+ 
     capital = medici_ledger.create_account("Owner's Capital", AccountType.EQUITY)
     retained_earnings = medici_ledger.create_account("Retained Earnings", AccountType.EQUITY)
-    
+ 
     revenue = medici_ledger.create_account("Revenue", AccountType.REVENUE)
     interest_income = medici_ledger.create_account("Interest Income", AccountType.REVENUE)
-    
+ 
     expenses = medici_ledger.create_account("Expenses", AccountType.EXPENSE)
     wages = medici_ledger.create_account("Wages", AccountType.EXPENSE)
-    
-    # Running a full year simulation with concept-driven narration.
+ 
     print("=== 1397 MEDICI BANK SIMULATION ===")
     print("This walkthrough shows how every event records equal debits and credits.\n")
-
+ 
     print("[Concept] Owner investment increases assets and owner equity.")
     medici_ledger.record_transaction(
         date(1397, 1, 1),
@@ -977,7 +1041,7 @@ def main():
         TransactionEntry.debit(cash, Decimal("10000.00")),
         TransactionEntry.credit(capital, Decimal("10000.00"))
     )
-    
+ 
     print("\n[Concept] Issuing a loan swaps one asset (cash) for another (receivable).")
     medici_ledger.record_transaction(
         date(1397, 2, 15),
@@ -985,7 +1049,7 @@ def main():
         TransactionEntry.debit(accounts_receivable, Decimal("2000.00")),
         TransactionEntry.credit(cash, Decimal("2000.00"))
     )
-    
+ 
     print("\n[Concept] Repayments reduce receivables; interest increases revenue.")
     medici_ledger.record_transaction(
         date(1397, 8, 10),
@@ -994,7 +1058,7 @@ def main():
         TransactionEntry.credit(accounts_receivable, Decimal("1000.00")),
         TransactionEntry.credit(interest_income, Decimal("200.00"))
     )
-    
+ 
     print("\n[Concept] Buying long-term assets moves value from cash into land.")
     medici_ledger.record_transaction(
         date(1397, 9, 5),
@@ -1002,7 +1066,7 @@ def main():
         TransactionEntry.debit(land, Decimal("3000.00")),
         TransactionEntry.credit(cash, Decimal("3000.00"))
     )
-    
+ 
     print("\n[Concept] Paying wages records an expense and reduces cash.")
     medici_ledger.record_transaction(
         date(1397, 12, 1),
@@ -1010,25 +1074,22 @@ def main():
         TransactionEntry.debit(wages, Decimal("800.00")),
         TransactionEntry.credit(cash, Decimal("800.00"))
     )
-
+ 
     all_balanced = all(transaction.is_balanced() for transaction in medici_ledger.transactions)
     if all_balanced:
         print("\nAll sample transactions are balanced. ✓")
     else:
         print("\nWARNING: At least one sample transaction is unbalanced. ✗")
-    
-    # Print the trial balance to verify our accounting is balanced
+ 
     print("\n=== MEDICI BANK TRIAL BALANCE (Year 1397) ===")
     medici_ledger.print_trial_balance()
-    
-    # Print the balance sheet
+ 
     print("\n=== MEDICI BANK BALANCE SHEET (Year 1397) ===")
     medici_ledger.print_balance_sheet()
-    
-    # Print the income statement
+ 
     print("\n=== MEDICI BANK INCOME STATEMENT (Year 1397) ===")
     medici_ledger.print_income_statement()
-
-
+ 
+ 
 if __name__ == "__main__":
     main()
