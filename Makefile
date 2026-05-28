@@ -1,4 +1,4 @@
-.PHONY: help setup run run-module test generate-data transform-data serve-data run-api validate import-export clean-data
+.PHONY: help setup run run-module test generate-data transform-data serve-data run-api benford-analysis validate import-export clean-data
 
 help:
 	@echo "Available targets:"
@@ -10,6 +10,7 @@ help:
 	@echo "  make transform-data- Build cleaned analytics-ready transaction dataset"
 	@echo "  make serve-data   - Build serving-layer analytics and API payloads"
 	@echo "  make run-api      - Start the serving-layer HTTP API"
+	@echo "  make benford-analysis - Run Benford's Law anomaly detection"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
 	@echo "  make clean-data   - Remove demo export files from data/"
@@ -41,6 +42,9 @@ serve-data:
 
 run-api:
 	python3 pipeline_api_server.py
+
+benford-analysis:
+	python3 benford_analysis.py
 
 validate:
 	python3 validate_transactions.py
