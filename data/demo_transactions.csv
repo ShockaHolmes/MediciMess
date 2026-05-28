@@ -1,0 +1,7 @@
+transaction_id,date,description,line_number,debit_account,debit_amount,credit_account,credit_amount
+1,1397-01-01,Initial capital investment by Giovanni de' Medici,1,Cash,10000.00,Owner's Capital,10000.00
+2,1397-02-15,Loan extended to Florentine wool merchant,1,Accounts Receivable,2000.00,Cash,2000.00
+3,1397-08-10,Partial loan repayment with interest from wool merchant,1,Cash,1200.00,Accounts Receivable,1000.00
+3,1397-08-10,Partial loan repayment with interest from wool merchant,2,,,Interest Income,200.00
+4,1397-09-05,Purchase of land for new Medici banking house,1,Land,3000.00,Cash,3000.00
+5,1397-12-01,Quarterly wages for bank employees,1,Wages Expense,800.00,Cash,800.00
