@@ -537,6 +537,62 @@ class Ledger:
         )
  
         print(f"\nLedger balanced: {'YES' if is_balanced else 'NO'}")
+
+    def get_balance_sheet_report(self) -> Dict[str, Any]:
+        """
+        Build a structured balance sheet report (issues #67-#72).
+ 
+        Current-period net income (revenue - expenses) is included as a line
+        within equity so the accounting equation validates without requiring
+        period-end closing entries. This is standard practice for an interim
+        balance sheet.
+ 
+        Returns a dict consumable by both the printer and any future dashboard
+        (Dashboard Policy: values come from processed data, not hardcoded).
+        """
+        cent = Decimal("0.01")
+ 
+        def _section(account_type: AccountType):
+            items = []
+            total = Decimal("0")
+            for account in self.accounts.values():
+                if account.type == account_type and account.balance != 0:
+                    items.append({"name": account.name,
+                                  "amount": account.balance.quantize(cent)})
+                    total += account.balance
+            return items, total.quantize(cent)
+ 
+        assets, total_assets = _section(AccountType.ASSET)               # #68
+        liabilities, total_liabilities = _section(AccountType.LIABILITY) # #69
+        equity_accounts, total_equity_accounts = _section(AccountType.EQUITY)  # #70
+ 
+        # Net income from current period revenue and expenses.
+        total_revenue = sum(
+            (a.balance for a in self.accounts.values() if a.type == AccountType.REVENUE),
+            Decimal("0"),
+        )
+        total_expenses = sum(
+            (a.balance for a in self.accounts.values() if a.type == AccountType.EXPENSE),
+            Decimal("0"),
+        )
+        net_income = (total_revenue - total_expenses).quantize(cent)
+ 
+        total_equity = (total_equity_accounts + net_income).quantize(cent)
+        total_liab_and_equity = (total_liabilities + total_equity).quantize(cent)
+ 
+        return {
+            "assets": assets,
+            "total_assets": total_assets,
+            "liabilities": liabilities,
+            "total_liabilities": total_liabilities,
+            "equity_accounts": equity_accounts,
+            "total_equity_accounts": total_equity_accounts,
+            "net_income": net_income,
+            "total_equity": total_equity,
+            "total_liabilities_and_equity": total_liab_and_equity,
+            "is_balanced": total_assets == total_liab_and_equity,    # #72
+        }
+    
  
     def print_balance_sheet(self) -> None:
         """Prints a balance sheet (Assets = Liabilities + Equity)"""
@@ -628,48 +684,239 @@ class Ledger:
             "total_expenses": total_expenses,
             "net_income": net_income,
         }
-    
+
     def print_income_statement(self) -> None:
-        """Print an income statement grouped by revenue and expense accounts."""
-        report = self.get_income_statement_report()
-        revenue_accounts = report["revenue_accounts"]
-        expense_accounts = report["expense_accounts"]
-        total_revenue = report["total_revenue"]
-        total_expenses = report["total_expenses"]
-        net_income = report["net_income"]
 
-        print("INCOME STATEMENT")
-        print("=" * 60)
-        print(f"{'Account':<42} {'Amount (Florins)':>18}")
-        print("-" * 60)
-
-        print("REVENUE")
-        for row in revenue_accounts:
-            print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
-        print("-" * 60)
-        print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
-        print()
-
-        print("EXPENSES")
-        for row in expense_accounts:
-            print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
-        print("-" * 60)
-        print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
-        print()
-
-        net_label = "NET INCOME"
-        if net_income < 0:
-            net_label = "NET LOSS"
-        elif net_income == 0:
-            net_label = "BREAK-EVEN"
-
-        print("SUMMARY")
-        print("-" * 60)
-        print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
-        print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
-        print("=" * 60)
-        print(f"{net_label:<42} {net_income:>18,.2f}")
     
+
+    report = self.get_income_statement_report()
+    revenue_accounts = report["revenue_accounts"]
+    expense_accounts = report["expense_accounts"]
+    total_revenue = report["total_revenue"]
+    total_expenses = report["total_expenses"]
+    net_income = report["net_income"]
+
+    print("INCOME STATEMENT")
+    print("=" * 60)
+    print(f"{'Account':<42} {'Amount (Florins)':>18}")
+    print("-" * 60)
+
+    print("REVENUE")
+    for row in revenue_accounts:
+        print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
+    print("-" * 60)
+    print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
+    print()
+
+    print("EXPENSES")
+    for row in expense_accounts:
+        print(f"{row['account_name']:<42} {row['amount']:>18,.2f}")
+    print("-" * 60)
+    print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
+    print()
+
+    net_label = "NET INCOME"
+    if net_income < 0:
+        net_label = "NET LOSS"
+    elif net_income == 0:
+        net_label = "BREAK-EVEN"
+
+    print("SUMMARY")
+    print("-" * 60)
+    print(f"{'TOTAL REVENUE':<42} {total_revenue:>18,.2f}")
+    print(f"{'TOTAL EXPENSES':<42} {total_expenses:>18,.2f}")
+    print("=" * 60)
+    print(f"{net_label:<42} {net_income:>18,.2f}")
+ 
+    def get_kpi_metrics(self,
+                        cash_account: str = "Cash",
+                        loans_account: str = "Accounts Receivable") -> Dict[str, Any]:
+        """
+        KPI metrics for the dashboard's headline cards. Values are Decimals;
+        the frontend is responsible for currency formatting/serialization.
+        """
+        bs = self.get_balance_sheet_report()
+        cash = self.get_account(cash_account)
+        loans = self.get_account(loans_account)
+        total_revenue = sum(
+            (a.balance for a in self.accounts.values() if a.type == AccountType.REVENUE),
+            Decimal("0"),
+        )
+        total_expenses = sum(
+            (a.balance for a in self.accounts.values() if a.type == AccountType.EXPENSE),
+            Decimal("0"),
+        )
+        cent = Decimal("0.01")
+        return {
+            "total_assets":       bs["total_assets"],
+            "total_liabilities":  bs["total_liabilities"],
+            "total_equity":       bs["total_equity"],
+            "net_income":         bs["net_income"],
+            "cash_on_hand":       (cash.balance.quantize(cent) if cash else Decimal("0.00")),
+            "loans_outstanding":  (loans.balance.quantize(cent) if loans else Decimal("0.00")),
+            "total_revenue":      total_revenue.quantize(cent),
+            "total_expenses":     total_expenses.quantize(cent),
+            "transaction_count":  len(self.transactions),
+            "account_count":      len(self.accounts),
+        }
+ 
+    def get_cash_flow_series(self,
+                             cash_account: str = "Cash",
+                             group_by: str = "month",
+                             branch: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Time-series of cash inflows, outflows, and net change for the cash
+        flow chart. Periods are grouped by 'month' (YYYY-MM) or 'year' (YYYY).
+ 
+        `branch` filters to a single branch when transactions carry the field;
+        comparing branches is done by calling this twice with different values
+        and overlaying the two series in the frontend.
+ 
+        Each row: {period, inflow, outflow, net}.
+        """
+        if group_by not in ("month", "year"):
+            raise ValueError("group_by must be 'month' or 'year'")
+ 
+        buckets: Dict[str, Dict[str, Decimal]] = {}
+        for txn in self.transactions:
+            if branch is not None and txn.branch != branch:
+                continue
+            key = (txn.date.strftime("%Y-%m") if group_by == "month"
+                   else txn.date.strftime("%Y"))
+            slot = buckets.setdefault(key, {"inflow": Decimal("0"),
+                                            "outflow": Decimal("0")})
+            for e in txn.debits:
+                if e.account.name == cash_account:
+                    slot["inflow"] += e.amount
+            for e in txn.credits:
+                if e.account.name == cash_account:
+                    slot["outflow"] += e.amount
+ 
+        cent = Decimal("0.01")
+        rows = []
+        for key in sorted(buckets):
+            inflow = buckets[key]["inflow"].quantize(cent)
+            outflow = buckets[key]["outflow"].quantize(cent)
+            rows.append({
+                "period":  key,
+                "inflow":  inflow,
+                "outflow": outflow,
+                "net":     (inflow - outflow).quantize(cent),
+            })
+        return rows
+ 
+    def get_transactions_table(self,
+                               limit: Optional[int] = None,
+                               search: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        Structured rows for the dashboard's transaction table. Newest first.
+ 
+        `search` is a case-insensitive substring filter over description,
+        transaction id, and account names. `limit` caps the returned rows.
+        """
+        needle = search.lower() if search else None
+        rows: List[Dict[str, Any]] = []
+        for txn in reversed(self.transactions):
+            debit_names  = [e.account.name for e in txn.debits]
+            credit_names = [e.account.name for e in txn.credits]
+            if needle is not None:
+                haystack = " ".join([
+                    txn.description or "",
+                    txn.id or "",
+                    *debit_names, *credit_names,
+                ]).lower()
+                if needle not in haystack:
+                    continue
+            rows.append({
+                "id":          txn.id,
+                "date":        txn.date.isoformat(),
+                "description": txn.description,
+                "branch":      txn.branch,
+                "amount":      txn.total_debits(),          # debits == credits, either works
+                "debit_accounts":  debit_names,
+                "credit_accounts": credit_names,
+            })
+            if limit is not None and len(rows) >= limit:
+                break
+        return rows
+ 
+    def get_alerts(self,
+                   low_cash_threshold: Decimal = Decimal("1000"),
+                   cash_account: str = "Cash") -> List[Dict[str, Any]]:
+        """
+        Rule-based alerts for the alert panel. Each alert carries a `level`
+        ('info', 'warning', 'high_risk') so the frontend can separate routine
+        warnings from fraud-style indicators. Fraud-detection rules will land
+        in a later batch; this version only flags accounting health signals.
+        """
+        alerts: List[Dict[str, Any]] = []
+        bs = self.get_balance_sheet_report()
+        if bs["net_income"] < 0:
+            alerts.append({
+                "level": "warning",
+                "source": "income",
+                "message": f"Net income is negative ({bs['net_income']} florins).",
+            })
+        cash = self.get_account(cash_account)
+        if cash is not None and cash.balance < low_cash_threshold:
+            alerts.append({
+                "level": "warning",
+                "source": "liquidity",
+                "message": (f"Cash on hand ({cash.balance} florins) is below the "
+                            f"alert threshold ({low_cash_threshold} florins)."),
+            })
+        if not bs["is_balanced"]:
+            alerts.append({
+                "level": "high_risk",
+                "source": "integrity",
+                "message": "Balance sheet does not satisfy Assets = Liabilities + Equity.",
+            })
+        return alerts
+ 
+    def get_dashboard_data(self) -> Dict[str, Any]:
+        """One-call payload for the dashboard frontend (KPIs, cash flow,
+        recent transactions, alerts, and the balance sheet summary)."""
+        return {
+            "kpis":             self.get_kpi_metrics(),
+            "cash_flow":        self.get_cash_flow_series(),
+            "recent_transactions": self.get_transactions_table(limit=20),
+            "alerts":           self.get_alerts(),
+            "balance_sheet":    self.get_balance_sheet_report(),
+        }
+ 
+    # --- Pipeline ingestion (data pipeline batch) -------------------------
+ 
+    def ingest_file(self, filename: str, verbose: bool = False) -> int:
+        """
+        Pipeline ingestion entry point. Dispatches to the right importer by
+        file extension (.csv or .json), preserves the raw source file, and
+        logs success or failure to the 'medici_banking' logger.
+ 
+        Returns the number of transactions ingested (0 on file-level failure).
+        Raw data is never modified; per-record failures are skipped, not
+        silently posted (see Data Pipeline Policy).
+        """
+        ext = os.path.splitext(filename)[1].lower()
+        try:
+            if ext == ".csv":
+                count = self.import_transactions_from_csv(filename, verbose=verbose)
+            elif ext == ".json":
+                count = self.import_transactions_from_json(filename, verbose=verbose)
+            else:
+                raise ValueError(f"Unsupported file type for ingestion: {ext!r}. "
+                                 f"Expected .csv or .json.")
+        except FileNotFoundError:
+            logger.error("Ingestion failed: file not found: %s", filename)
+            raise
+        except (ValueError, json.JSONDecodeError) as e:
+            logger.error("Ingestion failed for %s: %s", filename, e)
+            raise
+        logger.info("Ingested %d transaction(s) from %s", count, filename)
+        return count
+ 
+    # --- Import / Export --------------------------------------------------
+
+  
     def export_transactions_to_csv(self, filename: str) -> int:
         """
         Export all transactions to a CSV file.
