@@ -12,8 +12,15 @@ Acceptance criteria mapping:
 
 from datetime import date
 from decimal import Decimal
+from pathlib import Path
+import sys
 
 import pytest
+
+# Support running this file directly via: python tests/test_medici_banking.py
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from medici_banking import (
     AccountType,
@@ -201,3 +208,80 @@ class TestDocumentation:
         for t in AccountType:
             assert t.description
             assert len(t.description) > 20
+
+
+class TestTrialBalanceReport:
+    """Trial balance report lists all accounts and shows balanced totals."""
+
+    def test_print_trial_balance_lists_accounts_and_totals(self, capsys):
+        ledger = Ledger("Trial Balance Demo")
+        ledger._silent_mode = True
+
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        capital = ledger.create_account("Capital", AccountType.EQUITY)
+        wages = ledger.create_account("Wages", AccountType.EXPENSE)
+        # Keep a zero balance account to ensure all accounts are listed.
+        ledger.create_account("Office Supplies", AccountType.ASSET)
+
+        ledger.record_transaction(
+            date(1397, 1, 1),
+            "Founder investment",
+            TransactionEntry.debit(cash, Decimal("1000")),
+            TransactionEntry.credit(capital, Decimal("1000")),
+        )
+
+        ledger.record_transaction(
+            date(1397, 2, 1),
+            "Wages paid",
+            TransactionEntry.debit(wages, Decimal("100")),
+            TransactionEntry.credit(cash, Decimal("100")),
+        )
+
+        ledger.print_trial_balance()
+        output = capsys.readouterr().out
+
+        assert "Cash" in output
+        assert "Capital" in output
+        assert "Wages" in output
+        assert "Office Supplies" in output
+        assert "TOTAL" in output
+        assert "1,000.00" in output
+        assert "Ledger balanced: YES" in output
+
+    def test_get_trial_balance_report_returns_structured_data(self):
+        ledger = Ledger("Trial Balance Data Demo")
+        ledger._silent_mode = True
+
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        capital = ledger.create_account("Capital", AccountType.EQUITY)
+        ledger.create_account("Office Supplies", AccountType.ASSET)
+
+        ledger.record_transaction(
+            date(1397, 1, 1),
+            "Founder investment",
+            TransactionEntry.debit(cash, Decimal("500.25")),
+            TransactionEntry.credit(capital, Decimal("500.25")),
+        )
+
+        report = ledger.get_trial_balance_report()
+
+        assert set(report.keys()) == {
+            "rows",
+            "total_debits",
+            "total_credits",
+            "is_balanced",
+        }
+        assert report["total_debits"] == Decimal("500.25")
+        assert report["total_credits"] == Decimal("500.25")
+        assert report["is_balanced"] is True
+
+        rows_by_name = {row["account_name"]: row for row in report["rows"]}
+        assert rows_by_name["Cash"]["account_type"] == "asset"
+        assert rows_by_name["Cash"]["debit_balance"] == Decimal("500.25")
+        assert rows_by_name["Cash"]["credit_balance"] == Decimal("0.00")
+        assert rows_by_name["Office Supplies"]["debit_balance"] == Decimal("0.00")
+        assert rows_by_name["Office Supplies"]["credit_balance"] == Decimal("0.00")
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__]))
