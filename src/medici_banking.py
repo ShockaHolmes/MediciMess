@@ -28,6 +28,7 @@ including initial capitalization, loans with interest (a key banking activity),
 property acquisition, and operating expenses.
 """
  
+
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import date, datetime
 from enum import Enum
@@ -36,6 +37,16 @@ from dataclasses import dataclass, field
 from pathlib import Path
 import csv
 import json
+
+# --- API server selection integration ---
+try:
+    from api_server_selector import get_api_base_url
+except ImportError:
+    def get_api_base_url():
+        # Fallback: just use localhost
+        return "http://127.0.0.1:8000"
+
+API_BASE_URL = get_api_base_url()
  
  
 class NormalBalance(str, Enum):
