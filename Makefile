@@ -1,10 +1,11 @@
-.PHONY: help setup run run-module test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export clean-data
+.PHONY: help setup run run-module start test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export final-demo clean-data
 
 help:
 	@echo "Available targets:"
 	@echo "  make setup        - Create venv and upgrade pip"
 	@echo "  make run          - Run main Medici banking demo"
 	@echo "  make run-module   - Run module entrypoint"
+	@echo "  make start        - Start API server + UI server together"
 	@echo "  make test         - Run test suite using .venv"
 	@echo "  make generate-data- Generate historical datasets in data/"
 	@echo "  make transform-data- Build cleaned analytics-ready transaction dataset"
@@ -14,6 +15,7 @@ help:
 	@echo "  make vendor-concentration - Run vendor concentration anomaly detection"
 	@echo "  make duplicate-detection - Run duplicate transaction anomaly detection"
 	@echo "  make round-clustering - Run round-number clustering anomaly detection"
+	@echo "  make final-demo    - Run the full final project demo"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
 	@echo "  make clean-data   - Remove demo export files from data/"
@@ -27,6 +29,9 @@ run:
 
 run-module:
 	python3 -m medici_banking
+
+start:
+	./start.sh
 
 test:
 	@test -x .venv/bin/python || (echo "Virtual environment missing. Run 'make setup' first." && exit 1)
@@ -63,6 +68,9 @@ validate:
 
 import-export:
 	python3 demo_import_export.py
+
+final-demo:
+	python3 final_project_demo.py
 
 clean-data:
 	rm -f data/exported_transactions.csv data/exported_transactions.json
