@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "run_at": "2026-05-28T20:02:59Z",
+    "total_transactions": 84981,
+    "transactions_compared": 84981,
+    "block_count": 216,
+    "date_window_days": 3,
+    "amount_tolerance": "1.00",
+    "description_similarity_threshold": 0.88,
+    "exact_duplicate_count": 0,
+    "possible_duplicate_count": 0,
+    "flagged_count": 0
+  },
+  "alerts": []
+}

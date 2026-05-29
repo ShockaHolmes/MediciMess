@@ -1,0 +1,20 @@
+[
+  {
+    "username": "florence_owner",
+    "password": "hashed_password1",
+    "branch": "Florence",
+    "role": "admin"
+  },
+  {
+    "username": "milan_owner",
+    "password": "hashed_password2",
+    "branch": "Milan",
+    "role": "admin"
+  },
+  {
+    "username": "milan_manager",
+    "password": "hashed_password3",
+    "branch": "Milan",
+    "role": "manager"
+  }
+]

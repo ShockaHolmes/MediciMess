@@ -1,0 +1,23 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {},
+    "launch": {
+        "configurations": [
+            {
+                "name": "Start Dashboard Stack (API + UI)",
+                "type": "cppvsdbg",
+                "request": "launch",
+                "preLaunchTask": "Start Dashboard Stack (API + UI)",
+                "program": "${command:echo}",
+                "args": ["Dashboard stack started!"],
+                "stopAtEntry": false,
+                "console": "internalConsole",
+                "internalConsoleOptions": "neverOpen"
+            }
+        ]
+    }
+}

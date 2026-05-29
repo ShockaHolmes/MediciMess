@@ -1,0 +1,352 @@
+[
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Avignon",
+    "alert_count": 2,
+    "affected_transaction_count": 2002
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Bruges",
+    "alert_count": 2,
+    "affected_transaction_count": 811
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Florence",
+    "alert_count": 3,
+    "affected_transaction_count": 2433
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Geneva",
+    "alert_count": 3,
+    "affected_transaction_count": 3396
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "London",
+    "alert_count": 3,
+    "affected_transaction_count": 2299
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Milan",
+    "alert_count": 4,
+    "affected_transaction_count": 2474
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Naples",
+    "alert_count": 4,
+    "affected_transaction_count": 4320
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Pisa",
+    "alert_count": 3,
+    "affected_transaction_count": 3339
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Rome",
+    "alert_count": 4,
+    "affected_transaction_count": 2707
+  },
+  {
+    "rule": "A",
+    "severity": "HIGH",
+    "branch": "Venice",
+    "alert_count": 3,
+    "affected_transaction_count": 3305
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Avignon",
+    "alert_count": 8,
+    "affected_transaction_count": 5749
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Bruges",
+    "alert_count": 8,
+    "affected_transaction_count": 7054
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Florence",
+    "alert_count": 9,
+    "affected_transaction_count": 8295
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Geneva",
+    "alert_count": 6,
+    "affected_transaction_count": 4130
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "London",
+    "alert_count": 7,
+    "affected_transaction_count": 5656
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Milan",
+    "alert_count": 7,
+    "affected_transaction_count": 5503
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Naples",
+    "alert_count": 2,
+    "affected_transaction_count": 2105
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Pisa",
+    "alert_count": 3,
+    "affected_transaction_count": 3358
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Rome",
+    "alert_count": 7,
+    "affected_transaction_count": 10061
+  },
+  {
+    "rule": "A",
+    "severity": "MEDIUM",
+    "branch": "Venice",
+    "alert_count": 8,
+    "affected_transaction_count": 5032
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Avignon",
+    "alert_count": 2,
+    "affected_transaction_count": 92
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Bruges",
+    "alert_count": 1,
+    "affected_transaction_count": 42
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Florence",
+    "alert_count": 2,
+    "affected_transaction_count": 93
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Geneva",
+    "alert_count": 1,
+    "affected_transaction_count": 32
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "London",
+    "alert_count": 1,
+    "affected_transaction_count": 37
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Milan",
+    "alert_count": 1,
+    "affected_transaction_count": 39
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Naples",
+    "alert_count": 2,
+    "affected_transaction_count": 50
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Pisa",
+    "alert_count": 2,
+    "affected_transaction_count": 76
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Rome",
+    "alert_count": 1,
+    "affected_transaction_count": 38
+  },
+  {
+    "rule": "B",
+    "severity": "HIGH",
+    "branch": "Venice",
+    "alert_count": 1,
+    "affected_transaction_count": 56
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Avignon",
+    "alert_count": 46,
+    "affected_transaction_count": 1327
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Bruges",
+    "alert_count": 51,
+    "affected_transaction_count": 1432
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Florence",
+    "alert_count": 48,
+    "affected_transaction_count": 1360
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Geneva",
+    "alert_count": 52,
+    "affected_transaction_count": 1497
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "London",
+    "alert_count": 51,
+    "affected_transaction_count": 1528
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Milan",
+    "alert_count": 48,
+    "affected_transaction_count": 1346
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Naples",
+    "alert_count": 46,
+    "affected_transaction_count": 1224
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Pisa",
+    "alert_count": 45,
+    "affected_transaction_count": 1260
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Rome",
+    "alert_count": 51,
+    "affected_transaction_count": 1401
+  },
+  {
+    "rule": "B",
+    "severity": "MEDIUM",
+    "branch": "Venice",
+    "alert_count": 51,
+    "affected_transaction_count": 1471
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Avignon",
+    "alert_count": 47,
+    "affected_transaction_count": 145
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Bruges",
+    "alert_count": 55,
+    "affected_transaction_count": 168
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Florence",
+    "alert_count": 46,
+    "affected_transaction_count": 150
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Geneva",
+    "alert_count": 53,
+    "affected_transaction_count": 164
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "London",
+    "alert_count": 41,
+    "affected_transaction_count": 128
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Milan",
+    "alert_count": 45,
+    "affected_transaction_count": 140
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Naples",
+    "alert_count": 30,
+    "affected_transaction_count": 91
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Pisa",
+    "alert_count": 48,
+    "affected_transaction_count": 146
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Rome",
+    "alert_count": 101,
+    "affected_transaction_count": 423
+  },
+  {
+    "rule": "E",
+    "severity": "MEDIUM",
+    "branch": "Venice",
+    "alert_count": 42,
+    "affected_transaction_count": 127
+  }
+]

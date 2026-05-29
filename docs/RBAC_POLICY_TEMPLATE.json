@@ -1,0 +1,318 @@
+{
+  "policy_name": "branch_ops_dashboard_rbac",
+  "version": "1.1",
+  "status": "template",
+  "description": "Role-to-route authorization template for the Branch Operations Dashboard APIs.",
+  "default_decision": "deny",
+  "roles": {
+    "SENIOR_BANK_OFFICIAL": {
+      "scope": "all_branches",
+      "capabilities": ["view", "act", "admin"]
+    },
+    "BRANCH_MANAGER": {
+      "scope": "assigned_branch",
+      "capabilities": ["view", "act"]
+    },
+    "AUDITOR": {
+      "scope": "all_branches",
+      "capabilities": ["view", "act"]
+    },
+    "READ_ONLY_STUDENT": {
+      "scope": "assigned_branch_training_only",
+      "capabilities": ["view"]
+    }
+  },
+  "route_policies": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/health",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_all",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_all"
+      },
+      "rules": {
+        "scope_param": null,
+        "masking_profile": "none",
+        "requires_training_dataset": false,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "api_index",
+      "method": "GET",
+      "path": "/api",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_all",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_all"
+      },
+      "rules": {
+        "scope_param": null,
+        "masking_profile": "none",
+        "requires_training_dataset": false,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "transactions",
+      "method": "GET",
+      "path": "/api/transactions",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned_masked"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "student_counterparty_redacted",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "kpis",
+      "method": "GET",
+      "path": "/api/kpis",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "accounts",
+      "method": "GET",
+      "path": "/api/accounts",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "cashflow",
+      "method": "GET",
+      "path": "/api/cashflow",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "expenses",
+      "method": "GET",
+      "path": "/api/expenses",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned_masked"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "student_vendor_redacted",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "loans",
+      "method": "GET",
+      "path": "/api/loans",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "alerts_read",
+      "method": "GET",
+      "path": "/api/alerts",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned_masked"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "student_alert_evidence_redacted",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "alerts_ack",
+      "method": "POST",
+      "path": "/api/alerts/{id}/acknowledge",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "deny"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": false,
+        "audit_action": true
+      }
+    },
+    {
+      "id": "duplicates",
+      "method": "GET",
+      "path": "/api/duplicates",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned_masked"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "student_description_redacted",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "vendor_concentration",
+      "method": "GET",
+      "path": "/api/vendor-concentration",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned_masked"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "student_vendor_redacted",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "benford",
+      "method": "GET",
+      "path": "/api/benford",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    },
+    {
+      "id": "round_clustering",
+      "method": "GET",
+      "path": "/api/round-clustering",
+      "access": {
+        "SENIOR_BANK_OFFICIAL": "allow_all",
+        "BRANCH_MANAGER": "allow_assigned",
+        "AUDITOR": "allow_all",
+        "READ_ONLY_STUDENT": "allow_assigned"
+      },
+      "rules": {
+        "scope_param": "branch",
+        "masking_profile": "none",
+        "requires_training_dataset": true,
+        "audit_action": false
+      }
+    }
+  ],
+  "masking_profiles": {
+    "none": {
+      "redact_fields": []
+    },
+    "student_counterparty_redacted": {
+      "redact_fields": ["counterparty"]
+    },
+    "student_vendor_redacted": {
+      "redact_fields": ["counterparty", "vendor"]
+    },
+    "student_description_redacted": {
+      "redact_fields": ["description", "description_left", "description_right"]
+    },
+    "student_alert_evidence_redacted": {
+      "redact_fields": ["counterparty", "description", "affected_transaction_ids"]
+    }
+  },
+  "decision_codes": {
+    "allow_all": {
+      "allow": true,
+      "enforce_scope": false,
+      "apply_masking": false
+    },
+    "allow_assigned": {
+      "allow": true,
+      "enforce_scope": true,
+      "apply_masking": false
+    },
+    "allow_assigned_masked": {
+      "allow": true,
+      "enforce_scope": true,
+      "apply_masking": true
+    },
+    "deny": {
+      "allow": false,
+      "status_code": 403,
+      "error": "forbidden"
+    }
+  },
+  "audit_requirements": {
+    "log_denied_requests": true,
+    "log_action_routes": true,
+    "required_log_fields": [
+      "timestamp",
+      "user_id",
+      "role",
+      "method",
+      "path",
+      "decision",
+      "reason",
+      "branch_scope"
+    ]
+  }
+}
