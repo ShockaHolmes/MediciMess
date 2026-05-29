@@ -1,285 +1,223 @@
-"""
-Transaction Data Validation Script
+"""Validate historical transaction CSV data for double-entry consistency.
 
-Validates that the generated historical transactions maintain proper
-double-entry accounting principles and can be loaded into the Medici ledger.
+Checks performed:
+1. Required fields are present and non-empty per row.
+2. Date format is strict ISO date (YYYY-MM-DD).
+3. Debit and credit amounts are valid positive decimals.
+4. Each transaction row balances: sum(debits) == sum(credits).
 """
 
+from __future__ import annotations
+
+import argparse
 import csv
-import json
-from decimal import Decimal
+import sys
+from dataclasses import dataclass
 from datetime import datetime
-from collections import defaultdict
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
+DEFAULT_CSV = DATA_DIR / "medici_transactions.csv"
+
+REQUIRED_FIELDS = {
+    "id",
+    "date",
+    "branch",
+    "type",
+    "description",
+    "debit_account",
+    "debit_amount",
+    "credit_account",
+    "credit_amount",
+}
 
 
-def validate_csv_structure(filename: str) -> bool:
-    """Validate the CSV file structure"""
-    print(f"\n{'='*60}")
-    print(f"VALIDATING CSV FILE: {filename}")
-    print(f"{'='*60}\n")
-    
-    required_fields = {'id', 'date', 'branch', 'type', 'description', 
-                      'debit_account', 'debit_amount', 'credit_account', 'credit_amount'}
-    
+@dataclass
+class InvalidRecord:
+    row_number: int
+    transaction_id: str
+    reasons: list[str]
+
+
+def _parse_amount(value: str, field_name: str) -> Decimal:
     try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            fieldnames = set(reader.fieldnames)
-            
-            # Check if all required fields are present
-            missing_fields = required_fields - fieldnames
-            if missing_fields:
-                print(f"❌ Missing required fields: {missing_fields}")
-                return False
-            
-            print(f"✓ All required fields present")
-            print(f"  Total fields: {len(fieldnames)}")
-            print(f"  Fields: {', '.join(sorted(fieldnames))}\n")
-            
-            # Validate each transaction
-            transaction_count = 0
-            error_count = 0
-            total_debits = Decimal('0')
-            total_credits = Decimal('0')
-            
-            for idx, row in enumerate(reader, 1):
-                transaction_count += 1
-                
-                # Validate date format
-                try:
-                    datetime.fromisoformat(row['date'])
-                except ValueError:
-                    print(f"❌ Invalid date format in transaction {idx}: {row['date']}")
-                    error_count += 1
-                    continue
-                
-                # Validate amounts
-                try:
-                    debit_amt = Decimal(str(row['debit_amount']))
-                    credit_amt = Decimal(str(row['credit_amount']))
-                    
-                    # Check for additional credit account
-                    if row.get('credit_amount_2'):
-                        if not row.get('credit_account_2'):
-                            print(f"❌ Missing credit_account_2 for transaction {idx} with credit_amount_2")
-                            error_count += 1
-                            continue
-                        credit_amt += Decimal(str(row['credit_amount_2']))
-                    
-                    total_debits += debit_amt
-                    total_credits += credit_amt
-                    
-                    # Check if transaction is balanced
-                    # Allow for small floating point differences
-                    if abs(debit_amt - credit_amt) > Decimal('0.01'):
-                        print(f"❌ Unbalanced transaction {idx}: "
-                              f"Debit={debit_amt}, Credit={credit_amt}")
-                        error_count += 1
-                        
-                except (ValueError, KeyError) as e:
-                    print(f"❌ Invalid amounts in transaction {idx}: {e}")
-                    error_count += 1
-                    continue
-            
-            print(f"\nValidation Results:")
-            print(f"  Total transactions: {transaction_count}")
-            print(f"  Errors found: {error_count}")
-            print(f"  Total debits:  {total_debits:,.2f} florins")
-            print(f"  Total credits: {total_credits:,.2f} florins")
-            print(f"  Difference:    {abs(total_debits - total_credits):,.2f} florins")
-            
-            if error_count == 0:
-                print(f"\n✓ All transactions are valid!")
-                return True
-            else:
-                print(f"\n❌ Found {error_count} errors")
-                return False
-                
-    except FileNotFoundError:
-        print(f"❌ File not found: {filename}")
-        return False
-    except Exception as e:
-        print(f"❌ Error reading file: {e}")
-        return False
+        amount = Decimal(value)
+    except (InvalidOperation, TypeError) as exc:
+        raise ValueError(f"{field_name} is not a valid decimal ({value!r})") from exc
+    if amount <= 0:
+        raise ValueError(f"{field_name} must be greater than zero ({value!r})")
+    return amount
 
 
-def analyze_transaction_distribution(filename: str):
-    """Analyze the distribution of transactions"""
-    print(f"\n{'='*60}")
-    print(f"TRANSACTION DISTRIBUTION ANALYSIS")
-    print(f"{'='*60}\n")
-    
-    try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            
-            # Collect statistics
-            by_type = defaultdict(int)
-            by_branch = defaultdict(int)
-            by_year = defaultdict(int)
-            amounts_by_type = defaultdict(list)
-            
-            for row in reader:
-                trans_type = row['type']
-                branch = row['branch']
-                year = row['date'][:4]
-                amount = float(row['debit_amount'])
-                
-                by_type[trans_type] += 1
-                by_branch[branch] += 1
-                by_year[year] += 1
-                amounts_by_type[trans_type].append(amount)
-            
-            # Print by type
-            print("Transactions by Type:")
-            for t_type, count in sorted(by_type.items(), key=lambda x: x[1], reverse=True):
-                avg_amount = sum(amounts_by_type[t_type]) / len(amounts_by_type[t_type])
-                print(f"  {t_type:25s}: {count:5d} (avg: {avg_amount:>12,.2f} florins)")
-            
-            # Print by branch
-            print("\nTransactions by Branch:")
-            for branch, count in sorted(by_branch.items(), key=lambda x: x[1], reverse=True):
-                print(f"  {branch:15s}: {count:5d}")
-            
-            # Print by year (sample)
-            print("\nTransactions by Year (sample):")
-            years_sample = sorted(by_year.items())[:10]
-            for year, count in years_sample:
-                print(f"  {year}: {count:5d}")
-            print(f"  ... ({len(by_year)} total years)")
-            
-    except Exception as e:
-        print(f"❌ Error analyzing distribution: {e}")
+def _collect_side_total(row: dict[str, str], side: str) -> Decimal:
+    """Collect total amounts for debit_* or credit_* columns in a row."""
+    total = Decimal("0")
+
+    # Base fields are required and handled first.
+    base_account_key = f"{side}_account"
+    base_amount_key = f"{side}_amount"
+    account_value = (row.get(base_account_key) or "").strip()
+    amount_value = (row.get(base_amount_key) or "").strip()
+    if not account_value:
+        raise ValueError(f"{base_account_key} is empty")
+    if not amount_value:
+        raise ValueError(f"{base_amount_key} is empty")
+    total += _parse_amount(amount_value, base_amount_key)
+
+    # Optional split lines: credit_amount_2, debit_amount_2, etc.
+    index = 2
+    while True:
+        amount_key = f"{side}_amount_{index}"
+        account_key = f"{side}_account_{index}"
+        if amount_key not in row and account_key not in row:
+            break
+
+        amount_opt = (row.get(amount_key) or "").strip()
+        account_opt = (row.get(account_key) or "").strip()
+
+        if amount_opt or account_opt:
+            if not amount_opt:
+                raise ValueError(f"{amount_key} is empty")
+            if not account_opt:
+                raise ValueError(f"{account_key} is empty")
+            total += _parse_amount(amount_opt, amount_key)
+
+        index += 1
+
+    return total
 
 
-def check_historical_events(filename: str):
-    """Check for specific historical events in the data"""
-    print(f"\n{'='*60}")
-    print(f"HISTORICAL EVENT VERIFICATION")
-    print(f"{'='*60}\n")
-    
-    try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            
-            events_found = {
-                'ransom': False,
-                'papal_deposits': 0,
-                'war_financing': 0,
-                'alum_trade': 0,
-                'bills_of_exchange': 0
-            }
-            
-            for row in reader:
-                trans_type = row['type']
-                
-                # Check for Council of Constance ransom
-                if 'ransom' in trans_type.lower() or 'John XXIII' in row.get('description', ''):
-                    events_found['ransom'] = True
-                    print(f"✓ Found Council of Constance Ransom:")
-                    print(f"  Date: {row['date']}")
-                    print(f"  Amount: {row['debit_amount']} florins")
-                    print(f"  Description: {row['description']}\n")
-                
-                # Count major transaction types
-                if trans_type == 'deposit' and row['branch'] == 'Rome':
-                    events_found['papal_deposits'] += 1
-                elif trans_type == 'war_financing':
-                    events_found['war_financing'] += 1
-                elif trans_type == 'alum_trade':
-                    events_found['alum_trade'] += 1
-                elif trans_type == 'bill_of_exchange':
-                    events_found['bills_of_exchange'] += 1
-            
-            print("Historical Event Coverage:")
-            print(f"  {'Council of Constance Ransom:':<35} {'✓ Found' if events_found['ransom'] else '❌ Missing'}")
-            print(f"  {'Papal deposits (Rome branch):':<35} {events_found['papal_deposits']:>6} transactions")
-            print(f"  {'War financing operations:':<35} {events_found['war_financing']:>6} transactions")
-            print(f"  {'Alum trade (papal monopoly):':<35} {events_found['alum_trade']:>6} transactions")
-            print(f"  {'Bills of exchange (innovation):':<35} {events_found['bills_of_exchange']:>6} transactions")
-            
-            return events_found
-            
-    except Exception as e:
-        print(f"❌ Error checking historical events: {e}")
-        return None
-
-
-def validate_json_structure(filename: str) -> bool:
-    """Validate the JSON file structure"""
-    print(f"\n{'='*60}")
-    print(f"VALIDATING JSON FILE: {filename}")
-    print(f"{'='*60}\n")
-    
-    try:
-        with open(filename, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        
-        if not isinstance(data, list):
-            print(f"❌ JSON should contain a list of transactions")
-            return False
-        
-        print(f"✓ Valid JSON structure")
-        print(f"  Total transactions: {len(data)}")
-        
-        # Validate a sample
-        if len(data) > 0:
-            sample = data[0]
-            print(f"  Sample transaction keys: {', '.join(sorted(sample.keys()))}")
-        
-        return True
-        
-    except json.JSONDecodeError as e:
-        print(f"❌ Invalid JSON: {e}")
-        return False
-    except FileNotFoundError:
-        print(f"❌ File not found: {filename}")
-        return False
-    except Exception as e:
-        print(f"❌ Error reading file: {e}")
-        return False
-
-
-def main():
-    """Main validation function"""
-    print("\n" + "="*60)
-    print("MEDICI BANK TRANSACTION DATA VALIDATION")
-    print("="*60)
-
-    csv_file = DATA_DIR / 'medici_transactions.csv'
-    json_file = DATA_DIR / 'medici_transactions.json'
-    
-    # Validate CSV
-    csv_valid = validate_csv_structure(csv_file)
-    
-    # Validate JSON
-    json_valid = validate_json_structure(json_file)
-    
-    # Analyze distribution
-    analyze_transaction_distribution(csv_file)
-    
-    # Check historical events
-    check_historical_events(csv_file)
-    
-    # Final summary
-    print(f"\n{'='*60}")
-    print("VALIDATION SUMMARY")
-    print(f"{'='*60}")
-    print(f"CSV Validation:  {'✓ PASSED' if csv_valid else '❌ FAILED'}")
-    print(f"JSON Validation: {'✓ PASSED' if json_valid else '❌ FAILED'}")
-    
-    if csv_valid and json_valid:
-        print(f"\n✓ All validations passed! Data is ready for use.")
-        return 0
-    else:
-        print(f"\n❌ Some validations failed. Please review errors above.")
+def validate_transactions(csv_path: Path, max_invalid_to_print: int = 200) -> int:
+    if not csv_path.exists():
+        print(f"ERROR: File not found: {csv_path}")
         return 1
+
+    with csv_path.open("r", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        fieldnames = set(reader.fieldnames or [])
+
+        missing_columns = sorted(REQUIRED_FIELDS - fieldnames)
+        if missing_columns:
+            print("ERROR: Missing required CSV columns:")
+            for column in missing_columns:
+                print(f"  - {column}")
+            return 1
+
+        invalid_records: list[InvalidRecord] = []
+        total_rows = 0
+        valid_rows = 0
+        total_debits = Decimal("0")
+        total_credits = Decimal("0")
+
+        for row_number, row in enumerate(reader, start=2):
+            total_rows += 1
+            reasons: list[str] = []
+            tx_id = (row.get("id") or "").strip() or "<missing-id>"
+
+            # Required field non-empty checks.
+            for field in sorted(REQUIRED_FIELDS):
+                value = (row.get(field) or "").strip()
+                if not value:
+                    reasons.append(f"{field} is required")
+
+            # Date formatting check.
+            date_value = (row.get("date") or "").strip()
+            if date_value:
+                try:
+                    datetime.strptime(date_value, "%Y-%m-%d")
+                except ValueError:
+                    reasons.append(f"date is not YYYY-MM-DD ({date_value!r})")
+
+            # Amount and balance checks.
+            debit_total = Decimal("0")
+            credit_total = Decimal("0")
+            if not reasons:
+                try:
+                    debit_total = _collect_side_total(row, "debit")
+                    credit_total = _collect_side_total(row, "credit")
+                    if debit_total != credit_total:
+                        reasons.append(
+                            f"unbalanced transaction (debits={debit_total}, credits={credit_total})"
+                        )
+                except ValueError as exc:
+                    reasons.append(str(exc))
+
+            if reasons:
+                invalid_records.append(
+                    InvalidRecord(
+                        row_number=row_number,
+                        transaction_id=tx_id,
+                        reasons=reasons,
+                    )
+                )
+            else:
+                valid_rows += 1
+                total_debits += debit_total
+                total_credits += credit_total
+
+    invalid_count = len(invalid_records)
+
+    print("=" * 70)
+    print("HISTORICAL TRANSACTION VALIDATION")
+    print("=" * 70)
+    print(f"Dataset: {csv_path}")
+    print(f"Rows scanned: {total_rows:,}")
+    print(f"Valid rows:   {valid_rows:,}")
+    print(f"Invalid rows: {invalid_count:,}")
+    print(f"Total debits (valid rows):  {total_debits:,.2f}")
+    print(f"Total credits (valid rows): {total_credits:,.2f}")
+    print(f"Overall difference:         {abs(total_debits - total_credits):,.2f}")
+
+    if invalid_count:
+        print("\nInvalid records:")
+        for record in invalid_records[:max_invalid_to_print]:
+            reason_text = "; ".join(record.reasons)
+            print(
+                f"  Row {record.row_number} (id={record.transaction_id}): {reason_text}"
+            )
+
+        remaining = invalid_count - max_invalid_to_print
+        if remaining > 0:
+            print(f"  ... and {remaining} more invalid rows")
+
+    print("\nValidation summary:")
+    if invalid_count == 0:
+        print("  PASSED: all rows satisfy required fields, dates, amounts, and balancing checks")
+        print(f"  SUMMARY: {valid_rows:,} valid, {invalid_count:,} invalid")
+        return 0
+
+    print("  FAILED: one or more rows violate validation rules")
+    print(f"  SUMMARY: {valid_rows:,} valid, {invalid_count:,} invalid")
+    return 1
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Validate historical transaction CSV against double-entry checks."
+    )
+    parser.add_argument(
+        "csv_path",
+        nargs="?",
+        default=str(DEFAULT_CSV),
+        help="Path to CSV file to validate (default: data/medici_transactions.csv)",
+    )
+    parser.add_argument(
+        "--max-invalid",
+        type=int,
+        default=200,
+        help="Maximum number of invalid records to print",
+    )
+    return parser
+
+
+def main() -> int:
+    parser = _build_parser()
+    args = parser.parse_args()
+    return validate_transactions(Path(args.csv_path), max_invalid_to_print=args.max_invalid)
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())

@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "TXN-0001",
     "date": "1397-01-01",
     "description": "Initial capital investment by Giovanni de' Medici",
     "debits": [
@@ -19,7 +19,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": "TXN-0002",
     "date": "1397-02-15",
     "description": "Loan extended to Florentine wool merchant",
     "debits": [
@@ -38,7 +38,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": "TXN-0003",
     "date": "1397-08-10",
     "description": "Partial loan repayment with interest from wool merchant",
     "debits": [
@@ -62,7 +62,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": "TXN-0004",
     "date": "1397-09-05",
     "description": "Purchase of land for new Medici banking house",
     "debits": [
@@ -81,7 +81,7 @@
     ]
   },
   {
-    "id": 5,
+    "id": "TXN-0005",
     "date": "1397-12-01",
     "description": "Quarterly wages for bank employees",
     "debits": [
