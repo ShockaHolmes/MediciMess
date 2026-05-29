@@ -367,10 +367,19 @@ class Ledger:
  
     # --- Account management (#44, #45) ------------------------------------
  
-    def create_account(self, name: str, account_type: AccountType) -> Account:  # #44
+    def create_account(self, name: str, account_type: AccountType | str) -> Account:  # #44
         if name in self.accounts:
             raise DuplicateAccountError(f"Account '{name}' already exists.")
-        account = Account(name, account_type)
+        try:
+            parsed_account_type = AccountType.parse(account_type)
+        except ValueError as exc:
+            supported = ", ".join(t.value for t in AccountType)
+            raise ValueError(
+                f"Invalid account type for account '{name}': {account_type!r}. "
+                f"Supported account types: {supported}."
+            ) from exc
+
+        account = Account(name, parsed_account_type)
         self.accounts[name] = account
         return account
  
@@ -439,10 +448,12 @@ class Ledger:
  
         # Verify the transaction is balanced (#40 / Double-Entry Policy).
         if not transaction.is_balanced():
-            raise ValueError(
-                "Transaction is not balanced: debits must equal credits "
-                f"(debits total {transaction.total_debits()}, "
-                f"credits total {transaction.total_credits()})"
+            debits_total = transaction.total_debits()
+            credits_total = transaction.total_credits()
+            raise UnbalancedTransactionError(
+                f"Transaction is not balanced for '{description}' on {date}: "
+                f"debits={debits_total}, credits={credits_total}, "
+                f"difference={abs(debits_total - credits_total)}."
             )
  
         # Post to update account balances (#48).
@@ -733,7 +744,10 @@ class Ledger:
                         }
                     )
         
-        return len(self.transactions)
+        exported_count = len(self.transactions)
+        if not self._silent_mode:
+            print(f"Export complete: wrote {exported_count} transaction(s) to CSV '{output_path}'.")
+        return exported_count
  
     def export_transactions_to_json(self, filename: str) -> int:
         """
@@ -767,10 +781,17 @@ class Ledger:
             }
             transactions_data.append(trans_dict)
  
-        with open(filename, 'w', encoding='utf-8') as jsonfile:
+        output_path = Path(filename)
+        if output_path.parent != Path("."):
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with output_path.open('w', encoding='utf-8') as jsonfile:
             json.dump(transactions_data, jsonfile, indent=2)
  
-        return len(self.transactions)
+        exported_count = len(self.transactions)
+        if not self._silent_mode:
+            print(f"Export complete: wrote {exported_count} transaction(s) to JSON '{output_path}'.")
+        return exported_count
  
     def import_transactions_from_csv(self, filename: str, verbose: bool = False) -> int:
         """Import transactions from a CSV file into this ledger.
@@ -810,133 +831,170 @@ class Ledger:
         if input_path.parent == Path("."):
             input_path = Path("data") / input_path
 
+        if not input_path.exists():
+            raise FileNotFoundError(
+                f"CSV import failed: file not found at '{input_path}'."
+            )
+
         count = 0
         skipped = 0
 
-        with open(input_path, 'r', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
-            fieldnames = set(reader.fieldnames or [])
+        try:
+            with input_path.open('r', encoding='utf-8', newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                if not reader.fieldnames:
+                    raise ValueError(
+                        f"Malformed CSV in '{input_path}': missing header row."
+                    )
 
-            # New CSV format: line-based rows keyed by transaction_id.
-            if "transaction_id" in fieldnames:
-                grouped: Dict[str, Dict[str, Any]] = {}
-                order: List[str] = []
+                fieldnames = set(reader.fieldnames or [])
 
+                # New CSV format: line-based rows keyed by transaction_id.
+                if "transaction_id" in fieldnames:
+                    grouped: Dict[str, Dict[str, Any]] = {}
+                    order: List[str] = []
+
+                    for row in reader:
+                        tx_id = str(row.get("transaction_id", "")).strip()
+                        if not tx_id:
+                            continue
+
+                        if any(value is None for value in row.values()):
+                            raise ValueError(
+                                f"Malformed CSV in '{input_path}': row for transaction_id "
+                                f"{tx_id!r} has an inconsistent number of columns."
+                            )
+
+                        if tx_id not in grouped:
+                            grouped[tx_id] = {
+                                "date": row.get("date", "").strip(),
+                                "description": row.get("description", ""),
+                                "debits": [],
+                                "credits": [],
+                            }
+                            order.append(tx_id)
+
+                        debit_account = row.get("debit_account", "").strip()
+                        debit_amount_text = row.get("debit_amount", "").strip()
+                        if debit_account and debit_amount_text:
+                            grouped[tx_id]["debits"].append((debit_account, Decimal(debit_amount_text)))
+
+                        credit_account = row.get("credit_account", "").strip()
+                        credit_amount_text = row.get("credit_amount", "").strip()
+                        if credit_account and credit_amount_text:
+                            grouped[tx_id]["credits"].append((credit_account, Decimal(credit_amount_text)))
+
+                    for tx_id in order:
+                        tx_data = grouped[tx_id]
+                        try:
+                            trans_date = datetime.fromisoformat(tx_data["date"]).date()
+                            description = tx_data["description"]
+
+                            transaction = Transaction(trans_date, description)
+
+                            for debit_acc_name, debit_amount in tx_data["debits"]:
+                                account_type = self._infer_account_type(debit_acc_name)
+                                debit_account = self.get_or_create_account(debit_acc_name, account_type)
+                                transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount))
+
+                            for credit_acc_name, credit_amount in tx_data["credits"]:
+                                account_type = self._infer_account_type(credit_acc_name)
+                                credit_account = self.get_or_create_account(credit_acc_name, account_type)
+                                transaction.add_credit(TransactionEntry.credit(credit_account, credit_amount))
+
+                            if not transaction.is_balanced():
+                                debit_total = transaction.total_debits()
+                                credit_total = transaction.total_credits()
+                                raise UnbalancedTransactionError(
+                                    f"unbalanced transaction id {tx_id}: "
+                                    f"debits={debit_total}, credits={credit_total}"
+                                )
+
+                            transaction.post()
+                            self.transactions.append(transaction)
+                            if verbose:
+                                print(transaction)
+                            count += 1
+                        except (ValueError, KeyError) as e:
+                            skipped += 1
+                            if verbose:
+                                print(f"Warning: Skipping invalid transaction id {tx_id}: {e}")
+                            continue
+
+                    if verbose or not self._silent_mode:
+                        print(f"Imported {count} transaction(s) from '{input_path}'.")
+                        if skipped:
+                            print(f"Import summary: {skipped} transaction(s) skipped due to validation errors.")
+                    return count
+
+                # Backward-compatible legacy CSV import.
+                row_num = 1
                 for row in reader:
-                    tx_id = str(row.get("transaction_id", "")).strip()
-                    if not tx_id:
-                        continue
-
-                    if tx_id not in grouped:
-                        grouped[tx_id] = {
-                            "date": row.get("date", "").strip(),
-                            "description": row.get("description", ""),
-                            "debits": [],
-                            "credits": [],
-                        }
-                        order.append(tx_id)
-
-                    debit_account = row.get("debit_account", "").strip()
-                    debit_amount_text = row.get("debit_amount", "").strip()
-                    if debit_account and debit_amount_text:
-                        grouped[tx_id]["debits"].append((debit_account, Decimal(debit_amount_text)))
-
-                    credit_account = row.get("credit_account", "").strip()
-                    credit_amount_text = row.get("credit_amount", "").strip()
-                    if credit_account and credit_amount_text:
-                        grouped[tx_id]["credits"].append((credit_account, Decimal(credit_amount_text)))
-
-                for tx_id in order:
-                    tx_data = grouped[tx_id]
+                    row_num += 1
                     try:
-                        trans_date = datetime.fromisoformat(tx_data["date"]).date()
-                        description = tx_data["description"]
+                        trans_date = datetime.fromisoformat(row['date']).date()
+                        description = row['description']
 
+                        debit_accounts = [acc.strip() for acc in row.get('debit_account', '').split(',') if acc.strip()]
+                        debit_amount = Decimal(row.get('debit_amount', '0'))
+
+                        credit_account = row.get('credit_account', '').strip()
+                        credit_amount = Decimal(row.get('credit_amount', '0'))
+                        credit_account_2 = row.get('credit_account_2', '').strip()
+                        credit_amount_2 = Decimal(row.get('credit_amount_2', '0')) if row.get('credit_amount_2') else Decimal('0')
+ 
                         transaction = Transaction(trans_date, description)
-
-                        for debit_acc_name, debit_amount in tx_data["debits"]:
+ 
+                        # CSV format doesn't track individual debit amounts, so we
+                        # distribute the total equally. For precise multi-debit
+                        # transactions, use JSON which preserves individual amounts.
+                        for debit_acc_name in debit_accounts:
                             account_type = self._infer_account_type(debit_acc_name)
                             debit_account = self.get_or_create_account(debit_acc_name, account_type)
-                            transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount))
-
-                        for credit_acc_name, credit_amount in tx_data["credits"]:
-                            account_type = self._infer_account_type(credit_acc_name)
-                            credit_account = self.get_or_create_account(credit_acc_name, account_type)
-                            transaction.add_credit(TransactionEntry.credit(credit_account, credit_amount))
+                            transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount / len(debit_accounts)))
+ 
+                        if credit_account:
+                            account_type = self._infer_account_type(credit_account)
+                            credit_acc = self.get_or_create_account(credit_account, account_type)
+                            transaction.add_credit(TransactionEntry.credit(credit_acc, credit_amount))
+ 
+                        if credit_account_2 and credit_amount_2 > 0:
+                            account_type = self._infer_account_type(credit_account_2)
+                            credit_acc_2 = self.get_or_create_account(credit_account_2, account_type)
+                            transaction.add_credit(TransactionEntry.credit(credit_acc_2, credit_amount_2))
 
                         if not transaction.is_balanced():
-                            raise ValueError("Transaction is not balanced: debits must equal credits")
+                            debit_total = transaction.total_debits()
+                            credit_total = transaction.total_credits()
+                            raise UnbalancedTransactionError(
+                                f"unbalanced transaction at row {row_num}: "
+                                f"debits={debit_total}, credits={credit_total}"
+                            )
 
                         transaction.post()
                         self.transactions.append(transaction)
                         if verbose:
                             print(transaction)
                         count += 1
+
                     except (ValueError, KeyError) as e:
                         skipped += 1
                         if verbose:
-                            print(f"Warning: Skipping invalid transaction id {tx_id}: {e}")
+                            print(f"Warning: Skipping invalid transaction at row {row_num}: {e}")
                         continue
+        except csv.Error as exc:
+            raise ValueError(
+                f"Malformed CSV in '{input_path}': {exc}"
+            ) from exc
+        except UnicodeDecodeError as exc:
+            raise ValueError(
+                f"CSV import failed for '{input_path}': file is not valid UTF-8 text."
+            ) from exc
 
-                if verbose:
-                    print(f"\nImported {count} transaction(s) from '{input_path}'."
-                          + (f"  {skipped} skipped." if skipped else ""))
-                return count
-
-            # Backward-compatible legacy CSV import.
-            row_num = 1
-            for row in reader:
-                row_num += 1
-                try:
-                    trans_date = datetime.fromisoformat(row['date']).date()
-                    description = row['description']
-
-                    debit_accounts = [acc.strip() for acc in row.get('debit_account', '').split(',') if acc.strip()]
-                    debit_amount = Decimal(row.get('debit_amount', '0'))
-
-                    credit_account = row.get('credit_account', '').strip()
-                    credit_amount = Decimal(row.get('credit_amount', '0'))
-                    credit_account_2 = row.get('credit_account_2', '').strip()
-                    credit_amount_2 = Decimal(row.get('credit_amount_2', '0')) if row.get('credit_amount_2') else Decimal('0')
- 
-                    transaction = Transaction(trans_date, description)
- 
-                    # CSV format doesn't track individual debit amounts, so we
-                    # distribute the total equally. For precise multi-debit
-                    # transactions, use JSON which preserves individual amounts.
-                    for debit_acc_name in debit_accounts:
-                        account_type = self._infer_account_type(debit_acc_name)
-                        debit_account = self.get_or_create_account(debit_acc_name, account_type)
-                        transaction.add_debit(TransactionEntry.debit(debit_account, debit_amount / len(debit_accounts)))
- 
-                    if credit_account:
-                        account_type = self._infer_account_type(credit_account)
-                        credit_acc = self.get_or_create_account(credit_account, account_type)
-                        transaction.add_credit(TransactionEntry.credit(credit_acc, credit_amount))
- 
-                    if credit_account_2 and credit_amount_2 > 0:
-                        account_type = self._infer_account_type(credit_account_2)
-                        credit_acc_2 = self.get_or_create_account(credit_account_2, account_type)
-                        transaction.add_credit(TransactionEntry.credit(credit_acc_2, credit_amount_2))
-
-                    if not transaction.is_balanced():
-                        raise ValueError("Transaction is not balanced: debits must equal credits")
-
-                    transaction.post()
-                    self.transactions.append(transaction)
-                    if verbose:
-                        print(transaction)
-                    count += 1
-
-                except (ValueError, KeyError) as e:
-                    skipped += 1
-                    if verbose:
-                        print(f"Warning: Skipping invalid transaction at row {row_num}: {e}")
-                    continue
-
-        if verbose:
-            print(f"\nImported {count} transaction(s) from '{input_path}'."
-                  + (f"  {skipped} skipped." if skipped else ""))
+        if verbose or not self._silent_mode:
+            print(f"Imported {count} transaction(s) from '{input_path}'.")
+            if skipped:
+                print(f"Import summary: {skipped} transaction(s) skipped due to validation errors.")
         return count
  
     def import_transactions_from_json(self, filename: str, verbose: bool = False) -> int:
@@ -946,26 +1004,66 @@ class Ledger:
         Returns the number of transactions imported. Invalid or unbalanced
         records are skipped (and reported when verbose), never silently posted.
         """
+        input_path = Path(filename)
+        if not input_path.exists():
+            raise FileNotFoundError(
+                f"JSON import failed: file not found at '{input_path}'."
+            )
+
         count = 0
+        skipped = 0
+
+        try:
+            with input_path.open('r', encoding='utf-8') as jsonfile:
+                transactions_data = json.load(jsonfile)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"Malformed JSON in '{input_path}' at line {exc.lineno}, column {exc.colno}: {exc.msg}"
+            ) from exc
+        except UnicodeDecodeError as exc:
+            raise ValueError(
+                f"JSON import failed for '{input_path}': file is not valid UTF-8 text."
+            ) from exc
+
+        if not isinstance(transactions_data, list):
+            raise ValueError(
+                f"Malformed JSON in '{input_path}': expected a top-level list of transactions."
+            )
  
-        with open(filename, 'r', encoding='utf-8') as jsonfile:
-            transactions_data = json.load(jsonfile)
- 
-        for trans_dict in transactions_data:
+        for index, trans_dict in enumerate(transactions_data, start=1):
             try:
+                if not isinstance(trans_dict, dict):
+                    raise ValueError(
+                        f"transaction #{index} must be an object, got {type(trans_dict).__name__}"
+                    )
+
                 trans_date = datetime.fromisoformat(trans_dict['date']).date()
                 description = trans_dict['description']
  
                 transaction = Transaction(trans_date, description)
  
                 for debit_entry in trans_dict.get('debits', []):
-                    account_type = AccountType.parse(debit_entry['account_type'])
+                    try:
+                        account_type = AccountType.parse(debit_entry['account_type'])
+                    except ValueError as exc:
+                        raise ValueError(
+                            f"invalid account type in transaction #{index} debit entry "
+                            f"for account '{debit_entry.get('account', '<missing account>')}': "
+                            f"{debit_entry.get('account_type')!r}"
+                        ) from exc
                     debit_account = self.get_or_create_account(debit_entry['account'], account_type)
                     amount = Decimal(debit_entry['amount'])
                     transaction.add_debit(TransactionEntry.debit(debit_account, amount))
  
                 for credit_entry in trans_dict.get('credits', []):
-                    account_type = AccountType.parse(credit_entry['account_type'])
+                    try:
+                        account_type = AccountType.parse(credit_entry['account_type'])
+                    except ValueError as exc:
+                        raise ValueError(
+                            f"invalid account type in transaction #{index} credit entry "
+                            f"for account '{credit_entry.get('account', '<missing account>')}': "
+                            f"{credit_entry.get('account_type')!r}"
+                        ) from exc
                     credit_account = self.get_or_create_account(credit_entry['account'], account_type)
                     amount = Decimal(credit_entry['amount'])
                     transaction.add_credit(TransactionEntry.credit(credit_account, amount))
@@ -974,7 +1072,13 @@ class Ledger:
                 transaction.id = self._resolve_id(trans_dict.get('id') or None)
  
                 if not transaction.is_balanced():
-                    raise ValueError("Transaction is not balanced: debits must equal credits")
+                    debit_total = transaction.total_debits()
+                    credit_total = transaction.total_credits()
+                    raise UnbalancedTransactionError(
+                        f"unbalanced transaction #{index}: "
+                        f"debits={debit_total}, credits={credit_total}, "
+                        f"difference={abs(debit_total - credit_total)}"
+                    )
  
                 transaction.post()
                 self.transactions.append(transaction)
@@ -986,9 +1090,15 @@ class Ledger:
                 count += 1
  
             except (ValueError, KeyError) as e:
+                skipped += 1
                 if verbose:
-                    print(f"Warning: Skipping invalid transaction: {e}")
+                    print(f"Warning: Skipping invalid transaction #{index}: {e}")
                 continue
+
+        if verbose or not self._silent_mode:
+            print(f"Imported {count} transaction(s) from '{input_path}'.")
+            if skipped:
+                print(f"Import summary: {skipped} transaction(s) skipped due to validation errors.")
  
         return count
  

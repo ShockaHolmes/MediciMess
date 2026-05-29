@@ -186,9 +186,11 @@ def validate_transactions(csv_path: Path, max_invalid_to_print: int = 200) -> in
     print("\nValidation summary:")
     if invalid_count == 0:
         print("  PASSED: all rows satisfy required fields, dates, amounts, and balancing checks")
+        print(f"  SUMMARY: {valid_rows:,} valid, {invalid_count:,} invalid")
         return 0
 
     print("  FAILED: one or more rows violate validation rules")
+    print(f"  SUMMARY: {valid_rows:,} valid, {invalid_count:,} invalid")
     return 1
 
 

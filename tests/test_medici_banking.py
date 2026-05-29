@@ -15,6 +15,7 @@ from decimal import Decimal
 from pathlib import Path
 import sys
 import csv
+import json
 
 import pytest
 
@@ -625,6 +626,92 @@ class TestCSVImportFeature:
         output = capsys.readouterr().out
         assert "Verbose tx" in output
         assert "Imported 1 transaction" in output
+
+
+class TestImprovedErrorHandling:
+    def test_create_account_rejects_invalid_account_type_with_clear_error(self):
+        ledger = Ledger("Type Check")
+
+        with pytest.raises(ValueError, match="Invalid account type"):
+            ledger.create_account("Mystery", "not-a-real-type")
+
+    def test_import_csv_missing_file_raises_clear_error(self, tmp_path):
+        ledger = Ledger("Missing CSV")
+        missing_path = tmp_path / "does_not_exist.csv"
+
+        with pytest.raises(FileNotFoundError, match="CSV import failed: file not found"):
+            ledger.import_transactions_from_csv(str(missing_path))
+
+    def test_import_csv_malformed_csv_raises_clear_error(self, tmp_path):
+        ledger = Ledger("Malformed CSV")
+        bad_csv = tmp_path / "bad.csv"
+        bad_csv.write_text(
+            "transaction_id,date,description,debit_account,debit_amount,credit_account,credit_amount\n"
+            "1,1397-01-01,Bad line,\"Cash,100,Capital,100\n",
+            encoding="utf-8",
+        )
+
+        with pytest.raises(ValueError, match="Malformed CSV"):
+            ledger.import_transactions_from_csv(str(bad_csv))
+
+    def test_import_json_missing_file_raises_clear_error(self, tmp_path):
+        ledger = Ledger("Missing JSON")
+        missing_path = tmp_path / "does_not_exist.json"
+
+        with pytest.raises(FileNotFoundError, match="JSON import failed: file not found"):
+            ledger.import_transactions_from_json(str(missing_path))
+
+    def test_import_json_malformed_json_raises_clear_error(self, tmp_path):
+        ledger = Ledger("Malformed JSON")
+        bad_json = tmp_path / "bad.json"
+        bad_json.write_text('{"id": "TXN-0001"', encoding="utf-8")
+
+        with pytest.raises(ValueError, match="Malformed JSON"):
+            ledger.import_transactions_from_json(str(bad_json))
+
+
+class TestImprovedUserMessages:
+    def test_export_methods_print_success_messages_when_not_silent(self, tmp_path, capsys):
+        ledger = Ledger("Message Export")
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        capital = ledger.create_account("Capital", AccountType.EQUITY)
+
+        ledger.record_transaction(
+            date(1397, 1, 1),
+            "Founder investment",
+            TransactionEntry.debit(cash, Decimal("100.00")),
+            TransactionEntry.credit(capital, Decimal("100.00")),
+        )
+
+        csv_path = tmp_path / "ok.csv"
+        json_path = tmp_path / "ok.json"
+        ledger.export_transactions_to_csv(str(csv_path))
+        ledger.export_transactions_to_json(str(json_path))
+
+        output = capsys.readouterr().out
+        assert "Export complete: wrote 1 transaction(s) to CSV" in output
+        assert "Export complete: wrote 1 transaction(s) to JSON" in output
+
+    def test_import_json_prints_success_summary_when_not_silent(self, tmp_path, capsys):
+        ledger = Ledger("Seed")
+        cash = ledger.create_account("Cash", AccountType.ASSET)
+        capital = ledger.create_account("Capital", AccountType.EQUITY)
+        ledger.record_transaction(
+            date(1397, 1, 1),
+            "Founder investment",
+            TransactionEntry.debit(cash, Decimal("50.00")),
+            TransactionEntry.credit(capital, Decimal("50.00")),
+        )
+
+        json_path = tmp_path / "seed.json"
+        ledger.export_transactions_to_json(str(json_path))
+        capsys.readouterr()
+
+        imported = Ledger("Import Messages")
+        imported.import_transactions_from_json(str(json_path), verbose=False)
+
+        output = capsys.readouterr().out
+        assert "Imported 1 transaction(s) from" in output
 
 
 if __name__ == "__main__":
