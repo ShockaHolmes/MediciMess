@@ -95,6 +95,24 @@ Run the full final project demo:
 python3 final_project_demo.py
 ```
 
+## Open the Web App
+
+On macOS, you can start the web app by double-clicking [Start MediciMess.command](Start%20MediciMess.command) in the project folder.
+
+What it does:
+
+1. Starts the Medici API server.
+2. Starts the local web server.
+3. Opens the dashboard automatically in your browser.
+4. Lets you navigate to the ledger view from the dashboard.
+
+If the browser does not open automatically, use these URLs:
+
+- `http://127.0.0.1:5500/branch_operations_dashboard.html`
+- `http://127.0.0.1:5500/transaction_ledger_view.html`
+
+To stop the app, press `Ctrl+C` in the terminal window that opened.
+
 ## Usage Examples
 
 Create a ledger, post a balanced transaction, and print a trial balance:

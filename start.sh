@@ -30,10 +30,26 @@ echo "Starting Ledger UI server on http://127.0.0.1:${UI_PORT} ..."
 "$PYTHON_BIN" -m http.server "$UI_PORT" --bind 127.0.0.1 --directory "$ROOT_DIR" &
 UI_PID=$!
 
+open_dashboard() {
+  local dashboard_url="http://127.0.0.1:${UI_PORT}/branch_operations_dashboard.html"
+  for _ in {1..30}; do
+    if curl -fsS "$dashboard_url" >/dev/null 2>&1; then
+      open "$dashboard_url"
+      return 0
+    fi
+    sleep 1
+  done
+
+  echo "Could not confirm the dashboard was ready, so open this URL manually: $dashboard_url"
+}
+
+open_dashboard &
+
 echo
 echo "Stack is running:"
 echo "  API: http://127.0.0.1:${API_PORT}"
-echo "  UI : http://127.0.0.1:${UI_PORT}/transaction_ledger_view.html"
+echo "  UI : http://127.0.0.1:${UI_PORT}/branch_operations_dashboard.html"
+echo "  Ledger: http://127.0.0.1:${UI_PORT}/transaction_ledger_view.html"
 echo
 echo "Press Ctrl+C to stop both servers."
 
