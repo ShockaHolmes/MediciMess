@@ -1,4 +1,4 @@
-.PHONY: help setup run run-module start test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export clean-data
+.PHONY: help setup run run-module start test generate-data transform-data serve-data run-api benford-analysis vendor-concentration duplicate-detection round-clustering validate import-export final-demo clean-data
 
 help:
 	@echo "Available targets:"
@@ -15,6 +15,7 @@ help:
 	@echo "  make vendor-concentration - Run vendor concentration anomaly detection"
 	@echo "  make duplicate-detection - Run duplicate transaction anomaly detection"
 	@echo "  make round-clustering - Run round-number clustering anomaly detection"
+	@echo "  make final-demo    - Run the full final project demo"
 	@echo "  make validate     - Validate historical datasets"
 	@echo "  make import-export- Run import/export demonstration"
 	@echo "  make clean-data   - Remove demo export files from data/"
@@ -67,6 +68,9 @@ validate:
 
 import-export:
 	python3 demo_import_export.py
+
+final-demo:
+	python3 final_project_demo.py
 
 clean-data:
 	rm -f data/exported_transactions.csv data/exported_transactions.json

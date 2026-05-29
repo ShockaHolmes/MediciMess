@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medici Branch Operations Dashboard</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+    :root {
+      --paper: #f5f0e8;
+      --surface: #fffaf2;
+      --surface-2: #efe4d0;
+      --text: #2f2219;
+      --muted: #6d5a49;
+      --brand: #8b1a1a;
+      --brand-dark: #6f1111;
+      --gold: #b8860b;
+      --line: #dcc9a8;
+      --ok: #2e7d32;
+      --warn: #f57c00;
+      --danger: #c62828;
+      --shadow: rgba(45, 29, 17, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(139, 26, 26, 0.18) 0, transparent 34%),
+        radial-gradient(circle at 5% 95%, rgba(184, 134, 11, 0.18) 0, transparent 42%),
+        linear-gradient(145deg, #ebe0cb 0%, #f9f2e4 55%, #f1e4ce 100%);
+      padding: 18px;
+    }
+
+    .app-shell {
+      max-width: 1480px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px var(--shadow);
+      overflow: hidden;
+      min-height: calc(100vh - 36px);
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, #7d1515 0%, #5c100f 100%);
+      color: #fff4d8;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .brand {
+      border-bottom: 1px solid rgba(255, 236, 190, 0.22);
+      padding-bottom: 16px;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      letter-spacing: 0.02em;
+    }
+
+    .brand p {
+      margin: 8px 0 0;
+      font-size: 0.86rem;
+      color: #f8dab0;
+    }
+
+    .nav-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-item {
+      border: 1px solid rgba(255, 236, 190, 0.24);
+      background: rgba(255, 244, 216, 0.08);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 0.92rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(120deg, rgba(255, 223, 147, 0.25), rgba(255, 228, 168, 0.12));
+      border-color: rgba(255, 232, 176, 0.64);
+      font-weight: 600;
+    }
+
+    .role-chip {
+      margin-top: auto;
+      border: 1px solid rgba(255, 236, 190, 0.3);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: #ffe8be;
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    .main {
+      padding: 22px;
+      overflow: auto;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .topbar {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fff8ec, #f4e6cf);
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr 0.9fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .control {
+      display: grid;
+      gap: 5px;
+    }
+
+    .control label {
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .control select,
+    .control input,
+    .control button {
+      border: 1px solid #c9b595;
+      background: #fffcf5;
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      color: var(--text);
+      min-height: 42px;
+    }
+
+    .control button {
+      background: linear-gradient(125deg, var(--brand), var(--brand-dark));
+      color: #fff4dc;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .control button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(139, 26, 26, 0.28);
+    }
+
+    .control .quick-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: linear-gradient(120deg, #6f5d45 0%, #5f4f3a 100%);
+      color: #fff4dc;
+      border-radius: 10px;
+      padding: 10px 11px;
+      min-height: 42px;
+      font-weight: 700;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .control .quick-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(95, 79, 58, 0.26);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(155px, 1fr));
+      gap: 10px;
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      padding: 11px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    }
+
+    .kpi .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .kpi .value {
+      margin-top: 6px;
+      font-family: "Fraunces", serif;
+      font-size: 1.2rem;
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .kpi .delta {
+      margin-top: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .kpi .delta::before {
+      display: inline-block;
+      margin-right: 6px;
+      font-weight: 700;
+    }
+
+    .delta.up {
+      color: var(--ok);
+    }
+
+    .delta.up::before {
+      content: "▲";
+    }
+
+    .delta.down {
+      color: var(--danger);
+    }
+
+    .delta.down::before {
+      content: "▼";
+    }
+
+    .delta.flat {
+      color: #7a5c1d;
+    }
+
+    .delta.flat::before {
+      content: "◆";
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 12px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      font-size: 1.05rem;
+      color: var(--brand);
+    }
+
+    .panel-sub {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .chart-wireframe {
+      border: 1px dashed #b79e74;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fdf3e0, #f6ead4);
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .chart-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .chart-controls .control select {
+      min-height: 40px;
+      padding: 9px 10px;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .chart-card {
+      border: 1px solid rgba(143, 118, 74, 0.22);
+      border-radius: 12px;
+      background: rgba(255, 252, 244, 0.72);
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .chart-card h3 {
+      margin: 0;
+      font-family: "Fraunces", serif;
+      color: var(--brand);
+      font-size: 0.95rem;
+    }
+
+    .chart-card p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .svg-chart {
+      width: 100%;
+      height: 220px;
+      display: block;
+      overflow: visible;
+    }
+
+    .axis-line {
+      stroke: rgba(143, 118, 74, 0.42);
+      stroke-width: 1;
+    }
+
+    .grid-line {
+      stroke: rgba(143, 118, 74, 0.16);
+      stroke-width: 0.8;
+    }
+
+    .chart-label {
+      font-size: 0.72rem;
+      fill: #715a40;
+    }
+
+    .chart-line {
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .current-line {
+      stroke: var(--brand);
+    }
+
+    .comparison-line {
+      stroke: var(--gold);
+      stroke-dasharray: 4 3;
+      opacity: 0.9;
+    }
+
+    .net-area {
+      fill: rgba(139, 26, 26, 0.14);
+      stroke: rgba(139, 26, 26, 0.34);
+      stroke-width: 1.4;
+    }
+
+    .comparison-area {
+      fill: rgba(184, 134, 11, 0.11);
+      stroke: rgba(184, 134, 11, 0.38);
+      stroke-width: 1.2;
+      stroke-dasharray: 4 3;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend i {
+      width: 14px;
+      height: 3px;
+      border-radius: 999px;
+      display: inline-block;
+      background: currentColor;
+    }
+
+    .legend i.area {
+      height: 10px;
+      opacity: 0.28;
+      border-radius: 4px;
+    }
+
+    .legend .current {
+      color: var(--brand);
+    }
+
+    .legend .comparison {
+      color: var(--gold);
+    }
+
+    .legend .positive {
+      color: var(--ok);
+    }
+
+    .legend .negative {
+      color: var(--danger);
+    }
+
+    .chart-fallback {
+      border: 1px dashed rgba(143, 118, 74, 0.32);
+      border-radius: 10px;
+      padding: 10px;
+      background: rgba(255, 250, 241, 0.9);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .alert-list {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .alert-item {
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--warn);
+      background: #fff8ea;
+      border-radius: 12px;
+      padding: 9px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .alert-item.high {
+      border-left-color: var(--danger);
+    }
+
+    .alert-item.low {
+      border-left-color: var(--ok);
+    }
+
+    .alert-meta {
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+    }
+
+    .ledger {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .ledger-tools {
+      display: grid;
+      grid-template-columns: 1.4fr 0.7fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .ledger-tools input,
+    .ledger-tools select {
+      border: 1px solid #c9b595;
+      border-radius: 10px;
+      padding: 10px 11px;
+      font: inherit;
+      min-height: 42px;
+      background: #fffcf5;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid #dbc49e;
+      border-radius: 12px;
+      background: #fff9ec;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1060px;
+      font-size: 0.92rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 9px 10px;
+      border-bottom: 1px solid #ead8ba;
+      white-space: nowrap;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f3e4c8;
+      color: #5f4a32;
+      font-size: 0.74rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:nth-child(2n) {
+      background: #fff3dc;
+    }
+
+    .status {
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 3px 8px;
+      display: inline-block;
+      font-size: 0.76rem;
+    }
+
+    .status.balanced {
+      color: var(--ok);
+      background: rgba(46, 125, 50, 0.12);
+    }
+
+    .status.pending {
+      color: #8a5a00;
+      background: rgba(245, 124, 0, 0.13);
+    }
+
+    .status.flagged {
+      color: var(--danger);
+      background: rgba(198, 40, 40, 0.14);
+    }
+
+    @media (max-width: 1300px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, minmax(140px, 1fr));
+      }
+
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .nav-group {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      .nav-item {
+        min-width: 175px;
+      }
+
+      .role-chip {
+        width: 100%;
+        margin-top: 0;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .ledger-tools {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 8px;
+      }
+
+      .main {
+        padding: 12px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(130px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <div class="brand">
+        <h1>Medici Branch Operations</h1>
+        <p>Senior Official Control Dashboard</p>
+      </div>
+
+      <nav class="nav-group" aria-label="Sections">
+        <div class="nav-item active">Operations Summary <span>01</span></div>
+        <div class="nav-item">Transaction Ledger <span>02</span></div>
+        <div class="nav-item">Cash and Liquidity <span>03</span></div>
+        <div class="nav-item">Alerts Queue <span>04</span></div>
+        <div class="nav-item">Reports Export <span>05</span></div>
+      </nav>
+
+      <div class="role-chip">
+        User: Giovanni di Bicci<br />
+        Role: Senior Bank Official<br />
+        Scope: All Branches
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="topbar" aria-label="Dashboard filters">
+        <div class="control">
+          <label for="branchFilter">Branch Filter</label>
+          <select id="branchFilter">
+            <option>Florence</option>
+            <option>Rome</option>
+            <option>Venice</option>
+            <option>Milan</option>
+            <option>Geneva</option>
+            <option>Bruges</option>
+            <option>London</option>
+            <option>Avignon</option>
+            <option>Constance</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="dateStart">Date Range Start</label>
+          <input id="dateStart" type="date" value="1420-01-01" />
+        </div>
+        <div class="control">
+          <label for="dateEnd">Date Range End</label>
+          <input id="dateEnd" type="date" value="1420-12-31" />
+        </div>
+        <div class="control">
+          <label for="applyFilters">Apply</label>
+          <button id="applyFilters" type="button">Update Dashboard</button>
+        </div>
+        <div class="control">
+          <label for="ledgerLink">Navigation</label>
+          <a id="ledgerLink" class="quick-link" href="transaction_ledger_view.html">Open Ledger View</a>
+        </div>
+      </section>
+
+      <section class="kpi-grid" aria-label="KPI cards">
+        <article class="kpi">
+          <div class="label">Cash Position</div>
+          <div class="value" id="kpiCashPosition">0.00 florins</div>
+          <div class="delta up" id="kpiCashPositionTrend">0.0% vs prior year</div>
+        </article>
+        <article class="kpi">
+          <div class="label">Loan Portfolio</div>
+          <div class="value" id="kpiLoanPortfolio">0.00 florins</div>
+          <div class="delta up" id="kpiLoanPortfolioTrend">0.0% vs prior year</div>
+        </article>
+        <article class="kpi">
+          <div class="label">Revenue</div>
+          <div class="value" id="kpiRevenue">0.00 florins</div>
+          <div class="delta up" id="kpiRevenueTrend">0.0% vs prior year</div>
+        </article>
+        <article class="kpi">
+          <div class="label">Expense</div>
+          <div class="value" id="kpiExpense">0.00 florins</div>
+          <div class="delta down" id="kpiExpenseTrend">0.0% vs prior year</div>
+        </article>
+        <article class="kpi">
+          <div class="label">Net Income</div>
+          <div class="value" id="kpiNetIncome">0.00 florins</div>
+          <div class="delta up" id="kpiNetIncomeTrend">0.0% vs prior year</div>
+        </article>
+        <article class="kpi">
+          <div class="label">Alerts Count</div>
+          <div class="value" id="kpiAlertsCount">0</div>
+          <div class="delta down" id="kpiAlertsCountTrend">0.0% vs prior year</div>
+        </article>
+      </section>
+
+      <section class="panel-grid">
+        <article class="panel" aria-label="Cash flow chart area">
+          <div class="panel-header">
+            <h2 class="panel-title">Cash Flow Chart Area</h2>
+            <span class="panel-sub">Inflows, outflows, and net flow by month or year</span>
+          </div>
+          <div class="chart-wireframe">
+            <div class="chart-controls">
+              <div class="control">
+                <label for="chartGranularity">Group By</label>
+                <select id="chartGranularity">
+                  <option value="month">Month</option>
+                  <option value="year">Year</option>
+                </select>
+              </div>
+              <div class="control">
+                <label for="comparisonBranch">Compare Branch</label>
+                <select id="comparisonBranch">
+                  <option value="">No comparison</option>
+                  <option value="Florence">Florence</option>
+                  <option value="Rome">Rome</option>
+                  <option value="Venice">Venice</option>
+                  <option value="Milan">Milan</option>
+                  <option value="Geneva">Geneva</option>
+                  <option value="Bruges">Bruges</option>
+                  <option value="London">London</option>
+                  <option value="Avignon">Avignon</option>
+                  <option value="Constance">Constance</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="chart-grid">
+              <div class="chart-card">
+                <div>
+                  <h3>Cash Inflow</h3>
+                  <p>Inflows by selected period, with optional branch comparison.</p>
+                </div>
+                <svg id="cashInflowChart" class="svg-chart" viewBox="0 0 360 220" preserveAspectRatio="none" role="img" aria-label="Cash inflow chart"></svg>
+                <div class="legend">
+                  <span class="current"><i></i>Current branch</span>
+                  <span class="comparison"><i></i>Comparison branch</span>
+                </div>
+              </div>
+
+              <div class="chart-card">
+                <div>
+                  <h3>Cash Outflow</h3>
+                  <p>Outflows by selected period, with tooltip detail on hover.</p>
+                </div>
+                <svg id="cashOutflowChart" class="svg-chart" viewBox="0 0 360 220" preserveAspectRatio="none" role="img" aria-label="Cash outflow chart"></svg>
+                <div class="legend">
+                  <span class="current"><i></i>Current branch</span>
+                  <span class="comparison"><i></i>Comparison branch</span>
+                </div>
+              </div>
+
+              <div class="chart-card">
+                <div>
+                  <h3>Net Cash Flow</h3>
+                  <p>Net cash movement grouped by month or year.</p>
+                </div>
+                <svg id="netCashFlowChart" class="svg-chart" viewBox="0 0 360 220" preserveAspectRatio="none" role="img" aria-label="Net cash flow chart"></svg>
+                <div class="legend">
+                  <span class="positive"><i></i>Positive flow</span>
+                  <span class="negative"><i></i>Negative flow</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="chartFallbackText" class="chart-fallback" hidden>
+              Cash flow charts will appear here once the dashboard loads data from the Medici API.
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" aria-label="Anomaly alert panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Anomaly Alert Panel</h2>
+            <span class="panel-sub">31 open alerts</span>
+          </div>
+          <div class="alert-list">
+            <div class="alert-item high">
+              <div class="alert-meta">High Severity | Duplicate Transaction</div>
+              <div>TX-1420-0841 and TX-1420-0843 have same amount and counterparty within 48 hours.</div>
+              <div class="panel-sub">Recommended action: freeze both entries and request branch note.</div>
+            </div>
+            <div class="alert-item">
+              <div class="alert-meta">Medium Severity | Vendor Concentration</div>
+              <div>Vendor "Bernardi Freight" is 6.3% of courier expense category in current period.</div>
+              <div class="panel-sub">Recommended action: perform invoice sampling and approval check.</div>
+            </div>
+            <div class="alert-item low">
+              <div class="alert-meta">Low Severity | Round Number Clustering</div>
+              <div>Unusual concentration of amounts ending in 00 in Florence expense postings.</div>
+              <div class="panel-sub">Recommended action: include in next branch audit cycle.</div>
+            </div>
+            <div class="alert-item high">
+              <div class="alert-meta">High Severity | Balance Sheet Imbalance</div>
+              <div>Transaction TX-1420-0922 posted with debit and credit mismatch before nightly close.</div>
+              <div class="panel-sub">Recommended action: lock posting window and revalidate journal lines.</div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="ledger" aria-label="Transaction ledger table section">
+        <div class="panel-header">
+          <h2 class="panel-title">Transaction Ledger Table</h2>
+          <span class="panel-sub">Paginated ledger sample for selected branch and date range</span>
+        </div>
+
+        <div class="ledger-tools">
+          <div class="control">
+            <label for="ledgerSearch">Search Description / Counterparty</label>
+            <input id="ledgerSearch" type="text" placeholder="Search transactions" />
+          </div>
+          <div class="control">
+            <label for="typeFilter">Transaction Type</label>
+            <select id="typeFilter">
+              <option value="all">All Types</option>
+              <option value="deposit">Deposit</option>
+              <option value="withdrawal">Withdrawal</option>
+              <option value="loan_issuance">Loan Issuance</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="sortBy">Sort</label>
+            <select id="sortBy">
+              <option value="date_desc">Date: newest first</option>
+              <option value="date_asc">Date: oldest first</option>
+              <option value="amount_desc">Amount: high to low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Counterparty</th>
+                <th>Description</th>
+                <th>Debit Account</th>
+                <th>Debit Amount</th>
+                <th>Credit Account</th>
+                <th>Credit Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TX-1420-0907</td>
+                <td>1420-09-12</td>
+                <td>deposit</td>
+                <td>Arte della Lana</td>
+                <td>Quarterly wool trade deposit</td>
+                <td>Cash</td>
+                <td>3,200.00</td>
+                <td>Deposits Payable</td>
+                <td>3,200.00</td>
+                <td><span class="status balanced">Balanced</span></td>
+              </tr>
+              <tr>
+                <td>TX-1420-0911</td>
+                <td>1420-09-13</td>
+                <td>loan_issuance</td>
+                <td>House of Bardi</td>
+                <td>Bridge financing for maritime cargo</td>
+                <td>Loans Receivable</td>
+                <td>5,000.00</td>
+                <td>Cash</td>
+                <td>5,000.00</td>
+                <td><span class="status balanced">Balanced</span></td>
+              </tr>
+              <tr>
+                <td>TX-1420-0918</td>
+                <td>1420-09-15</td>
+                <td>expense</td>
+                <td>Bernardi Freight</td>
+                <td>Courier convoy security and transport</td>
+                <td>Courier Services</td>
+                <td>1,850.00</td>
+                <td>Cash</td>
+                <td>1,850.00</td>
+                <td><span class="status pending">Pending</span></td>
+              </tr>
+              <tr>
+                <td>TX-1420-0922</td>
+                <td>1420-09-16</td>
+                <td>withdrawal</td>
+                <td>Pazzi Treasury</td>
+                <td>Large withdrawal queued after close</td>
+                <td>Deposits Payable</td>
+                <td>2,400.00</td>
+                <td>Cash</td>
+                <td>2,350.00</td>
+                <td><span class="status flagged">Flagged</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const applyButton = document.getElementById("applyFilters");
+    const branchFilter = document.getElementById("branchFilter");
+    const dateStart = document.getElementById("dateStart");
+    const dateEnd = document.getElementById("dateEnd");
+    const chartGranularity = document.getElementById("chartGranularity");
+    const comparisonBranch = document.getElementById("comparisonBranch");
+    const inflowChart = document.getElementById("cashInflowChart");
+    const outflowChart = document.getElementById("cashOutflowChart");
+    const netChart = document.getElementById("netCashFlowChart");
+    const chartFallbackText = document.getElementById("chartFallbackText");
+    const API_BASE = "http://127.0.0.1:8000";
+
+    const fallbackSnapshot = {
+      cashPosition: { value: 98450, trend: 4.8, direction: "up" },
+      loanPortfolio: { value: 63180, trend: 6.4, direction: "up" },
+      revenue: { value: 35410, trend: 3.9, direction: "up" },
+      expense: { value: 22630, trend: -1.7, direction: "down" },
+      netIncome: { value: 12780, trend: 3.3, direction: "up" },
+      alertsCount: { value: 31, trend: -2.8, direction: "down" },
+    };
+
+    function formatFlorins(amount) {
+      return `${amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} florins`;
+    }
+
+    function setTrend(node, trend, direction) {
+      const pct = `${trend > 0 ? "+" : ""}${trend.toFixed(1)}% vs prior period`;
+      node.textContent = pct;
+      node.classList.remove("up", "down", "flat");
+      node.classList.add(direction);
+    }
+
+    function parseMoney(value) {
+      const parsed = Number.parseFloat(value ?? "0");
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
+    function parsePeriodKey(period, granularity) {
+      if (!period) {
+        return null;
+      }
+      if (granularity === "year") {
+        return period.slice(0, 4);
+      }
+      return period.slice(0, 7);
+    }
+
+    function humanizePeriod(period, granularity) {
+      if (granularity === "year") {
+        return period;
+      }
+      const [year, month] = period.split("-");
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthIndex = Number.parseInt(month, 10) - 1;
+      return `${monthNames[monthIndex] || month} ${year}`;
+    }
+
+    function aggregateCashflow(rows, granularity) {
+      const grouped = new Map();
+      for (const row of rows || []) {
+        const period = parsePeriodKey(row.period, granularity);
+        if (!period) {
+          continue;
+        }
+        const existing = grouped.get(period) || {
+          period,
+          cash_inflows: 0,
+          cash_outflows: 0,
+          net_cash_movement: 0,
+        };
+        existing.cash_inflows += parseMoney(row.cash_inflows);
+        existing.cash_outflows += parseMoney(row.cash_outflows);
+        existing.net_cash_movement += parseMoney(row.net_cash_movement);
+        grouped.set(period, existing);
+      }
+      return [...grouped.values()].sort((a, b) => a.period.localeCompare(b.period));
+    }
+
+    function makeSvgEl(name, attrs = {}) {
+      const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+      for (const [key, value] of Object.entries(attrs)) {
+        el.setAttribute(key, value);
+      }
+      return el;
+    }
+
+    function clearSvg(svg) {
+      while (svg.firstChild) {
+        svg.removeChild(svg.firstChild);
+      }
+    }
+
+    function scalePoints(values, width, height, padding) {
+      const max = Math.max(...values, 0);
+      const min = Math.min(...values, 0);
+      const span = Math.max(max - min, 1);
+      const usableHeight = height - padding * 2;
+      return (value) => {
+        const normalized = (value - min) / span;
+        const y = height - padding - normalized * usableHeight;
+        return Math.max(padding, Math.min(height - padding, y));
+      };
+    }
+
+    function buildPath(points) {
+      if (!points.length) {
+        return "";
+      }
+      return points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x},${point.y}`).join(" ");
+    }
+
+    function renderCashFlowChart(svg, currentRows, comparisonRows, granularity, chartKind) {
+      clearSvg(svg);
+
+      const width = 360;
+      const height = 220;
+      const padding = 28;
+      const chartHeight = 140;
+      const baseline = 170;
+      const current = aggregateCashflow(currentRows, granularity);
+      const comparison = comparisonRows ? aggregateCashflow(comparisonRows, granularity) : [];
+      const periods = current.map((row) => row.period);
+      const comparisonLookup = new Map(comparison.map((row) => [row.period, row]));
+
+      const values = current.flatMap((row) => {
+        const dataValue = chartKind === "inflow"
+          ? row.cash_inflows
+          : chartKind === "outflow"
+            ? row.cash_outflows
+            : row.net_cash_movement;
+        const compValue = comparisonLookup.get(row.period)
+          ? (chartKind === "inflow"
+              ? comparisonLookup.get(row.period).cash_inflows
+              : chartKind === "outflow"
+                ? comparisonLookup.get(row.period).cash_outflows
+                : comparisonLookup.get(row.period).net_cash_movement)
+          : 0;
+        return [dataValue, compValue, 0];
+      });
+
+      const scaleY = scalePoints(values.length ? values : [0], width, chartHeight, 12);
+      const xStep = periods.length > 1 ? (width - padding * 2) / (periods.length - 1) : 0;
+
+      clearSvg(svg);
+
+      svg.appendChild(makeSvgEl("line", { x1: padding, y1: baseline, x2: width - padding, y2: baseline, class: "axis-line" }));
+      [0.25, 0.5, 0.75].forEach((fraction) => {
+        const y = padding + (chartHeight * (1 - fraction));
+        svg.appendChild(makeSvgEl("line", { x1: padding, y1: y, x2: width - padding, y2: y, class: "grid-line" }));
+      });
+
+      const currentPoints = [];
+      const comparisonPoints = [];
+
+      current.forEach((row, index) => {
+        const currentValue = chartKind === "inflow"
+          ? row.cash_inflows
+          : chartKind === "outflow"
+            ? row.cash_outflows
+            : row.net_cash_movement;
+        const comparisonRow = comparisonLookup.get(row.period);
+        const comparisonValue = comparisonRow
+          ? (chartKind === "inflow"
+              ? comparisonRow.cash_inflows
+              : chartKind === "outflow"
+                ? comparisonRow.cash_outflows
+                : comparisonRow.net_cash_movement)
+          : null;
+
+        const x = periods.length > 1 ? padding + index * xStep : width / 2;
+        const currentY = scaleY(currentValue);
+        currentPoints.push({ x, y: currentY });
+
+        if (comparisonValue !== null) {
+          comparisonPoints.push({ x, y: scaleY(comparisonValue) });
+        }
+
+        const label = humanizePeriod(row.period, granularity);
+        const labelText = makeSvgEl("text", { x, y: 196, class: "chart-label", "text-anchor": "middle" });
+        labelText.textContent = label;
+        svg.appendChild(labelText);
+
+        if (chartKind === "net") {
+          const rectHeight = Math.max(1, Math.abs(baseline - currentY));
+          const rectY = currentValue >= 0 ? currentY : baseline;
+          const rect = makeSvgEl("rect", {
+            x: x - 11,
+            y: rectY,
+            width: 22,
+            height: rectHeight,
+            rx: 4,
+            class: currentValue >= 0 ? "net-area" : "comparison-area",
+          });
+          const title = makeSvgEl("title");
+          title.textContent = `${label}: ${formatFlorins(Math.abs(currentValue))} net cash flow`;
+          rect.appendChild(title);
+          svg.appendChild(rect);
+        } else {
+          const barHeight = Math.max(1, baseline - currentY);
+          const bar = makeSvgEl("rect", {
+            x: x - 11,
+            y: currentY,
+            width: 22,
+            height: barHeight,
+            rx: 5,
+            fill: chartKind === "inflow" ? "rgba(139, 26, 26, 0.82)" : "rgba(184, 134, 11, 0.82)",
+          });
+          const title = makeSvgEl("title");
+          title.textContent = `${label}: ${formatFlorins(currentValue)}`;
+          bar.appendChild(title);
+          svg.appendChild(bar);
+
+          if (comparisonValue !== null) {
+            const compHeight = Math.max(1, baseline - scaleY(comparisonValue));
+            const compBar = makeSvgEl("rect", {
+              x: x + 6,
+              y: scaleY(comparisonValue),
+              width: 10,
+              height: compHeight,
+              rx: 4,
+              fill: chartKind === "inflow" ? "rgba(184, 134, 11, 0.55)" : "rgba(139, 26, 26, 0.42)",
+            });
+            const compTitle = makeSvgEl("title");
+            compTitle.textContent = `${label}: comparison ${formatFlorins(comparisonValue)}`;
+            compBar.appendChild(compTitle);
+            svg.appendChild(compBar);
+          }
+        }
+      });
+
+      const linePath = buildPath(currentPoints);
+      if (chartKind === "net") {
+        const areaPath = `${linePath} L ${currentPoints.at(-1)?.x ?? padding},${baseline} L ${currentPoints[0]?.x ?? padding},${baseline} Z`;
+        const area = makeSvgEl("path", { d: areaPath, class: "net-area" });
+        const title = makeSvgEl("title");
+        title.textContent = `${chartKind === "net" ? "Net cash flow" : "Cash flow"} by ${granularity}`;
+        area.appendChild(title);
+        svg.appendChild(area);
+      }
+
+      const line = makeSvgEl("path", { d: linePath, class: chartKind === "net" ? "chart-line current-line" : "chart-line current-line" });
+      const title = makeSvgEl("title");
+      title.textContent = `Current branch ${chartKind} by ${granularity}`;
+      line.appendChild(title);
+      svg.appendChild(line);
+
+      if (comparisonPoints.length > 1) {
+        const compLine = makeSvgEl("path", { d: buildPath(comparisonPoints), class: "chart-line comparison-line" });
+        const compTitle = makeSvgEl("title");
+        compTitle.textContent = `Comparison branch ${chartKind} by ${granularity}`;
+        compLine.appendChild(compTitle);
+        svg.appendChild(compLine);
+      }
+    }
+
+    function toIsoDate(day) {
+      return day.toISOString().slice(0, 10);
+    }
+
+    function computePreviousRange(start, end) {
+      if (!start || !end) {
+        return null;
+      }
+      const startDate = new Date(`${start}T00:00:00`);
+      const endDate = new Date(`${end}T00:00:00`);
+      if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || endDate < startDate) {
+        return null;
+      }
+
+      const spanMs = endDate.getTime() - startDate.getTime();
+      const prevEnd = new Date(startDate.getTime() - 24 * 60 * 60 * 1000);
+      const prevStart = new Date(prevEnd.getTime() - spanMs);
+      return {
+        start: toIsoDate(prevStart),
+        end: toIsoDate(prevEnd),
+      };
+    }
+
+    function buildTrend(current, previous) {
+      if (!Number.isFinite(previous) || previous === 0) {
+        return { trend: 0, direction: "flat" };
+      }
+      const trend = ((current - previous) / Math.abs(previous)) * 100;
+      const direction = trend > 0.05 ? "up" : trend < -0.05 ? "down" : "flat";
+      return { trend, direction };
+    }
+
+    function buildParams(start, end) {
+      const params = new URLSearchParams();
+      if (branchFilter.value) {
+        params.set("branch", branchFilter.value);
+      }
+      if (start) {
+        params.set("start", start);
+      }
+      if (end) {
+        params.set("end", end);
+      }
+      return params;
+    }
+
+    async function fetchJson(path, params) {
+      const url = `${API_BASE}${path}?${params.toString()}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+      return response.json();
+    }
+
+    function renderKpis(snapshot) {
+      document.getElementById("kpiCashPosition").textContent = formatFlorins(snapshot.cashPosition.value);
+      setTrend(document.getElementById("kpiCashPositionTrend"), snapshot.cashPosition.trend, snapshot.cashPosition.direction);
+
+      document.getElementById("kpiLoanPortfolio").textContent = formatFlorins(snapshot.loanPortfolio.value);
+      setTrend(document.getElementById("kpiLoanPortfolioTrend"), snapshot.loanPortfolio.trend, snapshot.loanPortfolio.direction);
+
+      document.getElementById("kpiRevenue").textContent = formatFlorins(snapshot.revenue.value);
+      setTrend(document.getElementById("kpiRevenueTrend"), snapshot.revenue.trend, snapshot.revenue.direction);
+
+      document.getElementById("kpiExpense").textContent = formatFlorins(snapshot.expense.value);
+      setTrend(document.getElementById("kpiExpenseTrend"), snapshot.expense.trend, snapshot.expense.direction);
+
+      document.getElementById("kpiNetIncome").textContent = formatFlorins(snapshot.netIncome.value);
+      setTrend(document.getElementById("kpiNetIncomeTrend"), snapshot.netIncome.trend, snapshot.netIncome.direction);
+
+      document.getElementById("kpiAlertsCount").textContent = snapshot.alertsCount.value.toLocaleString("en-US");
+      setTrend(document.getElementById("kpiAlertsCountTrend"), snapshot.alertsCount.trend, snapshot.alertsCount.direction);
+    }
+
+    async function loadKpis() {
+      applyButton.disabled = true;
+      applyButton.textContent = "Loading...";
+
+      try {
+        const currentParams = buildParams(dateStart.value, dateEnd.value);
+        const [currentKpis, currentAlerts] = await Promise.all([
+          fetchJson("/api/kpis", currentParams),
+          fetchJson("/api/alerts", currentParams),
+        ]);
+
+        const previousRange = computePreviousRange(dateStart.value, dateEnd.value);
+        let previousKpis = null;
+        let previousAlerts = null;
+
+        if (previousRange) {
+          const previousParams = buildParams(previousRange.start, previousRange.end);
+          [previousKpis, previousAlerts] = await Promise.all([
+            fetchJson("/api/kpis", previousParams),
+            fetchJson("/api/alerts", previousParams),
+          ]);
+        }
+
+        const currentValues = {
+          cashPosition: parseMoney(currentKpis.closing_cash_balance),
+          loanPortfolio: parseMoney(currentKpis.loan_portfolio_balance),
+          revenue: parseMoney(currentKpis.total_revenue),
+          expense: parseMoney(currentKpis.operating_expenses),
+          netIncome: parseMoney(currentKpis.net_income),
+          alertsCount: Number.parseInt(currentAlerts.total ?? 0, 10) || 0,
+        };
+
+        const previousValues = {
+          cashPosition: parseMoney(previousKpis?.closing_cash_balance),
+          loanPortfolio: parseMoney(previousKpis?.loan_portfolio_balance),
+          revenue: parseMoney(previousKpis?.total_revenue),
+          expense: parseMoney(previousKpis?.operating_expenses),
+          netIncome: parseMoney(previousKpis?.net_income),
+          alertsCount: Number.parseInt(previousAlerts?.total ?? 0, 10) || 0,
+        };
+
+        const snapshot = {
+          cashPosition: {
+            value: currentValues.cashPosition,
+            ...buildTrend(currentValues.cashPosition, previousValues.cashPosition),
+          },
+          loanPortfolio: {
+            value: currentValues.loanPortfolio,
+            ...buildTrend(currentValues.loanPortfolio, previousValues.loanPortfolio),
+          },
+          revenue: {
+            value: currentValues.revenue,
+            ...buildTrend(currentValues.revenue, previousValues.revenue),
+          },
+          expense: {
+            value: currentValues.expense,
+            ...buildTrend(currentValues.expense, previousValues.expense),
+          },
+          netIncome: {
+            value: currentValues.netIncome,
+            ...buildTrend(currentValues.netIncome, previousValues.netIncome),
+          },
+          alertsCount: {
+            value: currentValues.alertsCount,
+            ...buildTrend(currentValues.alertsCount, previousValues.alertsCount),
+          },
+        };
+
+        renderKpis(snapshot);
+        applyButton.textContent = "Update Dashboard";
+      } catch (error) {
+        console.error("Failed to load KPI data:", error);
+        renderKpis(fallbackSnapshot);
+        applyButton.textContent = "API Unavailable (Showing Sample KPIs)";
+      } finally {
+        applyButton.disabled = false;
+      }
+    }
+
+    async function loadCashFlowCharts() {
+      chartFallbackText.hidden = true;
+      try {
+        const currentParams = buildParams(dateStart.value, dateEnd.value);
+        currentParams.set("granularity", chartGranularity.value);
+        const currentBranch = branchFilter.value;
+        const comparison = comparisonBranch.value && comparisonBranch.value !== currentBranch ? comparisonBranch.value : "";
+
+        const requests = [fetchJson("/api/cashflow", currentParams)];
+        if (comparison) {
+          const comparisonParams = buildParams(dateStart.value, dateEnd.value);
+          comparisonParams.set("granularity", chartGranularity.value);
+          comparisonParams.set("branch", comparison);
+          requests.push(fetchJson("/api/cashflow", comparisonParams));
+        }
+
+        const [currentData, comparisonData] = await Promise.all(requests);
+        const currentRows = currentData.data || [];
+        const comparisonRows = comparisonData?.data || [];
+
+        renderCashFlowChart(inflowChart, currentRows, comparisonRows, chartGranularity.value, "inflow");
+        renderCashFlowChart(outflowChart, currentRows, comparisonRows, chartGranularity.value, "outflow");
+        renderCashFlowChart(netChart, currentRows, comparisonRows, chartGranularity.value, "net");
+      } catch (error) {
+        console.error("Failed to load cash flow charts:", error);
+        chartFallbackText.hidden = false;
+        chartFallbackText.textContent = "Cash flow charts are unavailable right now. Start the API server to view live inflow, outflow, and net flow charts.";
+      }
+    }
+
+    loadKpis();
+    loadCashFlowCharts();
+
+    applyButton.addEventListener("click", async () => {
+      await loadKpis();
+      await loadCashFlowCharts();
+    });
+
+    chartGranularity.addEventListener("change", loadCashFlowCharts);
+    comparisonBranch.addEventListener("change", loadCashFlowCharts);
+  </script>
+</body>
+</html>

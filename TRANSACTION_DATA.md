@@ -178,7 +178,7 @@ The fraud is designed to be **plausible on casual inspection** but **detectable 
 - Round-number clustering
 - Payment frequency analysis
 
-**For instructors**: Full details of the scheme, detection methods, discussion questions, and grading rubric are in [`INSTRUCTOR_EMBEZZLEMENT_GUIDE.md`](INSTRUCTOR_EMBEZZLEMENT_GUIDE.md). **Do not distribute to students before the exercise.**
+**For instructors**: Full details of the scheme, detection methods, discussion questions, and grading rubric are in [docs/INSTRUCTOR_FRAUD_GUIDE.md](docs/INSTRUCTOR_FRAUD_GUIDE.md). **Do not distribute to students before the exercise.**
 
 ## Integration with Existing Code
 
