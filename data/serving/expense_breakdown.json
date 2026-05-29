@@ -1,0 +1,3698 @@
+[
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "137545.95",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Avignon Operations",
+    "amount": "34947.78",
+    "transaction_count": 55
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "123921.60",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "177131.02",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "66126.14",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "126978.00",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "87144.49",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "88755.99",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "132394.00",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "58461.36",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Avignon Operations",
+    "amount": "109421.60",
+    "transaction_count": 46
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "85976.50",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "140576.28",
+    "transaction_count": 40
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "82172.72",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "163548.27",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "99314.89",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "122270.45",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "157159.39",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "122758.79",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Avignon Operations",
+    "amount": "251197.08",
+    "transaction_count": 44
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "132755.88",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "92948.89",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "121444.40",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "128432.78",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "80553.66",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "121492.43",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "66705.96",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "152320.37",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Avignon Operations",
+    "amount": "119542.34",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "130148.54",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "79408.41",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "82465.17",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "127616.52",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "102414.02",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "64891.21",
+    "transaction_count": 14
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "83345.61",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "63333.39",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Avignon Operations",
+    "amount": "95365.66",
+    "transaction_count": 50
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "63620.81",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "106735.34",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "104053.40",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "32725.54",
+    "transaction_count": 12
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "153607.49",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "136161.08",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "76113.50",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "73575.24",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Avignon Operations",
+    "amount": "799694.32",
+    "transaction_count": 48
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "64471.10",
+    "transaction_count": 12
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "78100.62",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "97034.62",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "71944.69",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "173246.32",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "155463.55",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Avignon",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "130100.94",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "86279.62",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Bruges Operations",
+    "amount": "12799.79",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "152612.78",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "152793.56",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "136721.47",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "126137.26",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "136822.71",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "108733.59",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "85115.61",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "74378.62",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Bruges Operations",
+    "amount": "117853.65",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "73846.56",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "156696.43",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "128943.05",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "102307.45",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "109393.26",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "134634.50",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "155647.65",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "99179.36",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Bruges Operations",
+    "amount": "121153.37",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "60621.21",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "78416.01",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "151412.90",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "75485.09",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "166298.34",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "87783.76",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "149343.14",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "111183.68",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Bruges Operations",
+    "amount": "115995.71",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "177770.34",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "106213.14",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "138603.64",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "130933.94",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "112690.90",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "85128.66",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "94528.66",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "85986.38",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Bruges Operations",
+    "amount": "52173.14",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "127430.77",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "76282.04",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "125920.77",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "109383.57",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "151724.88",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "84210.37",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "164735.23",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "89736.91",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Bruges Operations",
+    "amount": "500619.87",
+    "transaction_count": 42
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "63623.01",
+    "transaction_count": 16
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "116191.07",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "120779.88",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "142736.93",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "65259.02",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "67674.56",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Bruges",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "124017.33",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "93734.27",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Florence Operations",
+    "amount": "24047.27",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "140921.22",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "144583.10",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "155732.47",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "104981.89",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "50128.14",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "98774.49",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "81710.28",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "169050.26",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Florence Operations",
+    "amount": "96167.65",
+    "transaction_count": 45
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "80937.21",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "141915.41",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "132091.30",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "118389.54",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "87883.84",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "187228.11",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "98615.08",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "128663.64",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Florence Operations",
+    "amount": "112962.51",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "103234.95",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "133203.04",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "99147.77",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "236267.31",
+    "transaction_count": 40
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "63137.73",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "118377.78",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "95278.11",
+    "transaction_count": 16
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "176564.28",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Florence Operations",
+    "amount": "141688.18",
+    "transaction_count": 46
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "87169.59",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "123657.86",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "122281.95",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "128884.87",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "142925.33",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "109769.24",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "46992.54",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "120891.45",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Florence Operations",
+    "amount": "40554.18",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "65811.89",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "115104.20",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "98239.05",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "85170.88",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "128170.63",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "90412.52",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "80048.53",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "94225.81",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Florence Operations",
+    "amount": "603433.08",
+    "transaction_count": 53
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "161310.51",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "81167.54",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "159131.55",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "102180.54",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "147911.37",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "67920.58",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Florence",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "127677.28",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "170701.54",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "121443.35",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Geneva Operations",
+    "amount": "21997.04",
+    "transaction_count": 40
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "97040.75",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "114934.58",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "149533.87",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "71507.95",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "115020.63",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "79763.29",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "90425.20",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "161592.07",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Geneva Operations",
+    "amount": "70330.69",
+    "transaction_count": 43
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "143743.29",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "95793.20",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "105758.60",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "95611.05",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "131480.58",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "122253.18",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "119998.77",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "143366.35",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Geneva Operations",
+    "amount": "68918.96",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "187568.24",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "67758.55",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "68737.04",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "112769.51",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "123098.95",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "116012.45",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "100961.54",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "131812.83",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Geneva Operations",
+    "amount": "145993.69",
+    "transaction_count": 44
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "147159.99",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "103604.52",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "158537.32",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "73524.18",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "87329.13",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "129165.69",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "152581.44",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "105377.98",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Geneva Operations",
+    "amount": "73356.17",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "98515.69",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "78106.37",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "73372.99",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "87637.62",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "73691.06",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "89103.47",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "108042.09",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "72374.99",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Geneva Operations",
+    "amount": "451684.11",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "97678.34",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "90094.53",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "113039.55",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "99241.90",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "113090.87",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Geneva",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "124245.92",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "55209.43",
+    "transaction_count": 15
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "110822.93",
+    "transaction_count": 30
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "122636.95",
+    "transaction_count": 25
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "London Operations",
+    "amount": "30323.76",
+    "transaction_count": 43
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "74792.91",
+    "transaction_count": 25
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "97901.11",
+    "transaction_count": 24
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "125854.89",
+    "transaction_count": 28
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "99988.16",
+    "transaction_count": 30
+  },
+  {
+    "branch": "London",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "116193.40",
+    "transaction_count": 37
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "134880.62",
+    "transaction_count": 26
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "49566.43",
+    "transaction_count": 24
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "206930.10",
+    "transaction_count": 43
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "London Operations",
+    "amount": "64622.67",
+    "transaction_count": 32
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "111264.60",
+    "transaction_count": 37
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "91325.26",
+    "transaction_count": 22
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "155934.94",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "85907.98",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "154208.34",
+    "transaction_count": 31
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "125094.85",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "133116.77",
+    "transaction_count": 36
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "65981.06",
+    "transaction_count": 30
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "London Operations",
+    "amount": "132547.18",
+    "transaction_count": 37
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "65792.45",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "93012.07",
+    "transaction_count": 32
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "58939.82",
+    "transaction_count": 20
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "118518.31",
+    "transaction_count": 23
+  },
+  {
+    "branch": "London",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "62250.35",
+    "transaction_count": 18
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "137696.53",
+    "transaction_count": 33
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "145652.51",
+    "transaction_count": 35
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "102145.24",
+    "transaction_count": 31
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "London Operations",
+    "amount": "129435.37",
+    "transaction_count": 45
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "99103.97",
+    "transaction_count": 21
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "180180.73",
+    "transaction_count": 38
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "109658.39",
+    "transaction_count": 32
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "139858.22",
+    "transaction_count": 30
+  },
+  {
+    "branch": "London",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "93652.54",
+    "transaction_count": 32
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "121762.48",
+    "transaction_count": 31
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "159983.21",
+    "transaction_count": 38
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "105233.38",
+    "transaction_count": 34
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "London Operations",
+    "amount": "76200.19",
+    "transaction_count": 43
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "114482.86",
+    "transaction_count": 35
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "60365.04",
+    "transaction_count": 22
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "135227.47",
+    "transaction_count": 28
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "101780.45",
+    "transaction_count": 31
+  },
+  {
+    "branch": "London",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "127567.09",
+    "transaction_count": 38
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "99255.02",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "85258.24",
+    "transaction_count": 21
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "186848.32",
+    "transaction_count": 37
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "London Operations",
+    "amount": "467045.83",
+    "transaction_count": 37
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "73183.85",
+    "transaction_count": 27
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "123030.09",
+    "transaction_count": 28
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "73197.58",
+    "transaction_count": 24
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "119605.26",
+    "transaction_count": 32
+  },
+  {
+    "branch": "London",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "73761.96",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "111982.07",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "74475.08",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "54557.95",
+    "transaction_count": 17
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "118733.31",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Milan Operations",
+    "amount": "15418.41",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "150366.46",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "145536.78",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "119796.81",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "193426.87",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "224268.12",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "104663.74",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "165600.89",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "154908.03",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Milan Operations",
+    "amount": "49769.85",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "116109.64",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "110422.28",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "153407.31",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "82452.69",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "102227.19",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "115572.68",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "104237.54",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "81578.86",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Milan Operations",
+    "amount": "64788.97",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "85103.67",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "137673.17",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "83199.54",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "137084.76",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "103702.44",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "131228.71",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "103326.57",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "154777.83",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Milan Operations",
+    "amount": "117712.13",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "46031.83",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "176697.39",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "45186.20",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "130311.18",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "115268.72",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "127342.89",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "140160.85",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "88589.70",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Milan Operations",
+    "amount": "52703.34",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "115698.74",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "189500.24",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "86962.19",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "116271.01",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "79986.19",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "119038.60",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "68469.80",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "107914.51",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Milan Operations",
+    "amount": "510181.27",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "114742.43",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "77644.42",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "138559.02",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Milan",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "186638.58",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "145584.70",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "172502.36",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "158749.58",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "129916.60",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "110262.56",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "111463.69",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "147548.86",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "120862.90",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "80029.75",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "96991.25",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "78439.78",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "96049.00",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "141846.20",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "66764.63",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "112311.62",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "144614.54",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "103458.79",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "102867.01",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "146366.49",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "130717.84",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "92621.22",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "69383.14",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "147338.24",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "145643.38",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "147914.73",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "80122.09",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "111386.93",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "86411.22",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "76031.56",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "61690.82",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "63581.45",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "71647.39",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "129099.51",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "107869.34",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "43455.26",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "102950.10",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "97411.21",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "102485.43",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "138114.10",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "119958.06",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "174329.27",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "56683.99",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "153898.91",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "102580.66",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "112523.14",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "79871.70",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "86352.83",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Naples",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "85348.82",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "96609.72",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "44677.70",
+    "transaction_count": 16
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "75048.09",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "99059.48",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "73592.08",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "145809.87",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "73941.83",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "168108.48",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "117074.10",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "83724.18",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "160112.71",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "137227.34",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "140063.90",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "119821.18",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "83967.69",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "94663.95",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "75468.02",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "127920.81",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "85692.77",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "192254.02",
+    "transaction_count": 40
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "154604.61",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "112181.67",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "118752.08",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "67600.24",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "110223.46",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "100364.88",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "112635.11",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "71215.62",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "162681.63",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "44114.68",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "142358.70",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "144035.72",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "116914.48",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "173052.11",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "123383.82",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "101945.34",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "59496.41",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "109537.67",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "65866.54",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "135147.04",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "118376.85",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "82432.23",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "49967.06",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "169572.31",
+    "transaction_count": 42
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "122249.28",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "96032.52",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "143940.24",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Pisa",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "70590.48",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "158929.42",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "148941.14",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "76974.45",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "73522.80",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "74740.40",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Rome Operations",
+    "amount": "18952.77",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "130529.90",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "100262.57",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "93438.04",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "120468.34",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "96509.02",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "126072.49",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "86320.34",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "114931.18",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Rome Operations",
+    "amount": "103797.13",
+    "transaction_count": 48
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "92126.21",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "90546.67",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "42301.26",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "135270.27",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "98202.37",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "63560.81",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "148324.02",
+    "transaction_count": 37
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "101463.60",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Rome Operations",
+    "amount": "71774.74",
+    "transaction_count": 45
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "92259.13",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "57966.92",
+    "transaction_count": 14
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "116031.13",
+    "transaction_count": 33
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "100722.86",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "155697.33",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "57540.56",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "143686.88",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "84148.31",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Rome Operations",
+    "amount": "86993.10",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "71227.81",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "163104.15",
+    "transaction_count": 34
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "47408.48",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "122675.09",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "101487.72",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "99439.28",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "62377.11",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "73405.25",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Rome Operations",
+    "amount": "82776.80",
+    "transaction_count": 49
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "64883.36",
+    "transaction_count": 17
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "54566.94",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "65474.45",
+    "transaction_count": 18
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "68271.76",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "127981.30",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "85796.19",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "113383.56",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "101123.65",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Rome Operations",
+    "amount": "421964.66",
+    "transaction_count": 38
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "106269.90",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "149543.95",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Rome",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "164810.89",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "75625.91",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Florentine Paperworks",
+    "amount": "111128.93",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Guildhall Security Company",
+    "amount": "112247.00",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "83789.17",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "150758.60",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "111317.15",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "119228.04",
+    "transaction_count": 35
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "146795.01",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Courier Services",
+    "counterparty": "Venice Operations",
+    "amount": "24347.88",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "109231.96",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Florentine Paperworks",
+    "amount": "95312.72",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Guildhall Security Company",
+    "amount": "101772.37",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "111136.66",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "153161.87",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "200043.51",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "121275.20",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "105504.79",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Maintenance",
+    "counterparty": "Venice Operations",
+    "amount": "144352.27",
+    "transaction_count": 40
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "105339.17",
+    "transaction_count": 28
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Florentine Paperworks",
+    "amount": "152114.56",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Guildhall Security Company",
+    "amount": "106844.44",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "97792.27",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "96211.95",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "103986.28",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "71103.79",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "68014.11",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Rent",
+    "counterparty": "Venice Operations",
+    "amount": "80662.70",
+    "transaction_count": 42
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "67559.31",
+    "transaction_count": 20
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Florentine Paperworks",
+    "amount": "116438.59",
+    "transaction_count": 23
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Guildhall Security Company",
+    "amount": "44158.18",
+    "transaction_count": 12
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "55039.04",
+    "transaction_count": 17
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "115470.55",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "83571.75",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "108411.82",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "122077.75",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Security",
+    "counterparty": "Venice Operations",
+    "amount": "169973.52",
+    "transaction_count": 51
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "50363.05",
+    "transaction_count": 21
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Florentine Paperworks",
+    "amount": "151303.10",
+    "transaction_count": 30
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Guildhall Security Company",
+    "amount": "117985.41",
+    "transaction_count": 19
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "94314.24",
+    "transaction_count": 22
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "79209.74",
+    "transaction_count": 24
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "153889.82",
+    "transaction_count": 36
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "112713.38",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "168800.48",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Supplies",
+    "counterparty": "Venice Operations",
+    "amount": "92875.29",
+    "transaction_count": 45
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Arno Lamp Oil Merchants",
+    "amount": "122007.38",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Florentine Paperworks",
+    "amount": "97057.47",
+    "transaction_count": 27
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Guildhall Security Company",
+    "amount": "115902.26",
+    "transaction_count": 31
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Mercato Maintenance Works",
+    "amount": "146282.57",
+    "transaction_count": 32
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Ponte Vecchio Rent Office",
+    "amount": "166566.32",
+    "transaction_count": 39
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "San Lorenzo Couriers",
+    "amount": "119502.68",
+    "transaction_count": 25
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Santa Maria Scribes",
+    "amount": "114410.39",
+    "transaction_count": 29
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Signoria Utilities Office",
+    "amount": "105806.51",
+    "transaction_count": 26
+  },
+  {
+    "branch": "Venice",
+    "debit_account": "Wages",
+    "counterparty": "Venice Operations",
+    "amount": "567749.79",
+    "transaction_count": 56
+  }
+]

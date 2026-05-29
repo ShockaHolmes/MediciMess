@@ -974,7 +974,12 @@
     const outflowChart = document.getElementById("cashOutflowChart");
     const netChart = document.getElementById("netCashFlowChart");
     const chartFallbackText = document.getElementById("chartFallbackText");
-    const API_BASE = "http://127.0.0.1:8000";
+    // Allow API_BASE override via ?api=... query parameter
+    function getApiBase() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get("api") || `http://${window.location.hostname}:8000`;
+    }
+    const API_BASE = getApiBase();
 
     const fallbackSnapshot = {
       cashPosition: { value: 98450, trend: 4.8, direction: "up" },

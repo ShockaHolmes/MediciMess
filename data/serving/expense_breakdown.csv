@@ -1,0 +1,529 @@
+branch,debit_account,counterparty,amount,transaction_count
+Avignon,Courier Services,Arno Lamp Oil Merchants,137545.95,35
+Avignon,Courier Services,Avignon Operations,34947.78,55
+Avignon,Courier Services,Florentine Paperworks,123921.60,35
+Avignon,Courier Services,Guildhall Security Company,177131.02,36
+Avignon,Courier Services,Mercato Maintenance Works,66126.14,24
+Avignon,Courier Services,Ponte Vecchio Rent Office,126978.00,27
+Avignon,Courier Services,San Lorenzo Couriers,87144.49,28
+Avignon,Courier Services,Santa Maria Scribes,88755.99,25
+Avignon,Courier Services,Signoria Utilities Office,132394.00,34
+Avignon,Maintenance,Arno Lamp Oil Merchants,58461.36,27
+Avignon,Maintenance,Avignon Operations,109421.60,46
+Avignon,Maintenance,Florentine Paperworks,85976.50,21
+Avignon,Maintenance,Guildhall Security Company,140576.28,40
+Avignon,Maintenance,Mercato Maintenance Works,82172.72,25
+Avignon,Maintenance,Ponte Vecchio Rent Office,163548.27,28
+Avignon,Maintenance,San Lorenzo Couriers,99314.89,31
+Avignon,Maintenance,Santa Maria Scribes,122270.45,31
+Avignon,Maintenance,Signoria Utilities Office,157159.39,34
+Avignon,Rent,Arno Lamp Oil Merchants,122758.79,24
+Avignon,Rent,Avignon Operations,251197.08,44
+Avignon,Rent,Florentine Paperworks,132755.88,30
+Avignon,Rent,Guildhall Security Company,92948.89,30
+Avignon,Rent,Mercato Maintenance Works,121444.40,25
+Avignon,Rent,Ponte Vecchio Rent Office,128432.78,31
+Avignon,Rent,San Lorenzo Couriers,80553.66,24
+Avignon,Rent,Santa Maria Scribes,121492.43,31
+Avignon,Rent,Signoria Utilities Office,66705.96,21
+Avignon,Security,Arno Lamp Oil Merchants,152320.37,29
+Avignon,Security,Avignon Operations,119542.34,39
+Avignon,Security,Florentine Paperworks,130148.54,22
+Avignon,Security,Guildhall Security Company,79408.41,23
+Avignon,Security,Mercato Maintenance Works,82465.17,33
+Avignon,Security,Ponte Vecchio Rent Office,127616.52,35
+Avignon,Security,San Lorenzo Couriers,102414.02,25
+Avignon,Security,Santa Maria Scribes,64891.21,14
+Avignon,Security,Signoria Utilities Office,83345.61,23
+Avignon,Supplies,Arno Lamp Oil Merchants,63333.39,23
+Avignon,Supplies,Avignon Operations,95365.66,50
+Avignon,Supplies,Florentine Paperworks,63620.81,21
+Avignon,Supplies,Guildhall Security Company,106735.34,21
+Avignon,Supplies,Mercato Maintenance Works,104053.40,31
+Avignon,Supplies,Ponte Vecchio Rent Office,32725.54,12
+Avignon,Supplies,San Lorenzo Couriers,153607.49,39
+Avignon,Supplies,Santa Maria Scribes,136161.08,25
+Avignon,Supplies,Signoria Utilities Office,76113.50,26
+Avignon,Wages,Arno Lamp Oil Merchants,73575.24,20
+Avignon,Wages,Avignon Operations,799694.32,48
+Avignon,Wages,Florentine Paperworks,64471.10,12
+Avignon,Wages,Guildhall Security Company,78100.62,21
+Avignon,Wages,Mercato Maintenance Works,97034.62,18
+Avignon,Wages,Ponte Vecchio Rent Office,71944.69,22
+Avignon,Wages,San Lorenzo Couriers,173246.32,32
+Avignon,Wages,Santa Maria Scribes,155463.55,28
+Avignon,Wages,Signoria Utilities Office,130100.94,27
+Bruges,Courier Services,Arno Lamp Oil Merchants,86279.62,23
+Bruges,Courier Services,Bruges Operations,12799.79,28
+Bruges,Courier Services,Florentine Paperworks,152612.78,29
+Bruges,Courier Services,Guildhall Security Company,152793.56,36
+Bruges,Courier Services,Mercato Maintenance Works,136721.47,37
+Bruges,Courier Services,Ponte Vecchio Rent Office,126137.26,32
+Bruges,Courier Services,San Lorenzo Couriers,136822.71,38
+Bruges,Courier Services,Santa Maria Scribes,108733.59,32
+Bruges,Courier Services,Signoria Utilities Office,85115.61,26
+Bruges,Maintenance,Arno Lamp Oil Merchants,74378.62,19
+Bruges,Maintenance,Bruges Operations,117853.65,39
+Bruges,Maintenance,Florentine Paperworks,73846.56,27
+Bruges,Maintenance,Guildhall Security Company,156696.43,27
+Bruges,Maintenance,Mercato Maintenance Works,128943.05,25
+Bruges,Maintenance,Ponte Vecchio Rent Office,102307.45,19
+Bruges,Maintenance,San Lorenzo Couriers,109393.26,24
+Bruges,Maintenance,Santa Maria Scribes,134634.50,23
+Bruges,Maintenance,Signoria Utilities Office,155647.65,31
+Bruges,Rent,Arno Lamp Oil Merchants,99179.36,25
+Bruges,Rent,Bruges Operations,121153.37,38
+Bruges,Rent,Florentine Paperworks,60621.21,24
+Bruges,Rent,Guildhall Security Company,78416.01,24
+Bruges,Rent,Mercato Maintenance Works,151412.90,33
+Bruges,Rent,Ponte Vecchio Rent Office,75485.09,24
+Bruges,Rent,San Lorenzo Couriers,166298.34,29
+Bruges,Rent,Santa Maria Scribes,87783.76,25
+Bruges,Rent,Signoria Utilities Office,149343.14,31
+Bruges,Security,Arno Lamp Oil Merchants,111183.68,30
+Bruges,Security,Bruges Operations,115995.71,32
+Bruges,Security,Florentine Paperworks,177770.34,39
+Bruges,Security,Guildhall Security Company,106213.14,32
+Bruges,Security,Mercato Maintenance Works,138603.64,32
+Bruges,Security,Ponte Vecchio Rent Office,130933.94,32
+Bruges,Security,San Lorenzo Couriers,112690.90,29
+Bruges,Security,Santa Maria Scribes,85128.66,20
+Bruges,Security,Signoria Utilities Office,94528.66,23
+Bruges,Supplies,Arno Lamp Oil Merchants,85986.38,26
+Bruges,Supplies,Bruges Operations,52173.14,33
+Bruges,Supplies,Florentine Paperworks,127430.77,28
+Bruges,Supplies,Guildhall Security Company,76282.04,30
+Bruges,Supplies,Mercato Maintenance Works,125920.77,24
+Bruges,Supplies,Ponte Vecchio Rent Office,109383.57,29
+Bruges,Supplies,San Lorenzo Couriers,151724.88,31
+Bruges,Supplies,Santa Maria Scribes,84210.37,21
+Bruges,Supplies,Signoria Utilities Office,164735.23,22
+Bruges,Wages,Arno Lamp Oil Merchants,89736.91,25
+Bruges,Wages,Bruges Operations,500619.87,42
+Bruges,Wages,Florentine Paperworks,63623.01,16
+Bruges,Wages,Guildhall Security Company,116191.07,24
+Bruges,Wages,Mercato Maintenance Works,120779.88,25
+Bruges,Wages,Ponte Vecchio Rent Office,142736.93,31
+Bruges,Wages,San Lorenzo Couriers,65259.02,22
+Bruges,Wages,Santa Maria Scribes,67674.56,26
+Bruges,Wages,Signoria Utilities Office,124017.33,26
+Florence,Courier Services,Arno Lamp Oil Merchants,93734.27,33
+Florence,Courier Services,Florence Operations,24047.27,38
+Florence,Courier Services,Florentine Paperworks,140921.22,30
+Florence,Courier Services,Guildhall Security Company,144583.10,32
+Florence,Courier Services,Mercato Maintenance Works,155732.47,29
+Florence,Courier Services,Ponte Vecchio Rent Office,104981.89,33
+Florence,Courier Services,San Lorenzo Couriers,50128.14,20
+Florence,Courier Services,Santa Maria Scribes,98774.49,22
+Florence,Courier Services,Signoria Utilities Office,81710.28,24
+Florence,Maintenance,Arno Lamp Oil Merchants,169050.26,29
+Florence,Maintenance,Florence Operations,96167.65,45
+Florence,Maintenance,Florentine Paperworks,80937.21,27
+Florence,Maintenance,Guildhall Security Company,141915.41,31
+Florence,Maintenance,Mercato Maintenance Works,132091.30,31
+Florence,Maintenance,Ponte Vecchio Rent Office,118389.54,22
+Florence,Maintenance,San Lorenzo Couriers,87883.84,28
+Florence,Maintenance,Santa Maria Scribes,187228.11,34
+Florence,Maintenance,Signoria Utilities Office,98615.08,27
+Florence,Rent,Arno Lamp Oil Merchants,128663.64,33
+Florence,Rent,Florence Operations,112962.51,37
+Florence,Rent,Florentine Paperworks,103234.95,26
+Florence,Rent,Guildhall Security Company,133203.04,26
+Florence,Rent,Mercato Maintenance Works,99147.77,24
+Florence,Rent,Ponte Vecchio Rent Office,236267.31,40
+Florence,Rent,San Lorenzo Couriers,63137.73,24
+Florence,Rent,Santa Maria Scribes,118377.78,28
+Florence,Rent,Signoria Utilities Office,95278.11,16
+Florence,Security,Arno Lamp Oil Merchants,176564.28,35
+Florence,Security,Florence Operations,141688.18,46
+Florence,Security,Florentine Paperworks,87169.59,23
+Florence,Security,Guildhall Security Company,123657.86,37
+Florence,Security,Mercato Maintenance Works,122281.95,22
+Florence,Security,Ponte Vecchio Rent Office,128884.87,29
+Florence,Security,San Lorenzo Couriers,142925.33,38
+Florence,Security,Santa Maria Scribes,109769.24,29
+Florence,Security,Signoria Utilities Office,46992.54,24
+Florence,Supplies,Arno Lamp Oil Merchants,120891.45,26
+Florence,Supplies,Florence Operations,40554.18,33
+Florence,Supplies,Florentine Paperworks,65811.89,25
+Florence,Supplies,Guildhall Security Company,115104.20,24
+Florence,Supplies,Mercato Maintenance Works,98239.05,28
+Florence,Supplies,Ponte Vecchio Rent Office,85170.88,32
+Florence,Supplies,San Lorenzo Couriers,128170.63,30
+Florence,Supplies,Santa Maria Scribes,90412.52,23
+Florence,Supplies,Signoria Utilities Office,80048.53,24
+Florence,Wages,Arno Lamp Oil Merchants,94225.81,27
+Florence,Wages,Florence Operations,603433.08,53
+Florence,Wages,Florentine Paperworks,161310.51,29
+Florence,Wages,Guildhall Security Company,81167.54,20
+Florence,Wages,Mercato Maintenance Works,159131.55,29
+Florence,Wages,Ponte Vecchio Rent Office,102180.54,24
+Florence,Wages,San Lorenzo Couriers,147911.37,22
+Florence,Wages,Santa Maria Scribes,67920.58,25
+Florence,Wages,Signoria Utilities Office,127677.28,27
+Geneva,Courier Services,Arno Lamp Oil Merchants,170701.54,34
+Geneva,Courier Services,Florentine Paperworks,121443.35,30
+Geneva,Courier Services,Geneva Operations,21997.04,40
+Geneva,Courier Services,Guildhall Security Company,97040.75,33
+Geneva,Courier Services,Mercato Maintenance Works,114934.58,32
+Geneva,Courier Services,Ponte Vecchio Rent Office,149533.87,36
+Geneva,Courier Services,San Lorenzo Couriers,71507.95,20
+Geneva,Courier Services,Santa Maria Scribes,115020.63,27
+Geneva,Courier Services,Signoria Utilities Office,79763.29,28
+Geneva,Maintenance,Arno Lamp Oil Merchants,90425.20,26
+Geneva,Maintenance,Florentine Paperworks,161592.07,30
+Geneva,Maintenance,Geneva Operations,70330.69,43
+Geneva,Maintenance,Guildhall Security Company,143743.29,27
+Geneva,Maintenance,Mercato Maintenance Works,95793.20,24
+Geneva,Maintenance,Ponte Vecchio Rent Office,105758.60,31
+Geneva,Maintenance,San Lorenzo Couriers,95611.05,31
+Geneva,Maintenance,Santa Maria Scribes,131480.58,23
+Geneva,Maintenance,Signoria Utilities Office,122253.18,29
+Geneva,Rent,Arno Lamp Oil Merchants,119998.77,31
+Geneva,Rent,Florentine Paperworks,143366.35,23
+Geneva,Rent,Geneva Operations,68918.96,32
+Geneva,Rent,Guildhall Security Company,187568.24,26
+Geneva,Rent,Mercato Maintenance Works,67758.55,21
+Geneva,Rent,Ponte Vecchio Rent Office,68737.04,26
+Geneva,Rent,San Lorenzo Couriers,112769.51,29
+Geneva,Rent,Santa Maria Scribes,123098.95,32
+Geneva,Rent,Signoria Utilities Office,116012.45,24
+Geneva,Security,Arno Lamp Oil Merchants,100961.54,25
+Geneva,Security,Florentine Paperworks,131812.83,31
+Geneva,Security,Geneva Operations,145993.69,44
+Geneva,Security,Guildhall Security Company,147159.99,34
+Geneva,Security,Mercato Maintenance Works,103604.52,27
+Geneva,Security,Ponte Vecchio Rent Office,158537.32,27
+Geneva,Security,San Lorenzo Couriers,73524.18,22
+Geneva,Security,Santa Maria Scribes,87329.13,22
+Geneva,Security,Signoria Utilities Office,129165.69,29
+Geneva,Supplies,Arno Lamp Oil Merchants,152581.44,39
+Geneva,Supplies,Florentine Paperworks,105377.98,33
+Geneva,Supplies,Geneva Operations,73356.17,34
+Geneva,Supplies,Guildhall Security Company,98515.69,33
+Geneva,Supplies,Mercato Maintenance Works,78106.37,23
+Geneva,Supplies,Ponte Vecchio Rent Office,73372.99,29
+Geneva,Supplies,San Lorenzo Couriers,87637.62,19
+Geneva,Supplies,Santa Maria Scribes,73691.06,19
+Geneva,Supplies,Signoria Utilities Office,89103.47,25
+Geneva,Wages,Arno Lamp Oil Merchants,108042.09,36
+Geneva,Wages,Florentine Paperworks,72374.99,24
+Geneva,Wages,Geneva Operations,451684.11,32
+Geneva,Wages,Guildhall Security Company,97678.34,23
+Geneva,Wages,Mercato Maintenance Works,90094.53,31
+Geneva,Wages,Ponte Vecchio Rent Office,113039.55,38
+Geneva,Wages,San Lorenzo Couriers,99241.90,25
+Geneva,Wages,Santa Maria Scribes,113090.87,30
+Geneva,Wages,Signoria Utilities Office,124245.92,27
+London,Courier Services,Arno Lamp Oil Merchants,55209.43,15
+London,Courier Services,Florentine Paperworks,110822.93,30
+London,Courier Services,Guildhall Security Company,122636.95,25
+London,Courier Services,London Operations,30323.76,43
+London,Courier Services,Mercato Maintenance Works,74792.91,25
+London,Courier Services,Ponte Vecchio Rent Office,97901.11,24
+London,Courier Services,San Lorenzo Couriers,125854.89,28
+London,Courier Services,Santa Maria Scribes,99988.16,30
+London,Courier Services,Signoria Utilities Office,116193.40,37
+London,Maintenance,Arno Lamp Oil Merchants,134880.62,26
+London,Maintenance,Florentine Paperworks,49566.43,24
+London,Maintenance,Guildhall Security Company,206930.10,43
+London,Maintenance,London Operations,64622.67,32
+London,Maintenance,Mercato Maintenance Works,111264.60,37
+London,Maintenance,Ponte Vecchio Rent Office,91325.26,22
+London,Maintenance,San Lorenzo Couriers,155934.94,27
+London,Maintenance,Santa Maria Scribes,85907.98,27
+London,Maintenance,Signoria Utilities Office,154208.34,31
+London,Rent,Arno Lamp Oil Merchants,125094.85,27
+London,Rent,Florentine Paperworks,133116.77,36
+London,Rent,Guildhall Security Company,65981.06,30
+London,Rent,London Operations,132547.18,37
+London,Rent,Mercato Maintenance Works,65792.45,27
+London,Rent,Ponte Vecchio Rent Office,93012.07,32
+London,Rent,San Lorenzo Couriers,58939.82,20
+London,Rent,Santa Maria Scribes,118518.31,23
+London,Rent,Signoria Utilities Office,62250.35,18
+London,Security,Arno Lamp Oil Merchants,137696.53,33
+London,Security,Florentine Paperworks,145652.51,35
+London,Security,Guildhall Security Company,102145.24,31
+London,Security,London Operations,129435.37,45
+London,Security,Mercato Maintenance Works,99103.97,21
+London,Security,Ponte Vecchio Rent Office,180180.73,38
+London,Security,San Lorenzo Couriers,109658.39,32
+London,Security,Santa Maria Scribes,139858.22,30
+London,Security,Signoria Utilities Office,93652.54,32
+London,Supplies,Arno Lamp Oil Merchants,121762.48,31
+London,Supplies,Florentine Paperworks,159983.21,38
+London,Supplies,Guildhall Security Company,105233.38,34
+London,Supplies,London Operations,76200.19,43
+London,Supplies,Mercato Maintenance Works,114482.86,35
+London,Supplies,Ponte Vecchio Rent Office,60365.04,22
+London,Supplies,San Lorenzo Couriers,135227.47,28
+London,Supplies,Santa Maria Scribes,101780.45,31
+London,Supplies,Signoria Utilities Office,127567.09,38
+London,Wages,Arno Lamp Oil Merchants,99255.02,27
+London,Wages,Florentine Paperworks,85258.24,21
+London,Wages,Guildhall Security Company,186848.32,37
+London,Wages,London Operations,467045.83,37
+London,Wages,Mercato Maintenance Works,73183.85,27
+London,Wages,Ponte Vecchio Rent Office,123030.09,28
+London,Wages,San Lorenzo Couriers,73197.58,24
+London,Wages,Santa Maria Scribes,119605.26,32
+London,Wages,Signoria Utilities Office,73761.96,26
+Milan,Courier Services,Arno Lamp Oil Merchants,111982.07,26
+Milan,Courier Services,Florentine Paperworks,74475.08,23
+Milan,Courier Services,Guildhall Security Company,54557.95,17
+Milan,Courier Services,Mercato Maintenance Works,118733.31,35
+Milan,Courier Services,Milan Operations,15418.41,38
+Milan,Courier Services,Ponte Vecchio Rent Office,150366.46,27
+Milan,Courier Services,San Lorenzo Couriers,145536.78,30
+Milan,Courier Services,Santa Maria Scribes,119796.81,24
+Milan,Courier Services,Signoria Utilities Office,193426.87,34
+Milan,Maintenance,Arno Lamp Oil Merchants,224268.12,32
+Milan,Maintenance,Florentine Paperworks,104663.74,26
+Milan,Maintenance,Guildhall Security Company,165600.89,32
+Milan,Maintenance,Mercato Maintenance Works,154908.03,31
+Milan,Maintenance,Milan Operations,49769.85,26
+Milan,Maintenance,Ponte Vecchio Rent Office,116109.64,27
+Milan,Maintenance,San Lorenzo Couriers,110422.28,29
+Milan,Maintenance,Santa Maria Scribes,153407.31,30
+Milan,Maintenance,Signoria Utilities Office,82452.69,23
+Milan,Rent,Arno Lamp Oil Merchants,102227.19,20
+Milan,Rent,Florentine Paperworks,115572.68,31
+Milan,Rent,Guildhall Security Company,104237.54,27
+Milan,Rent,Mercato Maintenance Works,81578.86,25
+Milan,Rent,Milan Operations,64788.97,31
+Milan,Rent,Ponte Vecchio Rent Office,85103.67,19
+Milan,Rent,San Lorenzo Couriers,137673.17,29
+Milan,Rent,Santa Maria Scribes,83199.54,27
+Milan,Rent,Signoria Utilities Office,137084.76,29
+Milan,Security,Arno Lamp Oil Merchants,103702.44,32
+Milan,Security,Florentine Paperworks,131228.71,36
+Milan,Security,Guildhall Security Company,103326.57,25
+Milan,Security,Mercato Maintenance Works,154777.83,37
+Milan,Security,Milan Operations,117712.13,37
+Milan,Security,Ponte Vecchio Rent Office,46031.83,18
+Milan,Security,San Lorenzo Couriers,176697.39,26
+Milan,Security,Santa Maria Scribes,45186.20,18
+Milan,Security,Signoria Utilities Office,130311.18,27
+Milan,Supplies,Arno Lamp Oil Merchants,115268.72,29
+Milan,Supplies,Florentine Paperworks,127342.89,27
+Milan,Supplies,Guildhall Security Company,140160.85,26
+Milan,Supplies,Mercato Maintenance Works,88589.70,27
+Milan,Supplies,Milan Operations,52703.34,32
+Milan,Supplies,Ponte Vecchio Rent Office,115698.74,25
+Milan,Supplies,San Lorenzo Couriers,189500.24,37
+Milan,Supplies,Santa Maria Scribes,86962.19,20
+Milan,Supplies,Signoria Utilities Office,116271.01,24
+Milan,Wages,Arno Lamp Oil Merchants,79986.19,23
+Milan,Wages,Florentine Paperworks,119038.60,25
+Milan,Wages,Guildhall Security Company,68469.80,26
+Milan,Wages,Mercato Maintenance Works,107914.51,27
+Milan,Wages,Milan Operations,510181.27,39
+Milan,Wages,Ponte Vecchio Rent Office,114742.43,21
+Milan,Wages,San Lorenzo Couriers,77644.42,33
+Milan,Wages,Santa Maria Scribes,138559.02,27
+Milan,Wages,Signoria Utilities Office,186638.58,39
+Naples,Courier Services,Arno Lamp Oil Merchants,145584.70,28
+Naples,Courier Services,Florentine Paperworks,172502.36,26
+Naples,Courier Services,Guildhall Security Company,158749.58,28
+Naples,Courier Services,Mercato Maintenance Works,129916.60,27
+Naples,Courier Services,Ponte Vecchio Rent Office,110262.56,33
+Naples,Courier Services,San Lorenzo Couriers,111463.69,27
+Naples,Courier Services,Santa Maria Scribes,147548.86,27
+Naples,Courier Services,Signoria Utilities Office,120862.90,25
+Naples,Maintenance,Arno Lamp Oil Merchants,80029.75,18
+Naples,Maintenance,Florentine Paperworks,96991.25,19
+Naples,Maintenance,Guildhall Security Company,78439.78,28
+Naples,Maintenance,Mercato Maintenance Works,96049.00,24
+Naples,Maintenance,Ponte Vecchio Rent Office,141846.20,30
+Naples,Maintenance,San Lorenzo Couriers,66764.63,21
+Naples,Maintenance,Santa Maria Scribes,112311.62,27
+Naples,Maintenance,Signoria Utilities Office,144614.54,34
+Naples,Rent,Arno Lamp Oil Merchants,103458.79,29
+Naples,Rent,Florentine Paperworks,102867.01,29
+Naples,Rent,Guildhall Security Company,146366.49,26
+Naples,Rent,Mercato Maintenance Works,130717.84,25
+Naples,Rent,Ponte Vecchio Rent Office,92621.22,24
+Naples,Rent,San Lorenzo Couriers,69383.14,25
+Naples,Rent,Santa Maria Scribes,147338.24,30
+Naples,Rent,Signoria Utilities Office,145643.38,37
+Naples,Security,Arno Lamp Oil Merchants,147914.73,23
+Naples,Security,Florentine Paperworks,80122.09,27
+Naples,Security,Guildhall Security Company,111386.93,31
+Naples,Security,Mercato Maintenance Works,86411.22,23
+Naples,Security,Ponte Vecchio Rent Office,76031.56,26
+Naples,Security,San Lorenzo Couriers,61690.82,24
+Naples,Security,Santa Maria Scribes,63581.45,26
+Naples,Security,Signoria Utilities Office,71647.39,20
+Naples,Supplies,Arno Lamp Oil Merchants,129099.51,26
+Naples,Supplies,Florentine Paperworks,107869.34,33
+Naples,Supplies,Guildhall Security Company,43455.26,19
+Naples,Supplies,Mercato Maintenance Works,102950.10,27
+Naples,Supplies,Ponte Vecchio Rent Office,97411.21,26
+Naples,Supplies,San Lorenzo Couriers,102485.43,26
+Naples,Supplies,Santa Maria Scribes,138114.10,36
+Naples,Supplies,Signoria Utilities Office,119958.06,33
+Naples,Wages,Arno Lamp Oil Merchants,174329.27,27
+Naples,Wages,Florentine Paperworks,56683.99,20
+Naples,Wages,Guildhall Security Company,153898.91,31
+Naples,Wages,Mercato Maintenance Works,102580.66,26
+Naples,Wages,Ponte Vecchio Rent Office,112523.14,23
+Naples,Wages,San Lorenzo Couriers,79871.70,25
+Naples,Wages,Santa Maria Scribes,86352.83,25
+Naples,Wages,Signoria Utilities Office,85348.82,24
+Pisa,Courier Services,Arno Lamp Oil Merchants,96609.72,25
+Pisa,Courier Services,Florentine Paperworks,44677.70,16
+Pisa,Courier Services,Guildhall Security Company,75048.09,34
+Pisa,Courier Services,Mercato Maintenance Works,99059.48,25
+Pisa,Courier Services,Ponte Vecchio Rent Office,73592.08,21
+Pisa,Courier Services,San Lorenzo Couriers,145809.87,33
+Pisa,Courier Services,Santa Maria Scribes,73941.83,26
+Pisa,Courier Services,Signoria Utilities Office,168108.48,36
+Pisa,Maintenance,Arno Lamp Oil Merchants,117074.10,33
+Pisa,Maintenance,Florentine Paperworks,83724.18,33
+Pisa,Maintenance,Guildhall Security Company,160112.71,38
+Pisa,Maintenance,Mercato Maintenance Works,137227.34,24
+Pisa,Maintenance,Ponte Vecchio Rent Office,140063.90,37
+Pisa,Maintenance,San Lorenzo Couriers,119821.18,27
+Pisa,Maintenance,Santa Maria Scribes,83967.69,27
+Pisa,Maintenance,Signoria Utilities Office,94663.95,29
+Pisa,Rent,Arno Lamp Oil Merchants,75468.02,19
+Pisa,Rent,Florentine Paperworks,127920.81,23
+Pisa,Rent,Guildhall Security Company,85692.77,27
+Pisa,Rent,Mercato Maintenance Works,192254.02,40
+Pisa,Rent,Ponte Vecchio Rent Office,154604.61,35
+Pisa,Rent,San Lorenzo Couriers,112181.67,25
+Pisa,Rent,Santa Maria Scribes,118752.08,30
+Pisa,Rent,Signoria Utilities Office,67600.24,24
+Pisa,Security,Arno Lamp Oil Merchants,110223.46,25
+Pisa,Security,Florentine Paperworks,100364.88,22
+Pisa,Security,Guildhall Security Company,112635.11,28
+Pisa,Security,Mercato Maintenance Works,71215.62,22
+Pisa,Security,Ponte Vecchio Rent Office,162681.63,36
+Pisa,Security,San Lorenzo Couriers,44114.68,20
+Pisa,Security,Santa Maria Scribes,142358.70,25
+Pisa,Security,Signoria Utilities Office,144035.72,35
+Pisa,Supplies,Arno Lamp Oil Merchants,116914.48,30
+Pisa,Supplies,Florentine Paperworks,173052.11,34
+Pisa,Supplies,Guildhall Security Company,123383.82,32
+Pisa,Supplies,Mercato Maintenance Works,101945.34,33
+Pisa,Supplies,Ponte Vecchio Rent Office,59496.41,23
+Pisa,Supplies,San Lorenzo Couriers,109537.67,30
+Pisa,Supplies,Santa Maria Scribes,65866.54,26
+Pisa,Supplies,Signoria Utilities Office,135147.04,30
+Pisa,Wages,Arno Lamp Oil Merchants,118376.85,22
+Pisa,Wages,Florentine Paperworks,82432.23,31
+Pisa,Wages,Guildhall Security Company,49967.06,18
+Pisa,Wages,Mercato Maintenance Works,169572.31,42
+Pisa,Wages,Ponte Vecchio Rent Office,122249.28,26
+Pisa,Wages,San Lorenzo Couriers,96032.52,24
+Pisa,Wages,Santa Maria Scribes,143940.24,28
+Pisa,Wages,Signoria Utilities Office,70590.48,27
+Rome,Courier Services,Arno Lamp Oil Merchants,158929.42,31
+Rome,Courier Services,Florentine Paperworks,148941.14,26
+Rome,Courier Services,Guildhall Security Company,76974.45,24
+Rome,Courier Services,Mercato Maintenance Works,73522.80,23
+Rome,Courier Services,Ponte Vecchio Rent Office,74740.40,27
+Rome,Courier Services,Rome Operations,18952.77,31
+Rome,Courier Services,San Lorenzo Couriers,130529.90,26
+Rome,Courier Services,Santa Maria Scribes,100262.57,24
+Rome,Courier Services,Signoria Utilities Office,93438.04,24
+Rome,Maintenance,Arno Lamp Oil Merchants,120468.34,32
+Rome,Maintenance,Florentine Paperworks,96509.02,22
+Rome,Maintenance,Guildhall Security Company,126072.49,25
+Rome,Maintenance,Mercato Maintenance Works,86320.34,25
+Rome,Maintenance,Ponte Vecchio Rent Office,114931.18,29
+Rome,Maintenance,Rome Operations,103797.13,48
+Rome,Maintenance,San Lorenzo Couriers,92126.21,22
+Rome,Maintenance,Santa Maria Scribes,90546.67,24
+Rome,Maintenance,Signoria Utilities Office,42301.26,24
+Rome,Rent,Arno Lamp Oil Merchants,135270.27,32
+Rome,Rent,Florentine Paperworks,98202.37,20
+Rome,Rent,Guildhall Security Company,63560.81,24
+Rome,Rent,Mercato Maintenance Works,148324.02,37
+Rome,Rent,Ponte Vecchio Rent Office,101463.60,23
+Rome,Rent,Rome Operations,71774.74,45
+Rome,Rent,San Lorenzo Couriers,92259.13,35
+Rome,Rent,Santa Maria Scribes,57966.92,14
+Rome,Rent,Signoria Utilities Office,116031.13,33
+Rome,Security,Arno Lamp Oil Merchants,100722.86,25
+Rome,Security,Florentine Paperworks,155697.33,31
+Rome,Security,Guildhall Security Company,57540.56,26
+Rome,Security,Mercato Maintenance Works,143686.88,34
+Rome,Security,Ponte Vecchio Rent Office,84148.31,27
+Rome,Security,Rome Operations,86993.10,34
+Rome,Security,San Lorenzo Couriers,71227.81,23
+Rome,Security,Santa Maria Scribes,163104.15,34
+Rome,Security,Signoria Utilities Office,47408.48,23
+Rome,Supplies,Arno Lamp Oil Merchants,122675.09,25
+Rome,Supplies,Florentine Paperworks,101487.72,30
+Rome,Supplies,Guildhall Security Company,99439.28,23
+Rome,Supplies,Mercato Maintenance Works,62377.11,30
+Rome,Supplies,Ponte Vecchio Rent Office,73405.25,18
+Rome,Supplies,Rome Operations,82776.80,49
+Rome,Supplies,San Lorenzo Couriers,64883.36,17
+Rome,Supplies,Santa Maria Scribes,54566.94,19
+Rome,Supplies,Signoria Utilities Office,65474.45,18
+Rome,Wages,Arno Lamp Oil Merchants,68271.76,28
+Rome,Wages,Florentine Paperworks,127981.30,32
+Rome,Wages,Guildhall Security Company,85796.19,22
+Rome,Wages,Mercato Maintenance Works,113383.56,28
+Rome,Wages,Ponte Vecchio Rent Office,101123.65,22
+Rome,Wages,Rome Operations,421964.66,38
+Rome,Wages,San Lorenzo Couriers,106269.90,30
+Rome,Wages,Santa Maria Scribes,149543.95,29
+Rome,Wages,Signoria Utilities Office,164810.89,29
+Venice,Courier Services,Arno Lamp Oil Merchants,75625.91,31
+Venice,Courier Services,Florentine Paperworks,111128.93,36
+Venice,Courier Services,Guildhall Security Company,112247.00,31
+Venice,Courier Services,Mercato Maintenance Works,83789.17,30
+Venice,Courier Services,Ponte Vecchio Rent Office,150758.60,29
+Venice,Courier Services,San Lorenzo Couriers,111317.15,23
+Venice,Courier Services,Santa Maria Scribes,119228.04,35
+Venice,Courier Services,Signoria Utilities Office,146795.01,25
+Venice,Courier Services,Venice Operations,24347.88,36
+Venice,Maintenance,Arno Lamp Oil Merchants,109231.96,24
+Venice,Maintenance,Florentine Paperworks,95312.72,27
+Venice,Maintenance,Guildhall Security Company,101772.37,28
+Venice,Maintenance,Mercato Maintenance Works,111136.66,26
+Venice,Maintenance,Ponte Vecchio Rent Office,153161.87,32
+Venice,Maintenance,San Lorenzo Couriers,200043.51,30
+Venice,Maintenance,Santa Maria Scribes,121275.20,28
+Venice,Maintenance,Signoria Utilities Office,105504.79,26
+Venice,Maintenance,Venice Operations,144352.27,40
+Venice,Rent,Arno Lamp Oil Merchants,105339.17,28
+Venice,Rent,Florentine Paperworks,152114.56,30
+Venice,Rent,Guildhall Security Company,106844.44,31
+Venice,Rent,Mercato Maintenance Works,97792.27,36
+Venice,Rent,Ponte Vecchio Rent Office,96211.95,24
+Venice,Rent,San Lorenzo Couriers,103986.28,31
+Venice,Rent,Santa Maria Scribes,71103.79,23
+Venice,Rent,Signoria Utilities Office,68014.11,23
+Venice,Rent,Venice Operations,80662.70,42
+Venice,Security,Arno Lamp Oil Merchants,67559.31,20
+Venice,Security,Florentine Paperworks,116438.59,23
+Venice,Security,Guildhall Security Company,44158.18,12
+Venice,Security,Mercato Maintenance Works,55039.04,17
+Venice,Security,Ponte Vecchio Rent Office,115470.55,30
+Venice,Security,San Lorenzo Couriers,83571.75,30
+Venice,Security,Santa Maria Scribes,108411.82,32
+Venice,Security,Signoria Utilities Office,122077.75,24
+Venice,Security,Venice Operations,169973.52,51
+Venice,Supplies,Arno Lamp Oil Merchants,50363.05,21
+Venice,Supplies,Florentine Paperworks,151303.10,30
+Venice,Supplies,Guildhall Security Company,117985.41,19
+Venice,Supplies,Mercato Maintenance Works,94314.24,22
+Venice,Supplies,Ponte Vecchio Rent Office,79209.74,24
+Venice,Supplies,San Lorenzo Couriers,153889.82,36
+Venice,Supplies,Santa Maria Scribes,112713.38,26
+Venice,Supplies,Signoria Utilities Office,168800.48,25
+Venice,Supplies,Venice Operations,92875.29,45
+Venice,Wages,Arno Lamp Oil Merchants,122007.38,27
+Venice,Wages,Florentine Paperworks,97057.47,27
+Venice,Wages,Guildhall Security Company,115902.26,31
+Venice,Wages,Mercato Maintenance Works,146282.57,32
+Venice,Wages,Ponte Vecchio Rent Office,166566.32,39
+Venice,Wages,San Lorenzo Couriers,119502.68,25
+Venice,Wages,Santa Maria Scribes,114410.39,29
+Venice,Wages,Signoria Utilities Office,105806.51,26
+Venice,Wages,Venice Operations,567749.79,56

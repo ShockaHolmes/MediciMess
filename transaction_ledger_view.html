@@ -380,6 +380,14 @@
     const nextBtn = document.getElementById('nextBtn');
     const fileInput = document.getElementById('fileInput');
 
+
+    // Allow API_BASE override via ?api=... query parameter for future API integration
+    function getApiBase() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get("api") || `http://${window.location.hostname}:8000`;
+    }
+    const API_BASE = getApiBase();
+
     let allRows = [];
     let filteredRows = [];
     let page = 1;

@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "run_at": "2026-05-28T20:00:03Z",
+    "total_transactions": 84981,
+    "group_count": 2,
+    "flagged_count": 6,
+    "threshold": 0.05,
+    "high_threshold": 0.2,
+    "min_group_total": "1.00",
+    "min_group_transactions": 5
+  },
+  "anomalies": [
+    {
+      "alert_id": 1,
+      "rule": "B",
+      "severity": "HIGH",
+      "branch": "Geneva",
+      "period": "1412-12",
+      "debit_account": "Courier Services",
+      "counterparty": "Ponte Vecchio Rent Office",
+      "metric_value": 0.539794,
+      "threshold_value": 0.05,
+      "group_total_amount": "12569.12",
+      "vendor_amount": "6784.74",
+      "vendor_transaction_count": 1,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        38361
+      ],
+      "description": "Vendor concentration above 5.0% for Courier Services in Geneva (1412-12).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    },
+    {
+      "alert_id": 4,
+      "rule": "B",
+      "severity": "HIGH",
+      "branch": "London",
+      "period": "1391-02",
+      "debit_account": "Security",
+      "counterparty": "Florentine Paperworks",
+      "metric_value": 0.369594,
+      "threshold_value": 0.05,
+      "group_total_amount": "6108.03",
+      "vendor_amount": "2257.49",
+      "vendor_transaction_count": 1,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        1878
+      ],
+      "description": "Vendor concentration above 5.0% for Security in London (1391-02).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    },
+    {
+      "alert_id": 5,
+      "rule": "B",
+      "severity": "HIGH",
+      "branch": "London",
+      "period": "1391-02",
+      "debit_account": "Security",
+      "counterparty": "Signoria Utilities Office",
+      "metric_value": 0.327181,
+      "threshold_value": 0.05,
+      "group_total_amount": "6108.03",
+      "vendor_amount": "1998.43",
+      "vendor_transaction_count": 1,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        1915
+      ],
+      "description": "Vendor concentration above 5.0% for Security in London (1391-02).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    },
+    {
+      "alert_id": 6,
+      "rule": "B",
+      "severity": "HIGH",
+      "branch": "London",
+      "period": "1391-02",
+      "debit_account": "Security",
+      "counterparty": "San Lorenzo Couriers",
+      "metric_value": 0.286759,
+      "threshold_value": 0.05,
+      "group_total_amount": "6108.03",
+      "vendor_amount": "1751.53",
+      "vendor_transaction_count": 2,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        1974,
+        1989
+      ],
+      "description": "Vendor concentration above 5.0% for Security in London (1391-02).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    },
+    {
+      "alert_id": 2,
+      "rule": "B",
+      "severity": "HIGH",
+      "branch": "Geneva",
+      "period": "1412-12",
+      "debit_account": "Courier Services",
+      "counterparty": "Florentine Paperworks",
+      "metric_value": 0.250541,
+      "threshold_value": 0.05,
+      "group_total_amount": "12569.12",
+      "vendor_amount": "3149.08",
+      "vendor_transaction_count": 1,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        38408
+      ],
+      "description": "Vendor concentration above 5.0% for Courier Services in Geneva (1412-12).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    },
+    {
+      "alert_id": 3,
+      "rule": "B",
+      "severity": "MEDIUM",
+      "branch": "Geneva",
+      "period": "1412-12",
+      "debit_account": "Courier Services",
+      "counterparty": "Guildhall Security Company",
+      "metric_value": 0.193658,
+      "threshold_value": 0.05,
+      "group_total_amount": "12569.12",
+      "vendor_amount": "2434.11",
+      "vendor_transaction_count": 1,
+      "group_transaction_count": 5,
+      "affected_transaction_ids": [
+        38356
+      ],
+      "description": "Vendor concentration above 5.0% for Courier Services in Geneva (1412-12).",
+      "detected_at": "2026-05-28T20:00:03Z",
+      "status": "OPEN"
+    }
+  ],
+  "groups": [
+    {
+      "branch": "Geneva",
+      "period": "1412-12",
+      "debit_account": "Courier Services",
+      "group_total_amount": "12569.12",
+      "group_transaction_count": 5,
+      "top_vendor_share": 0.539794,
+      "vendor_breakdown": [
+        {
+          "vendor": "Ponte Vecchio Rent Office",
+          "amount": "6784.74",
+          "transaction_count": 1,
+          "share": 0.539794,
+          "share_pct": 53.979
+        },
+        {
+          "vendor": "Florentine Paperworks",
+          "amount": "3149.08",
+          "transaction_count": 1,
+          "share": 0.250541,
+          "share_pct": 25.054
+        },
+        {
+          "vendor": "Guildhall Security Company",
+          "amount": "2434.11",
+          "transaction_count": 1,
+          "share": 0.193658,
+          "share_pct": 19.366
+        },
+        {
+          "vendor": "Geneva Operations",
+          "amount": "201.19",
+          "transaction_count": 2,
+          "share": 0.016007,
+          "share_pct": 1.601
+        }
+      ]
+    },
+    {
+      "branch": "London",
+      "period": "1391-02",
+      "debit_account": "Security",
+      "group_total_amount": "6108.03",
+      "group_transaction_count": 5,
+      "top_vendor_share": 0.369594,
+      "vendor_breakdown": [
+        {
+          "vendor": "Florentine Paperworks",
+          "amount": "2257.49",
+          "transaction_count": 1,
+          "share": 0.369594,
+          "share_pct": 36.959
+        },
+        {
+          "vendor": "Signoria Utilities Office",
+          "amount": "1998.43",
+          "transaction_count": 1,
+          "share": 0.327181,
+          "share_pct": 32.718
+        },
+        {
+          "vendor": "San Lorenzo Couriers",
+          "amount": "1751.53",
+          "transaction_count": 2,
+          "share": 0.286759,
+          "share_pct": 28.676
+        },
+        {
+          "vendor": "Arno Lamp Oil Merchants",
+          "amount": "100.58",
+          "transaction_count": 1,
+          "share": 0.016467,
+          "share_pct": 1.647
+        }
+      ]
+    }
+  ]
+}

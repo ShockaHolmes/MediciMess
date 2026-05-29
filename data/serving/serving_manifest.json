@@ -1,0 +1,30 @@
+{
+  "source_input": "/Users/shocka/MediciMess/data/medici_transactions_cleaned.csv",
+  "output_dir": "/Users/shocka/MediciMess/data/serving",
+  "tables": [
+    "analytics_ready_transactions",
+    "branch_summary",
+    "account_summary",
+    "monthly_kpi_summary",
+    "alert_summary",
+    "expense_breakdown",
+    "loan_portfolio"
+  ],
+  "api_payloads": [
+    "api_kpis.json",
+    "api_transactions.json",
+    "api_cashflow.json",
+    "api_loans.json",
+    "api_expenses.json",
+    "api_alerts.json"
+  ],
+  "rows_scanned": 84981,
+  "rows_written": 84981,
+  "duplicates_removed": 0,
+  "invalid_rows": 0,
+  "alerts_generated": 1107,
+  "date_range": {
+    "start": "1390-01-01",
+    "end": "1440-12-31"
+  }
+}
