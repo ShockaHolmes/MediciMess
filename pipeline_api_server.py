@@ -498,9 +498,89 @@ class ServingStore:
         }
         return {"alert_id": alert_id, **self.alert_status_overrides[alert_id]}
 
+    def get_alert_by_id(self, alert_id: int) -> dict[str, Any] | None:
+        for alert in self.alerts:
+            if alert.get("alert_id") == alert_id:
+                return alert
+        return None
+
 
 class MediciAPIHandler(BaseHTTPRequestHandler):
     store: ServingStore | None = None
+    BRANCH_SCOPED_GET_ROUTES = {
+        "/api/transactions",
+        "/api/kpis",
+        "/api/cashflow",
+        "/api/alerts",
+        "/api/duplicates",
+        "/api/vendor-concentration",
+        "/api/round-clustering",
+        "/api/loans",
+        "/api/expenses",
+    }
+    BRANCH_MANAGER_DENIED_GET_ROUTES = {
+        "/api/accounts",
+        "/api/benford",
+    }
+
+    @staticmethod
+    def _first_param(params: dict[str, list[str]], key: str) -> str:
+        return (params.get(key) or [""])[0].strip()
+
+    def _resolve_request_role(self, params: dict[str, list[str]]) -> str:
+        role = self._first_param(params, "role") or self.headers.get("X-Medici-Role", "")
+        normalized = role.strip().upper().replace("-", "_").replace(" ", "_")
+        if normalized in {"BRANCH_MANAGER", "MANAGER"}:
+            return "BRANCH_MANAGER"
+        return "SENIOR_BANK_OFFICIAL"
+
+    def _resolve_assigned_branch(self, params: dict[str, list[str]]) -> str:
+        return self._first_param(params, "assigned_branch") or self.headers.get("X-Medici-Assigned-Branch", "").strip()
+
+    def _authorize_get_request(self, path: str, params: dict[str, list[str]]) -> tuple[bool, str | None]:
+        role = self._resolve_request_role(params)
+        if role != "BRANCH_MANAGER":
+            return True, None
+
+        if path in self.BRANCH_MANAGER_DENIED_GET_ROUTES:
+            return False, "route is not available for branch manager role"
+
+        if path not in self.BRANCH_SCOPED_GET_ROUTES:
+            return True, None
+
+        assigned_branch = self._resolve_assigned_branch(params)
+        if not assigned_branch:
+            return False, "assigned_branch is required for branch manager role"
+
+        requested_branch = self._first_param(params, "branch")
+        if requested_branch and requested_branch != assigned_branch:
+            return False, "branch managers may only access their assigned branch"
+
+        # Force branch-scoped queries to the assigned branch.
+        params["branch"] = [assigned_branch]
+        return True, None
+
+    def _authorize_alert_acknowledge(self, alert_id: int, params: dict[str, list[str]]) -> tuple[bool, str | None]:
+        role = self._resolve_request_role(params)
+        if role != "BRANCH_MANAGER":
+            return True, None
+
+        assigned_branch = self._resolve_assigned_branch(params)
+        if not assigned_branch:
+            return False, "assigned_branch is required for branch manager role"
+
+        store = self.store
+        if store is None:
+            return False, "server not initialized"
+
+        alert = store.get_alert_by_id(alert_id)
+        if alert is None:
+            return False, "alert not found"
+
+        if alert.get("branch") != assigned_branch:
+            return False, "branch managers may only acknowledge alerts in their assigned branch"
+
+        return True, None
 
     def _send_json(self, status_code: int, payload: Any) -> None:
         body = json.dumps(payload, indent=2).encode("utf-8")
@@ -555,6 +635,11 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
             self._send_json(500, {"error": "server not initialized"})
             return
 
+        is_allowed, reason = self._authorize_get_request(parsed.path, params)
+        if not is_allowed:
+            self._send_json(403, {"error": reason})
+            return
+
         if parsed.path == "/health":
             self._send_json(200, {"status": "ok", "service": "medici-api"})
             return
@@ -599,6 +684,7 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         parsed = urlparse(self.path)
+        params = parse_qs(parsed.query)
         store = self.store
         if store is None:
             self._send_json(500, {"error": "server not initialized"})
@@ -610,6 +696,10 @@ class MediciAPIHandler(BaseHTTPRequestHandler):
                 alert_id = int(parts[2])
             except (IndexError, ValueError):
                 self._send_json(400, {"error": "invalid alert id"})
+                return
+            is_allowed, reason = self._authorize_alert_acknowledge(alert_id, params)
+            if not is_allowed:
+                self._send_json(403, {"error": reason})
                 return
             payload = self._read_body()
             self._send_json(200, store.acknowledge_alert(alert_id, payload))
