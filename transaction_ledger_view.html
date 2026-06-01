@@ -80,6 +80,13 @@
       flex-wrap: wrap;
     }
 
+    .hero-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .hero-link {
       display: inline-flex;
       align-items: center;
@@ -96,6 +103,30 @@
     .hero-link:hover {
       transform: translateY(-1px);
       box-shadow: 0 8px 18px rgba(95, 79, 58, 0.26);
+    }
+
+    .hero-link.return-link {
+      background: linear-gradient(120deg, #9e1d1d 0%, #7a1212 70%, #b8860b 100%);
+      color: #fff7e8;
+      border: 1px solid rgba(184, 134, 11, 0.55);
+      box-shadow: 0 6px 14px rgba(122, 18, 18, 0.26);
+    }
+
+    .hero-link.return-link:hover {
+      box-shadow: 0 9px 18px rgba(122, 18, 18, 0.34);
+    }
+
+    .scope-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #bca278;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: #fff2da;
+      color: #5f4f3a;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
 
     .controls {
@@ -172,6 +203,44 @@
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
+    }
+
+    .manager-launch {
+      margin: 12px 20px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff7e8;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .manager-launch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .manager-launch-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      text-align: center;
+      border: 1px solid #bca278;
+      border-radius: 10px;
+      background: linear-gradient(120deg, #fffaf0 0%, #f4e8d3 100%);
+      color: #4d3926;
+      min-height: 42px;
+      padding: 9px;
+      font-weight: 700;
+      font-size: 0.84rem;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .manager-launch-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(95, 79, 58, 0.16);
     }
 
     .table-wrap {
@@ -284,6 +353,10 @@
       .actions {
         grid-column: span 1;
       }
+
+      .manager-launch-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -291,10 +364,14 @@
   <main class="shell">
     <section class="hero">
       <div class="hero-row">
-        <h1 class="title">Medici Transaction Ledger</h1>
-        <a class="hero-link" href="branch_operations_dashboard.html">Open Branch Operations Dashboard</a>
+        <h1 id="ledgerTitle" class="title">Medici Transaction Ledger</h1>
+        <div class="hero-actions">
+          <span id="scopeBadge" class="scope-badge" hidden>Access Scope: Branch Manager - Florence Only</span>
+          <a id="dashboardLink" class="hero-link" href="branch_operations_dashboard.html">Open Branch Operations Dashboard</a>
+          <a id="seniorDashboardLink" class="hero-link return-link" href="branch_operations_dashboard.html">Return to Senior View</a>
+        </div>
       </div>
-      <p class="subtitle">Searchable and filterable ledger view for historical double-entry transactions</p>
+      <p id="ledgerSubtitle" class="subtitle">Searchable and filterable ledger view for historical double-entry transactions</p>
     </section>
 
     <section class="controls">
@@ -334,6 +411,11 @@
       </div>
     </section>
 
+    <section id="managerLaunchPanel" class="manager-launch" aria-label="Branch manager quick launch links">
+      <div class="subtitle">Branch Manager Quick Launch (single-branch restricted views)</div>
+      <div id="managerLaunchGrid" class="manager-launch-grid"></div>
+    </section>
+
     <section class="table-wrap">
       <table>
         <thead>
@@ -366,10 +448,18 @@
 
   <script>
     const PAGE_SIZE = 100;
+    const ALL_BRANCHES = ["Florence", "Rome", "Venice", "Milan", "Geneva", "Bruges", "London", "Avignon", "Constance"];
     const ledgerBody = document.getElementById('ledgerBody');
     const statusText = document.getElementById('statusText');
     const pageMeta = document.getElementById('pageMeta');
     const branchFilter = document.getElementById('branchFilter');
+    const ledgerTitle = document.getElementById('ledgerTitle');
+    const ledgerSubtitle = document.getElementById('ledgerSubtitle');
+    const dashboardLink = document.getElementById('dashboardLink');
+    const seniorDashboardLink = document.getElementById('seniorDashboardLink');
+    const scopeBadge = document.getElementById('scopeBadge');
+    const managerLaunchPanel = document.getElementById('managerLaunchPanel');
+    const managerLaunchGrid = document.getElementById('managerLaunchGrid');
 
     const searchInput = document.getElementById('searchInput');
     const dateStart = document.getElementById('dateStart');
@@ -388,9 +478,96 @@
     }
     const API_BASE = getApiBase();
 
+    function normalizeRole(role) {
+      const normalized = String(role || "").trim().toUpperCase();
+      if (["BRANCH_MANAGER", "MANAGER", "BRANCH-MANAGER", "BRANCH MANAGER"].includes(normalized)) {
+        return "BRANCH_MANAGER";
+      }
+      return "SENIOR_BANK_OFFICIAL";
+    }
+
+    function resolveViewerContext() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = normalizeRole(urlParams.get("role"));
+      const requestedBranch = (urlParams.get("branch") || "").trim();
+      const assignedBranch = ALL_BRANCHES.includes(requestedBranch) ? requestedBranch : "Florence";
+      return { role, assignedBranch };
+    }
+
+    const viewerContext = resolveViewerContext();
+
     let allRows = [];
     let filteredRows = [];
     let page = 1;
+
+    function applyRoleRestrictions() {
+      if (viewerContext.role !== "BRANCH_MANAGER") {
+        managerLaunchPanel.hidden = false;
+        scopeBadge.hidden = true;
+        seniorDashboardLink.hidden = true;
+        return;
+      }
+
+      ledgerTitle.textContent = `Medici Transaction Ledger - Branch Manager (${viewerContext.assignedBranch})`;
+      ledgerSubtitle.textContent = `Branch Manager - ${viewerContext.assignedBranch} only. Cross-branch ledger access is restricted.`;
+      branchFilter.innerHTML = `<option value="${viewerContext.assignedBranch}">${viewerContext.assignedBranch}</option>`;
+      branchFilter.value = viewerContext.assignedBranch;
+      branchFilter.disabled = true;
+      managerLaunchPanel.hidden = true;
+      scopeBadge.hidden = false;
+      scopeBadge.textContent = `Access Scope: Branch Manager - ${viewerContext.assignedBranch} Only`;
+      seniorDashboardLink.hidden = false;
+    }
+
+    function syncDashboardLinks() {
+      const dashboardUrl = new URL("branch_operations_dashboard.html", window.location.href);
+      if (new URLSearchParams(window.location.search).get("api")) {
+        dashboardUrl.searchParams.set("api", getApiBase());
+      }
+
+      if (viewerContext.role === "BRANCH_MANAGER") {
+        dashboardUrl.searchParams.set("role", "branch_manager");
+        dashboardUrl.searchParams.set("branch", viewerContext.assignedBranch);
+        dashboardUrl.searchParams.set("manager", `${viewerContext.assignedBranch} Manager`);
+      }
+
+      dashboardLink.href = dashboardUrl.toString();
+
+      const seniorUrl = new URL("branch_operations_dashboard.html", window.location.href);
+      if (new URLSearchParams(window.location.search).get("api")) {
+        seniorUrl.searchParams.set("api", getApiBase());
+      }
+      seniorDashboardLink.href = seniorUrl.toString();
+    }
+
+    function buildManagerLaunchUrl(branch) {
+      const launchUrl = new URL(window.location.href);
+      launchUrl.searchParams.set("role", "branch_manager");
+      launchUrl.searchParams.set("branch", branch);
+      if (new URLSearchParams(window.location.search).get("api")) {
+        launchUrl.searchParams.set("api", getApiBase());
+      }
+      return launchUrl.toString();
+    }
+
+    function renderManagerLaunchLinks() {
+      if (viewerContext.role === "BRANCH_MANAGER") {
+        managerLaunchPanel.hidden = true;
+        return;
+      }
+
+      managerLaunchPanel.hidden = false;
+      managerLaunchGrid.innerHTML = "";
+      for (const branch of ALL_BRANCHES) {
+        const link = document.createElement("a");
+        link.className = "manager-launch-link";
+        link.href = buildManagerLaunchUrl(branch);
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = `Branch Manager - ${branch}`;
+        managerLaunchGrid.appendChild(link);
+      }
+    }
 
     function parseCsv(text) {
       const rows = [];
@@ -464,7 +641,7 @@
 
     function applyFilters() {
       const q = searchInput.value.trim().toLowerCase();
-      const branch = branchFilter.value;
+      const branch = viewerContext.role === "BRANCH_MANAGER" ? viewerContext.assignedBranch : branchFilter.value;
       const fromDate = toDateValue(dateStart.value);
       const toDate = toDateValue(dateEnd.value);
 
@@ -522,6 +699,13 @@
     }
 
     function populateBranchFilter() {
+      if (viewerContext.role === "BRANCH_MANAGER") {
+        branchFilter.innerHTML = `<option value="${viewerContext.assignedBranch}">${viewerContext.assignedBranch}</option>`;
+        branchFilter.value = viewerContext.assignedBranch;
+        branchFilter.disabled = true;
+        return;
+      }
+
       const branches = Array.from(new Set(allRows.map((row) => row.branch).filter(Boolean))).sort();
       branchFilter.innerHTML = '<option value="">All branches</option>' + branches
         .map((branch) => `<option value="${branch}">${branch}</option>`)
@@ -529,7 +713,11 @@
     }
 
     function initializeRows(rows) {
-      allRows = rows
+      const scopedRows = viewerContext.role === "BRANCH_MANAGER"
+        ? rows.filter((row) => row.branch === viewerContext.assignedBranch)
+        : rows;
+
+      allRows = scopedRows
         .filter((row) => row.id && row.date)
         .sort((a, b) => {
           if (a.date !== b.date) {
@@ -575,7 +763,7 @@
     applyBtn.addEventListener('click', applyFilters);
     clearBtn.addEventListener('click', () => {
       searchInput.value = '';
-      branchFilter.value = '';
+      branchFilter.value = viewerContext.role === "BRANCH_MANAGER" ? viewerContext.assignedBranch : '';
       dateStart.value = '';
       dateEnd.value = '';
       filteredRows = allRows.slice();
@@ -610,6 +798,9 @@
       statusText.textContent = `Loaded ${rows.length.toLocaleString()} rows from ${file.name}`;
     });
 
+    applyRoleRestrictions();
+    syncDashboardLinks();
+    renderManagerLaunchLinks();
     tryLoadDefaultCsv();
   </script>
 </body>

@@ -111,6 +111,12 @@ If the browser does not open automatically, use these URLs:
 - `http://127.0.0.1:5500/branch_operations_dashboard.html`
 - `http://127.0.0.1:5500/transaction_ledger_view.html`
 
+Branch Manager restricted view (single-branch scope):
+
+- `http://127.0.0.1:5500/branch_operations_dashboard.html?role=branch_manager&branch=Florence&manager=Florence%20Manager`
+
+Replace `Florence` with the manager's city branch. In this mode, branch switching and cross-branch comparison are disabled, and API calls are constrained to the assigned branch.
+
 To stop the app, press `Ctrl+C` in the terminal window that opened.
 
 ## Usage Examples

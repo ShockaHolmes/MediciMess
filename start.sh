@@ -78,6 +78,8 @@ echo
 echo "Stack is running:"
 echo "  API:     http://${LOCAL_IP}:${API_PORT}  (or http://localhost:${API_PORT})"
 echo "  UI :     http://${LOCAL_IP}:${UI_PORT}/branch_operations_dashboard.html  (or http://localhost:${UI_PORT}/branch_operations_dashboard.html)"
+echo "  Manager: http://${LOCAL_IP}:${UI_PORT}/branch_operations_dashboard.html?role=branch_manager&branch=Florence&manager=Florence%20Manager"
+echo "  Ledger Manager: http://${LOCAL_IP}:${UI_PORT}/transaction_ledger_view.html?role=branch_manager&branch=Florence"
 echo "  Ledger:  http://${LOCAL_IP}:${UI_PORT}/transaction_ledger_view.html  (or http://localhost:${UI_PORT}/transaction_ledger_view.html)"
 echo
 echo "Share the http://${LOCAL_IP} URLs with your teammates."
